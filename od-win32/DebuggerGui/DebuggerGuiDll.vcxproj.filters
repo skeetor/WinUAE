@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\app">
+      <UniqueIdentifier>{497b39fb-6b3c-492e-9588-99bc8f962884}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\app">
+      <UniqueIdentifier>{dafe64f4-9632-4d33-af68-9cd2421c62ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\debugger">
+      <UniqueIdentifier>{75ea014b-3521-4c3f-b2df-f150367f2b00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\debugger">
+      <UniqueIdentifier>{a07e2a37-0cf9-4cdb-a9a8-f40fe1f1beb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\controls">
+      <UniqueIdentifier>{adf66422-d846-4005-ba7f-2d1684b54c30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\controls">
+      <UniqueIdentifier>{f2e2bec6-fd3c-46bf-b3f8-8541a84c2bbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\panes">
+      <UniqueIdentifier>{ba126083-f872-4432-867a-a38664aab0ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\panes">
+      <UniqueIdentifier>{aff874d8-94ad-4411-b259-57c2d8f1acac}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AppLookDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassTreeWnd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassViewBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebuggerGuiDll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicHelpView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileViewBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsPages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertiesViewBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UndoBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="app\DebuggerGui.h">
+      <Filter>Header Files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="app\DebuggerGuiDoc.h">
+      <Filter>Header Files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="app\DebuggerGuiView.h">
+      <Filter>Header Files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="app\StartView.h">
+      <Filter>Header Files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="debugger\DebuggerAPI.h">
+      <Filter>Header Files\debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="controls\UndoListBox.h">
+      <Filter>Header Files\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="controls\FindComboBox.h">
+      <Filter>Header Files\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="app\MainFrame.h">
+      <Filter>Header Files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="app\ChildFrame.h">
+      <Filter>Header Files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="controls\FilterEdit.h">
+      <Filter>Header Files\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="panes\CPUPane.h">
+      <Filter>Header Files\panes</Filter>
+    </ClInclude>
+    <ClInclude Include="res\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="panes\WatchPane.h">
+      <Filter>Header Files\panes</Filter>
+    </ClInclude>
+    <ClInclude Include="panes\MemoryPane.h">
+      <Filter>Header Files\panes</Filter>
+    </ClInclude>
+    <ClInclude Include="debugger\Machine.h">
+      <Filter>Header Files\debugger</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\res\start.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\DebuggerGui.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\DebuggerGuiDoc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\class_view.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\res_view.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\file_view.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\output_bar.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\watch_bar.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\dynamichelp.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\properti.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\class_view_hc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\file_view_hc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\res_view_hc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\prop_bar_hc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\dynamichelp_hc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\watch_bar_hc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\output_bar_hc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\cpp.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\build.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\menuimages.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\toolbar_.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\sort.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\toolbar1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\properti.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\solution.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\edit.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\check.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\classview.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\fileview.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\resource.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\workspc.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\dynamich.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\intellisense.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\optionsimages.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\menuimages24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\Toolbar24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\build24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\edit24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\img_inte_hc.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\solution24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\prop24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\classview_hc.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\sort24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\filevie24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\help24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\dynamich24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\resource24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\res\current.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app\DebuggerGuiDll.def">
+      <Filter>Source Files\app</Filter>
+    </None>
+    <None Include="res\DebuggerGui.rc2">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AppLookDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassTreeWnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClassViewBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicHelpView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileViewBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsPages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertiesViewBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UndoBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="app\DebuggerGui.cpp">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="app\DebuggerGuiDoc.cpp">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="app\DebuggerGuiView.cpp">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="app\StartView.cpp">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="debugger\DebuggerAPI.cpp">
+      <Filter>Source Files\debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="controls\UndoListBox.cpp">
+      <Filter>Source Files\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="controls\FindComboBox.cpp">
+      <Filter>Source Files\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="app\MainFrame.cpp">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="app\ChildFrame.cpp">
+      <Filter>Source Files\app</Filter>
+    </ClCompile>
+    <ClCompile Include="controls\FilterEdit.cpp">
+      <Filter>Source Files\controls</Filter>
+    </ClCompile>
+    <ClCompile Include="panes\CPUPane.cpp">
+      <Filter>Source Files\panes</Filter>
+    </ClCompile>
+    <ClCompile Include="panes\WatchPane.cpp">
+      <Filter>Source Files\panes</Filter>
+    </ClCompile>
+    <ClCompile Include="panes\MemoryPane.cpp">
+      <Filter>Source Files\panes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\DebuggerGui.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

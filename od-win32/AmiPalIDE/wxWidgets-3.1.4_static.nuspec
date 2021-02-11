@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<package  xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>wxWidgets</id>
+    <version>3.1.4</version>
+    <title>wxWidgets static</title>
+    <authors>http://wxwidgets.org/</authors>
+    <owners>http://wxwidgets.org/</owners>
+    <licenseUrl>https://www.wxwidgets.org/README.md</licenseUrl>
+    <projectUrl>https://www.wxwidgets.org/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Cross platform GUI library</description>
+    <releaseNotes></releaseNotes>
+    <copyright></copyright>
+    <tags>tools library</tags>
+    <summary>See project URL for details.</summary>
+  </metadata>
+  <files>
+    <!-- file src=".git\refs\heads\master" target="build\master" /-->
+    <file src="wxWidgets-3.1.4_static.targets" target="wxWidgets-3.1.4_static.targets"/>
+    <file src="include\**" target="include" />
+
+    <file src="lib\vc_x64_lib\mswud\**" target="lib\x64\Debug\mswu" />
+    <file src="lib\vc_x64_lib\mswu\**" target="lib\x64\Release\mswu" />
+    <file src="lib\vc_lib\mswud\**" target="lib\Win32\Debug\mswu" />
+    <file src="lib\vc_lib\mswu\**" target="lib\Win32\Release\mswu" />
+
+    <!-- Win64 Libraries -->
+    <file src="lib\vc_x64_lib\wxbase31u.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxbase31u.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxbase31u_net.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxbase31u_net.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxbase31u_xml.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxbase31u_xml.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxexpat.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxexpat.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxjpeg.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxjpeg.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_adv.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_adv.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_aui.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_aui.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_core.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_core.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_gl.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_gl.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_html.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_html.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_media.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_media.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_propgrid.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_propgrid.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_qa.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_qa.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_ribbon.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_ribbon.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_richtext.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_richtext.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_stc.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_stc.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_webview.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_webview.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_xrc.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxmsw31u_xrc.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxpng.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxpng.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxregexu.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxregexu.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxscintilla.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxscintilla.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxtiff.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxtiff.pdb" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxzlib.lib" target="lib\x64\Release" />
+    <file src="lib\vc_x64_lib\wxzlib.pdb" target="lib\x64\Release" />
+
+    <file src="lib\vc_x64_lib\wxbase31ud.lib" target="lib\x64\Debug\wxbase31u.lib" />
+    <file src="lib\vc_x64_lib\wxbase31ud.pdb" target="lib\x64\Debug\wxbase31ud.pdb" />
+    <file src="lib\vc_x64_lib\wxbase31ud_net.lib" target="lib\x64\Debug\wxbase31u_net.lib" />
+    <file src="lib\vc_x64_lib\wxbase31ud_net.pdb" target="lib\x64\Debug\wxbase31ud_net.pdb" />
+    <file src="lib\vc_x64_lib\wxbase31ud_xml.lib" target="lib\x64\Debug\wxbase31u_xml.lib" />
+    <file src="lib\vc_x64_lib\wxbase31ud_xml.pdb" target="lib\x64\Debug\wxbase31ud_xml.pdb" />
+    <file src="lib\vc_x64_lib\wxexpatd.lib" target="lib\x64\Debug\wxexpat.lib" />
+    <file src="lib\vc_x64_lib\wxexpatd.pdb" target="lib\x64\Debug\wxexpatd.pdb" />
+    <file src="lib\vc_x64_lib\wxjpegd.lib" target="lib\x64\Debug\wxjpeg.lib" />
+    <file src="lib\vc_x64_lib\wxjpegd.pdb" target="lib\x64\Debug\wxjpegd.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_adv.lib" target="lib\x64\Debug\wxmsw31u_adv.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_adv.pdb" target="lib\x64\Debug\wxmsw31ud_adv.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_aui.lib" target="lib\x64\Debug\wxmsw31u_aui.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_aui.pdb" target="lib\x64\Debug\wxmsw31ud_aui.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_core.lib" target="lib\x64\Debug\wxmsw31u_core.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_core.pdb" target="lib\x64\Debug\wxmsw31ud_core.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_gl.lib" target="lib\x64\Debug\wxmsw31u_gl.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_gl.pdb" target="lib\x64\Debug\wxmsw31ud_gl.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_html.lib" target="lib\x64\Debug\wxmsw31u_html.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_html.pdb" target="lib\x64\Debug\wxmsw31ud_html.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_media.lib" target="lib\x64\Debug\wxmsw31u_media.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_media.pdb" target="lib\x64\Debug\wxmsw31ud_media.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_propgrid.lib" target="lib\x64\Debug\wxmsw31u_propgrid.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_propgrid.pdb" target="lib\x64\Debug\wxmsw31ud_propgrid.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_qa.lib" target="lib\x64\Debug\wxmsw31u_qa.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_qa.pdb" target="lib\x64\Debug\wxmsw31ud_qa.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_ribbon.lib" target="lib\x64\Debug\wxmsw31u_ribbon.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_ribbon.pdb" target="lib\x64\Debug\wxmsw31ud_ribbon.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_richtext.lib" target="lib\x64\Debug\wxmsw31u_richtext.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_richtext.pdb" target="lib\x64\Debug\wxmsw31ud_richtext.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_stc.lib" target="lib\x64\Debug\wxmsw31u_stc.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_stc.pdb" target="lib\x64\Debug\wxmsw31ud_stc.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_webview.lib" target="lib\x64\Debug\wxmsw31u_webview.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_webview.pdb" target="lib\x64\Debug\wxmsw31ud_webview.pdb" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_xrc.lib" target="lib\x64\Debug\wxmsw31u_xrc.lib" />
+    <file src="lib\vc_x64_lib\wxmsw31ud_xrc.pdb" target="lib\x64\Debug\wxmsw31ud_xrc.pdb" />
+    <file src="lib\vc_x64_lib\wxpngd.lib" target="lib\x64\Debug\wxpng.lib" />
+    <file src="lib\vc_x64_lib\wxpngd.pdb" target="lib\x64\Debug\wxpngd.pdb" />
+    <file src="lib\vc_x64_lib\wxregexud.lib" target="lib\x64\Debug\wxregexu.lib" />
+    <file src="lib\vc_x64_lib\wxregexud.pdb" target="lib\x64\Debug\wxregexud.pdb" />
+    <file src="lib\vc_x64_lib\wxscintillad.lib" target="lib\x64\Debug\wxscintilla.lib" />
+    <file src="lib\vc_x64_lib\wxscintillad.pdb" target="lib\x64\Debug\wxscintillad.pdb" />
+    <file src="lib\vc_x64_lib\wxtiffd.lib" target="lib\x64\Debug\wxtiff.lib" />
+    <file src="lib\vc_x64_lib\wxtiffd.pdb" target="lib\x64\Debug\wxtiffd.pdb" />
+    <file src="lib\vc_x64_lib\wxzlibd.lib" target="lib\x64\Debug\wxzlib.lib" />
+    <file src="lib\vc_x64_lib\wxzlibd.pdb" target="lib\x64\Debug\wxzlibd.pdb" />
+
+    <!-- Win32 Libraries -->
+    <file src="lib\vc_lib\wxbase31u.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxbase31u.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxbase31u_net.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxbase31u_net.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxbase31u_xml.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxbase31u_xml.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxexpat.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxexpat.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxjpeg.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxjpeg.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_adv.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_adv.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_aui.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_aui.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_core.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_core.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_gl.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_gl.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_html.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_html.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_media.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_media.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_propgrid.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_propgrid.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_qa.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_qa.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_ribbon.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_ribbon.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_richtext.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_richtext.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_stc.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_stc.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_webview.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_webview.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_xrc.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxmsw31u_xrc.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxpng.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxpng.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxregexu.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxregexu.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxscintilla.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxscintilla.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxtiff.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxtiff.pdb" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxzlib.lib" target="lib\Win32\Release" />
+    <file src="lib\vc_lib\wxzlib.pdb" target="lib\Win32\Release" />
+
+    <file src="lib\vc_lib\wxbase31ud.lib" target="lib\Win32\Debug\wxbase31u.lib" />
+    <file src="lib\vc_lib\wxbase31ud.pdb" target="lib\Win32\Debug\wxbase31ud.pdb" />
+    <file src="lib\vc_lib\wxbase31ud_net.lib" target="lib\Win32\Debug\wxbase31u_net.lib" />
+    <file src="lib\vc_lib\wxbase31ud_net.pdb" target="lib\Win32\Debug\wxbase31ud_net.pdb" />
+    <file src="lib\vc_lib\wxbase31ud_xml.lib" target="lib\Win32\Debug\wxbase31u_xml.lib" />
+    <file src="lib\vc_lib\wxbase31ud_xml.pdb" target="lib\Win32\Debug\wxbase31ud_xml.pdb" />
+    <file src="lib\vc_lib\wxexpatd.lib" target="lib\Win32\Debug\wxexpat.lib" />
+    <file src="lib\vc_lib\wxexpatd.pdb" target="lib\Win32\Debug\wxexpatd.pdb" />
+    <file src="lib\vc_lib\wxjpegd.lib" target="lib\Win32\Debug\wxjpeg.lib" />
+    <file src="lib\vc_lib\wxjpegd.pdb" target="lib\Win32\Debug\wxjpegd.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_adv.lib" target="lib\Win32\Debug\wxmsw31u_adv.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_adv.pdb" target="lib\Win32\Debug\wxmsw31ud_adv.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_aui.lib" target="lib\Win32\Debug\wxmsw31u_aui.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_aui.pdb" target="lib\Win32\Debug\wxmsw31ud_aui.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_core.lib" target="lib\Win32\Debug\wxmsw31u_core.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_core.pdb" target="lib\Win32\Debug\wxmsw31ud_core.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_gl.lib" target="lib\Win32\Debug\wxmsw31u_gl.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_gl.pdb" target="lib\Win32\Debug\wxmsw31ud_gl.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_html.lib" target="lib\Win32\Debug\wxmsw31u_html.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_html.pdb" target="lib\Win32\Debug\wxmsw31ud_html.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_media.lib" target="lib\Win32\Debug\wxmsw31u_media.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_media.pdb" target="lib\Win32\Debug\wxmsw31ud_media.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_propgrid.lib" target="lib\Win32\Debug\wxmsw31u_propgrid.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_propgrid.pdb" target="lib\Win32\Debug\wxmsw31ud_propgrid.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_qa.lib" target="lib\Win32\Debug\wxmsw31u_qa.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_qa.pdb" target="lib\Win32\Debug\wxmsw31ud_qa.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_ribbon.lib" target="lib\Win32\Debug\wxmsw31u_ribbon.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_ribbon.pdb" target="lib\Win32\Debug\wxmsw31ud_ribbon.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_richtext.lib" target="lib\Win32\Debug\wxmsw31u_richtext.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_richtext.pdb" target="lib\Win32\Debug\wxmsw31ud_richtext.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_stc.lib" target="lib\Win32\Debug\wxmsw31u_stc.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_stc.pdb" target="lib\Win32\Debug\wxmsw31ud_stc.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_webview.lib" target="lib\Win32\Debug\wxmsw31u_webview.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_webview.pdb" target="lib\Win32\Debug\wxmsw31ud_webview.pdb" />
+    <file src="lib\vc_lib\wxmsw31ud_xrc.lib" target="lib\Win32\Debug\wxmsw31u_xrc.lib" />
+    <file src="lib\vc_lib\wxmsw31ud_xrc.pdb" target="lib\Win32\Debug\wxmsw31ud_xrc.pdb" />
+    <file src="lib\vc_lib\wxpngd.lib" target="lib\Win32\Debug\wxpng.lib" />
+    <file src="lib\vc_lib\wxpngd.pdb" target="lib\Win32\Debug\wxpngd.pdb" />
+    <file src="lib\vc_lib\wxregexud.lib" target="lib\Win32\Debug\wxregexu.lib" />
+    <file src="lib\vc_lib\wxregexud.pdb" target="lib\Win32\Debug\wxregexud.pdb" />
+    <file src="lib\vc_lib\wxscintillad.lib" target="lib\Win32\Debug\wxscintilla.lib" />
+    <file src="lib\vc_lib\wxscintillad.pdb" target="lib\Win32\Debug\wxscintillad.pdb" />
+    <file src="lib\vc_lib\wxtiffd.lib" target="lib\Win32\Debug\wxtiff.lib" />
+    <file src="lib\vc_lib\wxtiffd.pdb" target="lib\Win32\Debug\wxtiffd.pdb" />
+    <file src="lib\vc_lib\wxzlibd.lib" target="lib\Win32\Debug\wxzlib.lib" />
+    <file src="lib\vc_lib\wxzlibd.pdb" target="lib\Win32\Debug\wxzlibd.pdb" />
+
+  </files>
+</package>

@@ -34,11 +34,21 @@
 
 #include "uae.h"
 
+#include "GuiDebuggerAPI.h"
+void loadDebuggerDLL(const TCHAR *dllName, TCHAR *cmdLine);
+void unloadDebuggerDLL(bool bForce);
+
+
 static HWND hDbgWnd = 0;
 static HWND hOutput = 0;
 static HACCEL dbgaccel = 0;
 static HFONT udfont = 0;
 static HWND hedit = 0;
+
+#define DLL_PATHLEN 1024
+extern const int gui_debugger_dll_pathlen = DLL_PATHLEN;
+TCHAR gui_debugger_dll[DLL_PATHLEN];
+TCHAR gui_debugger_dll_cmdline[DLL_PATHLEN];
 
 extern int consoleopen;
 BOOL debuggerinitializing = FALSE;
@@ -2048,9 +2058,11 @@ static INT_PTR CALLBACK DebuggerProc (HWND hDlg, UINT message, WPARAM wParam, LP
 
 int open_debug_window(void)
 {
-
 	struct newresource *nr;
 	int maximized;
+
+	if (gui_debugger_dll[0])
+		loadDebuggerDLL(gui_debugger_dll, gui_debugger_dll_cmdline);
 
 	if (hDbgWnd)
 		return 0;
@@ -2088,6 +2100,7 @@ int open_debug_window(void)
 void close_debug_window(void)
 {
 	DestroyWindow(hDbgWnd);
+	unloadDebuggerDLL(false);
 }
 
 int console_get_gui (TCHAR *out, int maxlen)

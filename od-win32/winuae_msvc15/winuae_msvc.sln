@@ -3,12 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "winuae", "winuae_msvc.vcxproj", "{4ADAA943-1AC8-4FB5-82E5-4FB753B6C2DA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8627DA33-98D1-4F60-B404-ECCEE0EE7BF9} = {8627DA33-98D1-4F60-B404-ECCEE0EE7BF9}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gencpu", "..\gencpu_msvc\gencpu_msvc.vcxproj", "{DEF7ACF7-050E-4069-BB99-5B5D93F60521}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E9F73E11-A463-45C6-A733-2BED75852BA1} = {E9F73E11-A463-45C6-A733-2BED75852BA1}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gencomp", "..\gencomp_msvc\gencomp_msvc.vcxproj", "{54197DFF-9CAA-4A9F-B9C2-2881EA04EACB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E9F73E11-A463-45C6-A733-2BED75852BA1} = {E9F73E11-A463-45C6-A733-2BED75852BA1}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genblitter", "..\genblitter_msvc\genblitter_msvc.vcxproj", "{765B0AF0-B8D3-4998-89AF-D6F939E1CD18}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E9F73E11-A463-45C6-A733-2BED75852BA1} = {E9F73E11-A463-45C6-A733-2BED75852BA1}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "build68k", "..\build68k_msvc\build68k_msvc.vcxproj", "{AF3DBBDE-E006-4DC3-9A26-CB0D7D82AE3C}"
 EndProject
@@ -21,6 +33,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ipctester", "..\ipctester\ipctester.vcxproj", "{79BDABE6-5308-4D64-8884-A5A35909D8D3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genlinetoscr", "..\genlinetoscr_msvc\genlinetoscr_msvc.vcxproj", "{E9F73E11-A463-45C6-A733-2BED75852BA1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AF3DBBDE-E006-4DC3-9A26-CB0D7D82AE3C} = {AF3DBBDE-E006-4DC3-9A26-CB0D7D82AE3C}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decompress", "..\decompress\decompress.vcxproj", "{38FAC3FB-A2B7-453F-8A6A-73B97201BB04}"
 EndProject
@@ -29,6 +44,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "consolewrapper", "..\consolewrapper\consolewrapper.vcxproj", "{2C44DD04-F5D6-4CC3-B0D6-1F4E51A0D962}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "prowizard", "..\prowizard\prowizard.vcxproj", "{8627DA33-98D1-4F60-B404-ECCEE0EE7BF9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{765B0AF0-B8D3-4998-89AF-D6F939E1CD18} = {765B0AF0-B8D3-4998-89AF-D6F939E1CD18}
+		{DEF7ACF7-050E-4069-BB99-5B5D93F60521} = {DEF7ACF7-050E-4069-BB99-5B5D93F60521}
+		{54197DFF-9CAA-4A9F-B9C2-2881EA04EACB} = {54197DFF-9CAA-4A9F-B9C2-2881EA04EACB}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "unpackers", "..\unpackers\unpackers.vcxproj", "{98BA115B-829F-4085-9729-ABD0D779A60A}"
 EndProject

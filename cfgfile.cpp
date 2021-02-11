@@ -57,6 +57,11 @@ static struct zfile *default_file, *configstore;
 static int uaeconfig;
 static int unicode_config = 0;
 
+#define DLL_PATHLEN 1024
+extern const int gui_debugger_dll_pathlen;
+extern TCHAR gui_debugger_dll[DLL_PATHLEN];
+extern TCHAR gui_debugger_dll_cmdline[DLL_PATHLEN];
+
 /* @@@ need to get rid of this... just cut part of the manual and print that
 * as a help text.  */
 struct cfg_lines
@@ -3293,6 +3298,9 @@ static int cfgfile_parse_host (struct uae_prefs *p, TCHAR *option, TCHAR *value)
 		}
 		return 1;
 	}
+
+	cfgfile_string(option, value, _T("gui_debugger_dll"), gui_debugger_dll, gui_debugger_dll_pathlen);
+	cfgfile_string(option, value, _T("gui_debugger_dll_cmdline"), gui_debugger_dll_cmdline, gui_debugger_dll_pathlen);
 
 	if (cfgfile_intval (option, value, _T("sound_frequency"), &p->sound_freq, 1)
 		|| cfgfile_intval (option, value, _T("sound_max_buff"), &p->sound_maxbsiz, 1)

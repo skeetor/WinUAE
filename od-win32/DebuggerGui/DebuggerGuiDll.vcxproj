@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="app\ChildFrame.h" />
+    <ClInclude Include="app\DebuggerGui.h" />
+    <ClInclude Include="app\DebuggerGuiDoc.h" />
+    <ClInclude Include="app\DebuggerGuiView.h" />
+    <ClInclude Include="app\MainFrame.h" />
+    <ClInclude Include="app\StartView.h" />
+    <ClInclude Include="AppLookDlg.h" />
+    <ClInclude Include="ClassTreeWnd.h" />
+    <ClInclude Include="ClassViewBar.h" />
+    <ClInclude Include="controls\FilterEdit.h" />
+    <ClInclude Include="controls\FindComboBox.h" />
+    <ClInclude Include="controls\UndoListBox.h" />
+    <ClInclude Include="DebuggerGuiDll.h" />
+    <ClInclude Include="debugger\DebuggerAPI.h" />
+    <ClInclude Include="debugger\Machine.h" />
+    <ClInclude Include="DynamicHelpView.h" />
+    <ClInclude Include="FileViewBar.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="OptionsDlg.h" />
+    <ClInclude Include="OptionsPages.h" />
+    <ClInclude Include="OutputBar.h" />
+    <ClInclude Include="OutputView.h" />
+    <ClInclude Include="panes\CPUPane.h" />
+    <ClInclude Include="panes\MemoryPane.h" />
+    <ClInclude Include="panes\WatchPane.h" />
+    <ClInclude Include="PropertiesViewBar.h" />
+    <ClInclude Include="ResourceView.h" />
+    <ClInclude Include="res\resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="UndoBar.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\res\build.bmp" />
+    <Image Include="res\res\build24.bmp" />
+    <Image Include="res\res\check.bmp" />
+    <Image Include="res\res\classview.bmp" />
+    <Image Include="res\res\classview_hc.bmp" />
+    <Image Include="res\res\class_view.ico" />
+    <Image Include="res\res\class_view_hc.ico" />
+    <Image Include="res\res\cpp.ico" />
+    <Image Include="res\res\current.bmp" />
+    <Image Include="res\res\DebuggerGui.ico" />
+    <Image Include="res\res\DebuggerGuiDoc.ico" />
+    <Image Include="res\res\dynamich.bmp" />
+    <Image Include="res\res\dynamich24.bmp" />
+    <Image Include="res\res\dynamichelp.ico" />
+    <Image Include="res\res\dynamichelp_hc.ico" />
+    <Image Include="res\res\edit.bmp" />
+    <Image Include="res\res\edit24.bmp" />
+    <Image Include="res\res\filevie24.bmp" />
+    <Image Include="res\res\fileview.bmp" />
+    <Image Include="res\res\file_view.ico" />
+    <Image Include="res\res\file_view_hc.ico" />
+    <Image Include="res\res\help24.bmp" />
+    <Image Include="res\res\img_inte_hc.bmp" />
+    <Image Include="res\res\intellisense.bmp" />
+    <Image Include="res\res\menuimages.bmp" />
+    <Image Include="res\res\menuimages24.bmp" />
+    <Image Include="res\res\optionsimages.bmp" />
+    <Image Include="res\res\output_bar.ico" />
+    <Image Include="res\res\output_bar_hc.ico" />
+    <Image Include="res\res\prop24.bmp" />
+    <Image Include="res\res\properti.bmp" />
+    <Image Include="res\res\properti.ico" />
+    <Image Include="res\res\prop_bar_hc.ico" />
+    <Image Include="res\res\resource.bmp" />
+    <Image Include="res\res\resource24.bmp" />
+    <Image Include="res\res\res_view.ico" />
+    <Image Include="res\res\res_view_hc.ico" />
+    <Image Include="res\res\solution.bmp" />
+    <Image Include="res\res\solution24.bmp" />
+    <Image Include="res\res\sort.bmp" />
+    <Image Include="res\res\sort24.bmp" />
+    <Image Include="res\res\start.png" />
+    <Image Include="res\res\Toolbar.bmp" />
+    <Image Include="res\res\toolbar1.bmp" />
+    <Image Include="res\res\Toolbar24.bmp" />
+    <Image Include="res\res\toolbar_.bmp" />
+    <Image Include="res\res\watch_bar.ico" />
+    <Image Include="res\res\watch_bar_hc.ico" />
+    <Image Include="res\res\workspc.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app\DebuggerGuiDll.def" />
+    <None Include="res\DebuggerGui.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="app\ChildFrame.cpp" />
+    <ClCompile Include="app\DebuggerGui.cpp" />
+    <ClCompile Include="app\DebuggerGuiDoc.cpp" />
+    <ClCompile Include="app\DebuggerGuiView.cpp" />
+    <ClCompile Include="app\MainFrame.cpp" />
+    <ClCompile Include="app\StartView.cpp" />
+    <ClCompile Include="AppLookDlg.cpp" />
+    <ClCompile Include="ClassTreeWnd.cpp" />
+    <ClCompile Include="ClassViewBar.cpp" />
+    <ClCompile Include="controls\FilterEdit.cpp" />
+    <ClCompile Include="controls\FindComboBox.cpp" />
+    <ClCompile Include="controls\UndoListBox.cpp" />
+    <ClCompile Include="debugger\DebuggerAPI.cpp" />
+    <ClCompile Include="DynamicHelpView.cpp" />
+    <ClCompile Include="FileViewBar.cpp" />
+    <ClCompile Include="OptionsDlg.cpp" />
+    <ClCompile Include="OptionsPages.cpp" />
+    <ClCompile Include="OutputBar.cpp" />
+    <ClCompile Include="OutputView.cpp" />
+    <ClCompile Include="panes\CPUPane.cpp" />
+    <ClCompile Include="panes\MemoryPane.cpp" />
+    <ClCompile Include="panes\WatchPane.cpp" />
+    <ClCompile Include="PropertiesViewBar.cpp" />
+    <ClCompile Include="ResourceView.cpp" />
+    <ClCompile Include="UndoBar.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\DebuggerGui.rc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{9C5B04B8-96E6-49AE-8967-3B69A2C6D67B}</ProjectGuid>
+    <Keyword>MFCDLLProj</Keyword>
+    <RootNamespace>DebuggerGuiDll</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)..\DebuggerGui</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)..\DebuggerGui</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)..\DebuggerGui</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)..\DebuggerGui</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WINUAE_DEBUGGER_API_EXPORTS;_AFXDLL;UNICODE;WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <CallingConvention>FastCall</CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AssemblerOutput>All</AssemblerOutput>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <ModuleDefinitionFile>app\DebuggerGuiDll.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WINUAE_DEBUGGER_API_EXPORTS;_AFXDLL;UNICODE;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <CallingConvention>FastCall</CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AssemblerOutput>All</AssemblerOutput>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <ModuleDefinitionFile>app\DebuggerGuiDll.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WINUAE_DEBUGGER_API_EXPORTS;_AFXDLL;UNICODE;WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <CallingConvention>FastCall</CallingConvention>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AssemblerOutput>All</AssemblerOutput>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>app\DebuggerGuiDll.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WINUAE_DEBUGGER_API_EXPORTS;_AFXDLL;UNICODE;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <CallingConvention>FastCall</CallingConvention>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AssemblerOutput>All</AssemblerOutput>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>app\DebuggerGuiDll.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

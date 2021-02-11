@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories Condition="$(WX_3_1_4Include) == ''">%(AdditionalIncludeDirectories);$(SolutionDir)packages\wxWidgets.3.1.4\include;$(SolutionDir)packages\wxWidgets.3.1.4\lib\$(Platform)\$(Configuration)\mswu;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="$(WX_3_1_4Include) != ''">%(AdditionalIncludeDirectories);$(WX_3_1_4Include)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories Condition="$(WX_3_1_4Library) == ''">%(AdditionalLibraryDirectories);$(SolutionDir)packages\wxWidgets.3.1.4\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="$(WX_3_1_4Library) != ''">%(AdditionalLibraryDirectories);$(WX_3_1_4Library)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies);wxbase31u.lib;wxbase31u_net.lib;wxbase31u_xml.lib;wxexpat.lib;wxjpeg.lib;wxmsw31u_adv.lib;wxmsw31u_aui.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxmsw31u_html.lib;wxmsw31u_media.lib;wxmsw31u_propgrid.lib;wxmsw31u_qa.lib;wxmsw31u_ribbon.lib;wxmsw31u_richtext.lib;wxmsw31u_stc.lib;wxmsw31u_webview.lib;wxmsw31u_xrc.lib;wxpng.lib;wxregexu.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

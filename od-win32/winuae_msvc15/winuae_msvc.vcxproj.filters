@@ -77,6 +77,9 @@
     <Filter Include="pcem">
       <UniqueIdentifier>{c9a4aeea-c63c-40e4-9da2-371acd5ea8fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="win32\debugger">
+      <UniqueIdentifier>{8a0b60dc-634a-41a9-a79e-8e0c476500cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ahidsound_dsonly.cpp">
@@ -1002,6 +1005,9 @@
     </ClCompile>
     <ClCompile Include="..\..\pcem\vid_voodoo.cpp">
       <Filter>pcem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GuiDebuggerInterface.cpp">
+      <Filter>win32\debugger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
