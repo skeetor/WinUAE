@@ -2,11 +2,13 @@
 
 #include "wx/window.h"
 
-class DocumentView
+class Document
 {
 public:
-	DocumentView(void) {}
-	virtual ~DocumentView() {}
+	Document(void)
+	: m_locked(false)
+	{}
+	virtual ~Document() {}
 
 public:
 	/**
@@ -32,4 +34,13 @@ public:
 	 * 'active' is true, if the document was currently the active one.
 	 */
 	virtual bool closing(bool forced, bool active) = 0;
+
+	/**
+	 * Lock the document, so it is not modified anymore.
+	 */
+	virtual void lock(bool state) { m_locked = state; }
+	virtual bool isLocked(void) { return m_locked; }
+
+private:
+	bool m_locked:1;
 };

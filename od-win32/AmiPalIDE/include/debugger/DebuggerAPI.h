@@ -12,8 +12,19 @@
 	#define WINUAE_DEBUGGER_API __declspec(dllimport)
 #endif // WINUAE_DEBUGGER_API_EXPORTS
 
+#ifndef STRINGIFY
 #define TO_STRING(a) STRINGIFY(a)
 #define STRINGIFY(a) #a
+#endif
+
+#define MAJOR_VERSION	0x01
+#define MINOR_VERSION	0x02
+#define BUILD_VERSION	0x0304
+
+static inline uint32_t getVersion(void)
+{
+	return ((MAJOR_VERSION << 24) | (MINOR_VERSION << 16) | BUILD_VERSION);
+}
 
 /**
  * DEBUGGER_DLL_PROC creates the definitions for functions which can be called
@@ -121,8 +132,10 @@
 
 /**
  * Initialize the application.
+ * If the return value is not a nullptr it contains a wchar message with an error
+ * description.
  */
-DEBUGGER_DLL_PROC(bool, InitDebugger, wchar_t *cmdLine);
+DEBUGGER_DLL_PROC(wchar_t *, InitDebugger, uint32_t version, wchar_t *cmdLine);
 
 /**
  * Closes teh debugger and exits the debugger application. This has to be called

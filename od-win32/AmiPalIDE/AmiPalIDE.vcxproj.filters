@@ -28,12 +28,6 @@
     <Filter Include="packages">
       <UniqueIdentifier>{bc7adab6-8cda-4825-b2a4-a88311c185f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\config">
-      <UniqueIdentifier>{a7fa1fbf-90fd-4b3d-ac31-ff6ba46e7788}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\config">
-      <UniqueIdentifier>{aac17e9b-d9dd-405e-ae9a-a7cc4b293d03}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\controls">
       <UniqueIdentifier>{c13dc330-2ced-4589-8bd7-c7aa0babe528}</UniqueIdentifier>
     </Filter>
@@ -45,6 +39,27 @@
     </Filter>
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{50154629-4011-4d15-9c16-0faaf064c0d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gui\properties">
+      <UniqueIdentifier>{3017a7e2-f179-4edf-b351-3d568b12ee41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gui\properties">
+      <UniqueIdentifier>{224f6f37-1169-401a-a565-fea3ac7e2d6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\config">
+      <UniqueIdentifier>{e3b7ecfd-07fc-4306-ab99-e3978e061aaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\config">
+      <UniqueIdentifier>{10d7ddd3-269c-4cb8-a904-0386093e0a55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gui\properties\pages">
+      <UniqueIdentifier>{ca6bd29d-9243-447b-8f40-62cb2d47d91e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gui\properties\pages">
+      <UniqueIdentifier>{4738584d-1934-4c76-b4ee-c84d2499f850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\algorithms">
+      <UniqueIdentifier>{b849ff91-2e0c-4a7b-8a27-619c1042e946}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +87,6 @@
     <ClInclude Include="include\gui\DocumentPanel.h">
       <Filter>Header Files\gui</Filter>
     </ClInclude>
-    <ClInclude Include="include\gui\DocumentView.h">
-      <Filter>Header Files\gui</Filter>
-    </ClInclude>
     <ClInclude Include="include\controls\ComboBoxEdit.h">
       <Filter>Header Files\controls</Filter>
     </ClInclude>
@@ -86,6 +98,42 @@
     </ClInclude>
     <ClInclude Include="include\controls\EditBtn.h">
       <Filter>Header Files\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\properties\PropertyDlg.h">
+      <Filter>Header Files\gui\properties</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\Document.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\properties\ConfigDlg.h">
+      <Filter>Header Files\gui\properties</Filter>
+    </ClInclude>
+    <ClInclude Include="include\controls\TreeItemData.h">
+      <Filter>Header Files\controls</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config\ApplicationConfig.h">
+      <Filter>Header Files\config</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\properties\PropertyPage.h">
+      <Filter>Header Files\gui\properties</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\properties\PropertyPagePanel.h">
+      <Filter>Header Files\gui\properties</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\properties\pages\GlobalSettingsPage.h">
+      <Filter>Header Files\gui\properties\pages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\properties\pages\DebuggerViewPage.h">
+      <Filter>Header Files\gui\properties\pages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config\Config.h">
+      <Filter>Header Files\config</Filter>
+    </ClInclude>
+    <ClInclude Include="include\algorithms\observer.h">
+      <Filter>Header Files\algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config\DebuggerConfig.h">
+      <Filter>Header Files\config</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -119,16 +167,27 @@
     <ClCompile Include="controls\EditBtn.cpp">
       <Filter>Source Files\controls</Filter>
     </ClCompile>
+    <ClCompile Include="gui\properties\PropertyDlg.cpp">
+      <Filter>Source Files\gui\properties</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\properties\ConfigDlg.cpp">
+      <Filter>Source Files\gui\properties</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\properties\pages\GlobalSettingsPage.cpp">
+      <Filter>Source Files\gui\properties\pages</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\properties\pages\DebuggerViewPage.cpp">
+      <Filter>Source Files\gui\properties\pages</Filter>
+    </ClCompile>
+    <ClCompile Include="config\config.cpp">
+      <Filter>Source Files\config</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="wxWidgets-3.1.4_static.nuspec">
-      <Filter>packages</Filter>
-    </None>
-    <None Include="wxWidgets-3.1.4_static.targets">
-      <Filter>packages</Filter>
-    </None>
     <None Include="packages.config">
       <Filter>packages</Filter>
     </None>
+    <None Include="wxWidgets-0.0.0_static.nuspec" />
+    <None Include="wxWidgets-0.0.0_static.targets" />
   </ItemGroup>
 </Project>

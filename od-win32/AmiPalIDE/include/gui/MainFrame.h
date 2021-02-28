@@ -5,13 +5,16 @@
 #include <wx/treectrl.h>
 #include <wx/aui/aui.h>
 
+#include "config/ApplicationConfig.h"
+
 // TODO: Can be removed when the actual classes are implemented
 typedef wxTextCtrl RegistersPanel;
 typedef wxTextCtrl DisasmPanel;
 typedef wxTextCtrl BreakpointPanel;
 typedef wxTextCtrl ConsolePanel;
 
-class AmiPalMainFrame;
+class wxDialog;
+
 class MemoryPanel;
 class MemoryToolBar;
 class DocumentPanel;
@@ -19,13 +22,6 @@ class DocumentPanel;
 class DisasmPanel;
 class BreakpointPanel;
 class ConsolePanel;*/
-
-enum CloseButtonAction
-{
-	CLOSE_WINDOW,
-	CLOSE_MINIMIZE,
-	CLOSE_IGNORE
-};
 
 // IDs for the controls and the menu commands
 enum AmiPalMainFrameID
@@ -60,10 +56,14 @@ enum AmiPalMainFrameID
 };
 
 // Define a new frame type: this is going to be our main frame
-class MainFrame : public wxFrame
+class MainFrame
+: public wxFrame
 {
 public:
-	MainFrame(const wxString& title, const wxString &configFile);
+	MainFrame(const wxString& title);
+	~MainFrame(void) override;
+
+	static MainFrame *getInstance(void);
 
 	void OnClose(wxCloseEvent& event);
 
@@ -88,6 +88,14 @@ public:
 	void OnLayoutSave(wxCommandEvent& event);
 	void OnLayoutLoad(wxCommandEvent& event);
 
+	/**
+	 * If a modal dialog is used, it should be registered here. This is
+	 * because we are running from a DLL, so the client can unload the DLL
+	 * any time, even if a modal dialog is currently opended. This will lead
+	 * to a crash on exit, so the modal dialog has to be closed on exit.
+	 */
+	void setModalDialog(wxDialog *dlg = nullptr) { m_modalDialog = dlg; }
+
 protected:
 	RegistersPanel *createRegistersPanel(void);
 	MemoryPanel *createMemoryPanel(void);
@@ -108,7 +116,6 @@ private:
 	wxTreeCtrl *CreateFileBrowser();
 
 private:
-	wxString m_configFile;
 	wxAuiManager m_manager;
 
 	wxStatusBar *m_statusBar;
@@ -122,7 +129,8 @@ private:
 	BreakpointPanel *m_breakpointPanel;
 	ConsolePanel *m_consolePanel;
 
-	CloseButtonAction m_closeAction;
+	wxDialog *m_modalDialog;
+
 	bool m_closeByMenu;
 
 	wxDECLARE_EVENT_TABLE();

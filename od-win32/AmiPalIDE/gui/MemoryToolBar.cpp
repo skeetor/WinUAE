@@ -81,6 +81,10 @@ MemoryToolBar::~MemoryToolBar()
 void MemoryToolBar::reset(void)
 {
 	m_sizeTxt->SetValue("");
+	bool enable = true;
+	if (m_memory)
+		enable = m_memory->isLocked();
+	m_sizeTxt->Enable(enable);
 
 	m_columnsBox->SetSelection(0);
 	m_bytesBox->SetSelection(1);
@@ -125,6 +129,11 @@ void MemoryToolBar::updateBytesBox()
 	m_bytesBox->SetSelection(pos);
 }
 
+void MemoryToolBar::lock(bool locked)
+{
+	m_sizeTxt->Enable(locked);
+}
+
 void MemoryToolBar::updateControls(void)
 {
 	if (m_memory)
@@ -135,6 +144,7 @@ void MemoryToolBar::updateControls(void)
 		if (val)
 			s << m_memory->getMemorySize();
 		m_sizeTxt->SetValue(s);
+		m_sizeTxt->Enable(!m_memory->isLocked());
 
 		updateColumnsBox();
 		updateBytesBox();
@@ -145,13 +155,16 @@ void MemoryToolBar::updateControls(void)
 	else
 		reset();
 }
-
+ 
 bool MemoryToolBar::Enable(bool enable)
 {
 	m_columnsBox->Enable(enable);
 	m_spacesChk->Enable(enable);
 	m_bytesBox->Enable(enable);
 	m_typeBox->Enable(enable);
+
+	if (m_memory)
+		enable = !m_memory->isLocked();
 	m_sizeTxt->Enable(enable);
 
 	return true;

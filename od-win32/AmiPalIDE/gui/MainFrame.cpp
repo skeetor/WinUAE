@@ -7,6 +7,10 @@
 #include "gui/MemoryPanel.h"
 #include "gui/MemoryToolBar.h"
 
+#include "gui/properties/ConfigDlg.h"
+
+#include "config/ApplicationConfig.h"
+
 #include <wx/app.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
@@ -50,9 +54,8 @@ wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
 
 wxEND_EVENT_TABLE()
 
-MainFrame::MainFrame(const wxString& title, const wxString &configFile)
+MainFrame::MainFrame(const wxString& title)
 : wxFrame(NULL, wxID_ANY, title)
-, m_configFile(configFile)
 , m_statusBar(nullptr)
 , m_frameMenu(nullptr)
 , m_documents(nullptr)
@@ -62,8 +65,8 @@ MainFrame::MainFrame(const wxString& title, const wxString &configFile)
 , m_disasmPanel(nullptr)
 , m_breakpointPanel(nullptr)
 , m_consolePanel(nullptr)
+, m_modalDialog(nullptr)
 , m_closeByMenu(false)
-, m_closeAction(CloseButtonAction::CLOSE_WINDOW)
 {
 	// Enable docking
 	m_manager.SetManagedWindow(this);
@@ -104,6 +107,15 @@ MainFrame::MainFrame(const wxString& title, const wxString &configFile)
 	SetIcon(wxICON(sample));
 
 	SetStatusText("Welcome to wxWidgets!");
+}
+
+MainFrame::~MainFrame(void)
+{
+}
+
+MainFrame *MainFrame::getInstance(void)
+{
+	return wxGetApp().m_mainFrame;
 }
 
 wxMenu *MainFrame::createFileMenu(void)
@@ -256,7 +268,7 @@ void MainFrame::OnClose(wxCloseEvent &event)
 {
 	if (event.CanVeto())
 	{
-		switch (m_closeAction)
+		switch (ApplicationConfig::getInstance().closeAction)
 		{
 			case CLOSE_IGNORE:
 				event.Veto();
@@ -268,6 +280,9 @@ void MainFrame::OnClose(wxCloseEvent &event)
 			return;
 		}
 	}
+
+	if (m_modalDialog)
+		m_modalDialog->EndModal(wxID_CANCEL);
 
 	DebuggerExited();
 
@@ -323,6 +338,14 @@ void MainFrame::OnViewMemoryToolbar(wxCommandEvent &event)
 
 void MainFrame::OnOptions(wxCommandEvent& event)
 {
+	ConfigDlg dlg(this);
+
+	// We don't really care about the exit code. The user
+	// must press apply to change the settings, and after that
+	// there is no going back, so canceling the dialog has no
+	// effect in this case. Only if the user did not press apply
+	// but then, the changes are discarded anyway.
+	dlg.ShowModal();
 }
 
 void MainFrame::OnLayoutSave(wxCommandEvent& event)

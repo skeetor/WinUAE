@@ -22,7 +22,7 @@ class EditBtn
 {
 public:
 	EditBtn(wxWindow *parent, wxWindowID id = wxID_ANY, const wxString &label = wxEmptyString, const wxString &buttonLabel = wxEmptyString, const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxSize(478, 51), long style = wxTAB_TRAVERSAL, const wxString &name = wxEmptyString);
-	~EditBtn();
+	~EditBtn() override;
 
 	void setLabel(const wxString &text);
 	wxString getLabel(void) const;
@@ -30,9 +30,13 @@ public:
 	void setButtonLabel(const wxString &text);
 	wxString getButtonLabel(void) const;
 
+	void EnableButton(bool enable = true);
+
 	void setValue(const wxString &text);
 	wxString getValue(void) const;
 	wxTextCtrl *getEdit(void);
+
+	void Enable(bool enable = true, bool enableButton = true);
 
 protected:
 	void OnText(wxCommandEvent &event);

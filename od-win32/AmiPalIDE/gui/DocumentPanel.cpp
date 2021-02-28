@@ -16,14 +16,14 @@ DocumentPanel::~DocumentPanel()
 {
 }
 
-bool DocumentPanel::AddPage(DocumentView *page, const wxString &caption, bool select, const wxBitmap &bitmap)
+bool DocumentPanel::AddPage(Document *page, const wxString &caption, bool select, const wxBitmap &bitmap)
 {
 	wxWindow *w = page->getWindow();
 	w->SetClientData(page);
 	return wxAuiNotebook::AddPage(w, caption, select, bitmap);
 }
 
-bool DocumentPanel::DocumentPanel::InsertPage(size_t pageIdx, DocumentView *page, const wxString &caption, bool select, const wxBitmap &bitmap)
+bool DocumentPanel::DocumentPanel::InsertPage(size_t pageIdx, Document *page, const wxString &caption, bool select, const wxBitmap &bitmap)
 {
 	wxWindow *w = page->getWindow();
 	w->SetClientData(page);
@@ -38,14 +38,14 @@ void DocumentPanel::OnPageChanged(wxAuiNotebookEvent &event)
 	if ((page = event.GetOldSelection()) != -1)
 	{
 		wxWindow *w = GetPage(page);
-		DocumentView *d = static_cast<DocumentView *>(w->GetClientData());
+		Document *d = static_cast<Document *>(w->GetClientData());
 		d->deactivate();
 	}
 
 	if ((page = event.GetSelection()) != -1)
 	{
 		wxWindow *w = GetPage(page);
-		DocumentView *d = reinterpret_cast<DocumentView *>(w->GetClientData());
+		Document *d = reinterpret_cast<Document *>(w->GetClientData());
 		d->activate();
 	}
 
@@ -62,7 +62,7 @@ void DocumentPanel::OnPageClosing(wxAuiNotebookEvent &event)
 	if ((page = event.GetSelection()) != -1)
 	{
 		w = GetPage(page);
-		DocumentView *d = static_cast<DocumentView *>(w->GetClientData());
+		Document *d = static_cast<Document *>(w->GetClientData());
 		if (!d->closing(false, active))
 		{
 			event.Veto();
@@ -84,7 +84,7 @@ void DocumentPanel::OnPageClosing(wxAuiNotebookEvent &event)
 		w = GetPage(page);
 		if (w)
 		{
-			DocumentView *d = static_cast<DocumentView *>(w->GetClientData());
+			Document *d = static_cast<Document *>(w->GetClientData());
 			d->activate();
 		}
 	}

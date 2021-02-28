@@ -60,7 +60,15 @@ void loadDebuggerDLL(const TCHAR *dllName, TCHAR *cmdLine)
 		cmd += *p++;
 #endif
 
-	InitDebugger(&cmd[0]);
+	gDebuggerExited = true;
+	wchar_t *error;
+	if ((error = InitDebugger(getVersion(), &cmd[0])) != nullptr)
+	{
+		MessageBoxW(NULL, error, L"Error initializing GUI Debugger", MB_OK);
+		unloadDebuggerDLL(true);
+		return;
+	}
+
 	ShowDebugger(SW_RESTORE);
 	gDebuggerExited = false;
 }

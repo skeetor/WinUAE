@@ -45,6 +45,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 					 _In_ LPWSTR	lpCmdLine,
 					 _In_ int	   nCmdShow)
 {
+	hInst = hInstance;
 	wstring wcmd;
 	WCHAR *p = lpCmdLine;
 	while (*p)

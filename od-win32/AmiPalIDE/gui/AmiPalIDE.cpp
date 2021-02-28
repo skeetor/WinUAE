@@ -5,6 +5,8 @@
 #include "gui/MainFrame.h"
 #include "utils/commandline.h"
 
+#include "config/ApplicationConfig.h"
+
 using namespace std;
 
 //wxIMPLEMENT_APP(AmiPalApp);
@@ -23,7 +25,11 @@ bool AmiPalApp::OnInit(void)
 //	if (!wxApp::OnInit())
 //		return false;
 
-	m_mainFrame = new MainFrame(_T("AmiPalIDE v0.01"), configFile);
+	ApplicationConfig &config = ApplicationConfig::getInstance();
+
+	config.configFile = configFile;
+
+	m_mainFrame = new MainFrame(_T("AmiPalIDE v0.01"));
 	m_mainFrame->Show(true);
 
 	gApp = this;

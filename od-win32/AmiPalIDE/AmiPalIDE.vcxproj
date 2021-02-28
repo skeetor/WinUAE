@@ -110,7 +110,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AssemblerOutput>All</AssemblerOutput>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)packages\wxWidgets.3.1.4\include;$(SolutionDir)packages\wxWidgets.3.1.4\lib\$(Platform)\$(Configuration)\mswu</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)packages\wxWidgets.0.0.0\include;$(SolutionDir)packages\wxWidgets.0.0.0\lib\$(Platform)\$(Configuration)\mswu</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -121,7 +121,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableUAC>false</EnableUAC>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(SolutionDir)packages\wxWidgets.3.1.4\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(SolutionDir)packages\wxWidgets.0.0.0\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
       <AdditionalDependencies>rpcrt4.lib;comctl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);wxbase31u.lib;wxbase31u_net.lib;wxbase31u_xml.lib;wxexpat.lib;wxjpeg.lib;wxmsw31u_adv.lib;wxmsw31u_aui.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxmsw31u_html.lib;wxmsw31u_media.lib;wxmsw31u_propgrid.lib;wxmsw31u_qa.lib;wxmsw31u_ribbon.lib;wxmsw31u_richtext.lib;wxmsw31u_stc.lib;wxmsw31u_webview.lib;wxmsw31u_xrc.lib;wxpng.lib;wxregexu.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -137,7 +137,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AssemblerOutput>All</AssemblerOutput>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)packages\wxWidgets.3.1.4\include;$(SolutionDir)packages\wxWidgets.3.1.4\lib\$(Platform)\$(Configuration)\mswu</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)packages\wxWidgets.0.0.0\include;$(SolutionDir)packages\wxWidgets.0.0.0\lib\$(Platform)\$(Configuration)\mswu</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -150,7 +150,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableUAC>false</EnableUAC>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(SolutionDir)packages\wxWidgets.3.1.4\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(SolutionDir)packages\wxWidgets.0.0.0\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
       <AdditionalDependencies>rpcrt4.lib;comctl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);wxbase31u.lib;wxbase31u_net.lib;wxbase31u_xml.lib;wxexpat.lib;wxjpeg.lib;wxmsw31u_adv.lib;wxmsw31u_aui.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxmsw31u_html.lib;wxmsw31u_media.lib;wxmsw31u_propgrid.lib;wxmsw31u_qa.lib;wxmsw31u_ribbon.lib;wxmsw31u_richtext.lib;wxmsw31u_stc.lib;wxmsw31u_webview.lib;wxmsw31u_xrc.lib;wxpng.lib;wxregexu.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -165,7 +165,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AssemblerOutput>All</AssemblerOutput>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)packages\wxWidgets.3.1.4\include;$(SolutionDir)packages\wxWidgets.3.1.4\lib\$(Platform)\$(Configuration)\mswu</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)packages\wxWidgets.0.0.0\include;$(SolutionDir)packages\wxWidgets.0.0.0\lib\$(Platform)\$(Configuration)\mswu</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -176,7 +176,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableUAC>false</EnableUAC>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(SolutionDir)packages\wxWidgets.3.1.4\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(SolutionDir)packages\wxWidgets.0.0.0\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
       <AdditionalDependencies>rpcrt4.lib;comctl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);wxbase31u.lib;wxbase31u_net.lib;wxbase31u_xml.lib;wxexpat.lib;wxjpeg.lib;wxmsw31u_adv.lib;wxmsw31u_aui.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxmsw31u_html.lib;wxmsw31u_media.lib;wxmsw31u_propgrid.lib;wxmsw31u_qa.lib;wxmsw31u_ribbon.lib;wxmsw31u_richtext.lib;wxmsw31u_stc.lib;wxmsw31u_webview.lib;wxmsw31u_xrc.lib;wxpng.lib;wxregexu.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -192,7 +192,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AssemblerOutput>All</AssemblerOutput>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)packages\wxWidgets.3.1.4\include;$(SolutionDir)packages\wxWidgets.3.1.4\lib\$(Platform)\$(Configuration)\mswu</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)packages\wxWidgets.0.0.0\include;$(SolutionDir)packages\wxWidgets.0.0.0\lib\$(Platform)\$(Configuration)\mswu</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -205,26 +205,38 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableUAC>false</EnableUAC>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(SolutionDir)packages\wxWidgets.3.1.4\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(SolutionDir)packages\wxWidgets.0.0.0\lib\$(Platform)\$(Configuration)</AdditionalLibraryDirectories>
       <AdditionalDependencies>rpcrt4.lib;comctl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);wxbase31u.lib;wxbase31u_net.lib;wxbase31u_xml.lib;wxexpat.lib;wxjpeg.lib;wxmsw31u_adv.lib;wxmsw31u_aui.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxmsw31u_html.lib;wxmsw31u_media.lib;wxmsw31u_propgrid.lib;wxmsw31u_qa.lib;wxmsw31u_ribbon.lib;wxmsw31u_richtext.lib;wxmsw31u_stc.lib;wxmsw31u_webview.lib;wxmsw31u_xrc.lib;wxpng.lib;wxregexu.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\algorithms\observer.h" />
+    <ClInclude Include="include\config\ApplicationConfig.h" />
+    <ClInclude Include="include\config\Config.h" />
+    <ClInclude Include="include\config\DebuggerConfig.h" />
     <ClInclude Include="include\controls\EditBtn.h" />
     <ClInclude Include="include\controls\ComboBoxEdit.h" />
+    <ClInclude Include="include\controls\TreeItemData.h" />
     <ClInclude Include="include\debugger\DebuggerAPI.h" />
     <ClInclude Include="include\debugger\Machine.h" />
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\globals.h" />
     <ClInclude Include="include\gui\AmiPalIDE.h" />
     <ClInclude Include="include\gui\DocumentPanel.h" />
-    <ClInclude Include="include\gui\DocumentView.h" />
+    <ClInclude Include="include\gui\Document.h" />
     <ClInclude Include="include\gui\MainFrame.h" />
     <ClInclude Include="include\gui\MemoryPanel.h" />
     <ClInclude Include="include\gui\MemoryToolBar.h" />
+    <ClInclude Include="include\gui\properties\ConfigDlg.h" />
+    <ClInclude Include="include\gui\properties\pages\DebuggerViewPage.h" />
+    <ClInclude Include="include\gui\properties\PropertyPage.h" />
+    <ClInclude Include="include\gui\properties\pages\GlobalSettingsPage.h" />
+    <ClInclude Include="include\gui\properties\PropertyDlg.h" />
+    <ClInclude Include="include\gui\properties\PropertyPagePanel.h" />
     <ClInclude Include="include\utils\commandline.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="config\config.cpp" />
     <ClCompile Include="controls\EditBtn.cpp" />
     <ClCompile Include="controls\ComboBoxEdit.cpp" />
     <ClCompile Include="debugger\DebuggerAPI.cpp" />
@@ -234,12 +246,16 @@
     <ClCompile Include="gui\MainFrame.cpp" />
     <ClCompile Include="gui\MemoryPanel.cpp" />
     <ClCompile Include="gui\MemoryToolBar.cpp" />
+    <ClCompile Include="gui\properties\ConfigDlg.cpp" />
+    <ClCompile Include="gui\properties\pages\GlobalSettingsPage.cpp" />
+    <ClCompile Include="gui\properties\pages\DebuggerViewPage.cpp" />
+    <ClCompile Include="gui\properties\PropertyDlg.cpp" />
     <ClCompile Include="utils\commandline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="wxWidgets-3.1.4_static.nuspec" />
-    <None Include="wxWidgets-3.1.4_static.targets" />
+    <None Include="wxWidgets-0.0.0_static.nuspec" />
+    <None Include="wxWidgets-0.0.0_static.targets" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

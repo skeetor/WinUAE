@@ -71,3 +71,4 @@ packages.config
 **/.vs
 /cpudefs.c
 *.cfg
+/od-win32/winuae_msvc15/test_config.txt

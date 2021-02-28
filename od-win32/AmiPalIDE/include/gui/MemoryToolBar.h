@@ -41,6 +41,7 @@ public:
 	// Set the controls to the values from the current MemoryPanel
 	// If MemoryPanel is not set, it will reset to defaults.
 	void updateControls(void);
+	void lock(bool locked);
 
 protected:
 	void OnNewMemory(wxCommandEvent &event);

@@ -16,6 +16,7 @@ wxIMPLEMENT_APP(AmiPalApp);
 static bool gDebuggerExited = false;
 AmiPalApp *gApp = nullptr;
 static thread *gGuiThread = nullptr;
+static wchar_t ErrorText[265];
 
 static vector<wstring> parseCmdLine(wchar_t *cmdLine)
 {
@@ -56,11 +57,26 @@ static inline MainFrame *getAppFrame(void)
 	if (gDebuggerExited)
 		return nullptr;
 
-	return wxGetApp().m_mainFrame;
+	return MainFrame::getInstance();
 }
 
-extern "C" WINUAE_DEBUGGER_API bool InitDebugger(wchar_t *cmdLine)
+static bool isCompatible(uint32_t clientVersion)
 {
+	if (clientVersion <= getVersion())
+		return true;
+
+	return false;
+}
+
+extern "C" WINUAE_DEBUGGER_API wchar_t *InitDebugger(uint32_t version, wchar_t *cmdLine)
+{
+	if (!isCompatible(version))
+	{
+		_snwprintf(ErrorText, sizeof(ErrorText), L"Client API version %08lX is incompatible with debugger version %08lX", version, getVersion());
+
+		return ErrorText;
+	}
+
 	if (!gGuiThread)
 	{
 		if (gDebuggerExited)
@@ -80,16 +96,16 @@ extern "C" WINUAE_DEBUGGER_API bool InitDebugger(wchar_t *cmdLine)
 	while (!(*app))
 		Sleep(100);
 
-	return true;
+	return nullptr;
 }
 
 extern "C" WINUAE_DEBUGGER_API void CloseDebugger(void)
 {
 	if (!gDebuggerExited)
 	{
-		AmiPalApp &app = wxGetApp();
-		if (app.m_mainFrame)
-			app.m_mainFrame->Close(true);
+		MainFrame *frame = MainFrame::getInstance();
+		if (frame)
+			frame->Close(true);
 	}
 
 	if (gGuiThread)

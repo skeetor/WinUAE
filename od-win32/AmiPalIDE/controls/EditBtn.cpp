@@ -123,3 +123,11 @@ wxTextCtrl *EditBtn::getEdit(void)
 {
 	return m_editTxt;
 }
+
+void EditBtn::Enable(bool enable, bool enableButton)
+{
+	m_editLbl->Enable(enable);
+	m_editTxt->Enable(enable);
+
+	m_editBtn->Enable(enableButton);
+}

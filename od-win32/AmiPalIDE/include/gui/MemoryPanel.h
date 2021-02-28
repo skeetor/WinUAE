@@ -4,8 +4,10 @@
 #include <wx/panel.h>
 
 #include "gui/MemoryToolBar.h"
-#include "gui/DocumentView.h"
+#include "gui/Document.h"
 #include "debugger/DebuggerAPI.h"
+#include "algorithms/observer.h"
+#include "config/DebuggerConfig.h"
 
 #define IDC_ADDRESS_TXT 1000
 #define IDC_MEMORY_TXT 1001
@@ -16,7 +18,8 @@ class EditBtn;
 ///////////////////////////////////////////////////////////////////////////
 class MemoryPanel
 : public wxPanel
-, public DocumentView
+, public Document
+, Listener<DebuggerConfig>
 {
 public:
 	enum DisplayType
@@ -29,7 +32,7 @@ public:
 	MemoryPanel(MemoryToolBar *toolBar, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxSize(819,191), long style = wxTAB_TRAVERSAL, const wxString &name = wxEmptyString);
 	~MemoryPanel() override;
 
-public: // DocumentView overrides
+public: // Document overrides
 	wxWindow *getWindow(void) override { return this; }
 	void activate(void) override;
 	void deactivate(void) override;
@@ -69,13 +72,13 @@ public:
 	void setSpaces(bool spaces);
 	bool hasSpaces(void) const { return m_spaces; }
 
-	void setLocked(bool locked);
-	bool isLocked(void) const { return m_locked; }
+	void lock(bool locked) override;
 
 protected:
 	size_t printDump(size_t address);
 	void OnAddressChanged(wxCommandEvent &event);
 	void OnLock(wxCommandEvent &event);
+	void handleNotification(DebuggerConfig &config);
 
 private:
 	void adjustDimensions(void);
@@ -84,8 +87,9 @@ private:
 private:
 	EditBtn *m_addressTxt;
 	wxTextCtrl *m_memoryTxt;
-	wxFont m_font;
 	MemoryToolBar *m_toolBar;
+	uint32_t m_horizSB;
+	uint32_t m_vertSB;
 
 	size_t m_address;
 	size_t m_curAddress;
@@ -100,7 +104,6 @@ private:
 	size_t m_addressLimit;
 
 	bool m_spaces:1;
-	bool m_locked:1;
 
 	wxDECLARE_EVENT_TABLE();
 };

@@ -2,14 +2,14 @@
 <package  xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>wxWidgets</id>
-    <version>3.1.4</version>
-    <title>wxWidgets static</title>
+    <version>0.0.0</version>
+    <title>wxWidgets static src</title>
     <authors>http://wxwidgets.org/</authors>
     <owners>http://wxwidgets.org/</owners>
     <licenseUrl>https://github.com/wxWidgets/wxWidgets/blob/master/docs/licence.txt</licenseUrl>
     <projectUrl>https://www.wxwidgets.org/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Cross platform GUI library</description>
+    <description>Cross platform GUI library built form GIT source</description>
     <releaseNotes></releaseNotes>
     <copyright></copyright>
     <tags>tools library</tags>
@@ -17,7 +17,7 @@
   </metadata>
   <files>
     <!-- file src=".git\refs\heads\master" target="build\master" /-->
-    <file src="wxWidgets-3.1.4_static.targets" target="wxWidgets-3.1.4_static.targets"/>
+    <file src="wxWidgets-src_static.targets" target="wxWidgets-src_static.targets"/>
     <file src="include\**" target="include" />
 
     <file src="lib\vc_x64_lib\mswud\**" target="lib\x64\Debug\mswu" />

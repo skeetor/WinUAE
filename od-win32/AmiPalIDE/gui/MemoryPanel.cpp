@@ -28,6 +28,8 @@ wxEND_EVENT_TABLE()
 MemoryPanel::MemoryPanel(MemoryToolBar *toolBar, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style, const wxString &name)
 : wxPanel(parent, id, pos, size, style, name)
 , m_toolBar(toolBar)
+, m_horizSB(wxSystemMetric::wxSYS_HSCROLL_Y)
+, m_vertSB(wxSystemMetric::wxSYS_VSCROLL_X)
 , m_address(0)
 , m_curAddress(0)
 , m_addressRep(wxT("$00000000"))
@@ -39,15 +41,16 @@ MemoryPanel::MemoryPanel(MemoryToolBar *toolBar, wxWindow *parent, wxWindowID id
 , m_type(DisplayType::DST_HEX)
 , m_addressLimit(0xffffffff)
 , m_spaces(true)
-, m_locked(false)
 {
 	Init();
 
+	DebuggerConfig::getInstance().addListener(this);
 	m_addressTxt->setValue(wxT("$00000000"));
 }
 
 MemoryPanel::~MemoryPanel()
 {
+	DebuggerConfig::getInstance().removeListener(this);
 }
 
 void MemoryPanel::Init(void)
@@ -61,7 +64,7 @@ void MemoryPanel::Init(void)
 	sizer->Add(m_addressTxt, wxGBPosition(0, 0), wxGBSpan(1, 1), wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 5);
 
 	m_memoryTxt = new wxTextCtrl(this, IDC_MEMORY_TXT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_DONTWRAP | wxTE_MULTILINE | wxTE_NOHIDESEL | wxTE_PROCESS_ENTER | wxTE_READONLY | wxBORDER_STATIC);
-	m_memoryTxt->SetFont(wxFont(wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT("Courier New")));
+	m_memoryTxt->SetFont(DebuggerConfig::getInstance().memoryViewFont);
 	m_memoryTxt->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
 	m_memoryTxt->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
 
@@ -72,7 +75,7 @@ void MemoryPanel::Init(void)
 
 	SetSizer(sizer);
 	Layout();
-	setLocked(m_locked);
+	lock(isLocked());
 }
 
 void MemoryPanel::OnAddressChanged(wxCommandEvent &event)
@@ -108,7 +111,7 @@ void MemoryPanel::OnAddressChanged(wxCommandEvent &event)
 
 void MemoryPanel::OnLock(wxCommandEvent &event)
 {
-	setLocked(!isLocked());
+	lock(!isLocked());
 }
 
 void MemoryPanel::setAddress(size_t address)
@@ -161,9 +164,11 @@ void MemoryPanel::setSpaces(bool spaces)
 	printDump(m_curAddress);
 }
 
-void MemoryPanel::setLocked(bool locked)
+void MemoryPanel::lock(bool locked)
 {
-	m_locked = locked;
+	Document::lock(locked);
+	m_toolBar->lock(!locked);
+	m_addressTxt->Enable(!locked, true);
 
 	// TODO: Update Lockbutton bitmap
 	if (locked)
@@ -176,6 +181,7 @@ void MemoryPanel::activate(void)
 {
 	m_toolBar->setMemoryPanel(this);
 	m_toolBar->Enable();
+	m_toolBar->lock(isLocked());
 	m_toolBar->updateControls();
 }
 
@@ -201,13 +207,12 @@ void MemoryPanel::adjustDimensions(void)
 	m_addressTxt->GetSize(&aw, &ah);
 
 	wxSize sz = GetClientSize();
-	int displayWidth = sz.GetWidth();
 	int cw;
 	int ch;
 
 	m_memoryTxt->GetTextExtent("0", &cw, &ch);
-	int chars = (displayWidth / cw)-1;
-	int lines = ((sz.GetHeight() - ah) / ch) - 3;
+	int chars = ((sz.GetWidth() - m_vertSB) / cw);
+	int lines = ((sz.GetHeight() - ah - m_horizSB) / ch) - 1;
 	if (lines <= 0)
 		lines = 1;
 	m_curLines = lines;
@@ -265,7 +270,7 @@ size_t MemoryPanel::printDump(size_t address)
 	// If the panel is locked, then we use the memorydump for the cache.
 	// In that case we still update the view, as some
 	// display options might have been changed.
-	if (!m_locked)
+	if (!isLocked())
 	{
 		size = m_curLines * m_columns * m_bytes;
 
@@ -358,4 +363,11 @@ size_t MemoryPanel::printDump(size_t address)
 	m_memoryTxt->SetValue(lines);
 
 	return address;
+}
+
+void MemoryPanel::handleNotification(DebuggerConfig &config)
+{
+	m_memoryTxt->SetFont(DebuggerConfig::getInstance().memoryViewFont);
+	printDump(m_curAddress);
+	m_memoryTxt->Refresh();
 }

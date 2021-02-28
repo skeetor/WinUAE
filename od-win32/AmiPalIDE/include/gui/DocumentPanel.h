@@ -1,7 +1,7 @@
 #pragma once
 
 #include <wx/aui/aui.h>
-#include "gui/DocumentView.h"
+#include "gui/Document.h"
 
 ///////////////////////////////////////////////////////////////////////////
 class DocumentPanel
@@ -12,8 +12,8 @@ public:
 	~DocumentPanel() override;
 
 public:
-	bool AddPage(DocumentView *page, const wxString &caption, bool select = false, const wxBitmap &bitmap = wxNullBitmap);
-	bool InsertPage(size_t pageIdx, DocumentView *page, const wxString &caption, bool select = false, const wxBitmap &bitmap = wxNullBitmap);
+	bool AddPage(Document *page, const wxString &caption, bool select = false, const wxBitmap &bitmap = wxNullBitmap);
+	bool InsertPage(size_t pageIdx, Document *page, const wxString &caption, bool select = false, const wxBitmap &bitmap = wxNullBitmap);
 
 protected:
 	virtual void OnPageChanged(wxAuiNotebookEvent &event);
