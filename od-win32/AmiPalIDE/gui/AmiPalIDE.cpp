@@ -7,6 +7,8 @@
 
 #include "config/ApplicationConfig.h"
 
+#include <wx/fileconf.h>
+
 using namespace std;
 
 //wxIMPLEMENT_APP(AmiPalApp);
@@ -21,6 +23,8 @@ bool AmiPalApp::OnInit(void)
 {
 	if (!parseCommandLine(argc, argv))
 		return false;
+
+	wxConfigBase::DontCreateOnDemand();
 
 //	if (!wxApp::OnInit())
 //		return false;

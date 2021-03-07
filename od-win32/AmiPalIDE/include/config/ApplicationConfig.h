@@ -3,6 +3,8 @@
 #include "config/Config.h"
 #include <wx/string.h>
 
+#define APPLICATION_NAME wxT("AmiPal")
+
 enum CloseButtonAction
 {
 	CLOSE_WINDOW,
@@ -17,6 +19,7 @@ public:
 	ApplicationConfig()
 	: closeAction(CloseButtonAction::CLOSE_WINDOW)
 	, saveLayout(true)
+	, savePosition(true)
 	, layout(wxT("default"))
 	{}
 
@@ -32,6 +35,7 @@ public:
 		logFile = src.logFile;
 		layout = src.layout;
 		saveLayout = src.saveLayout;
+		savePosition = src.savePosition;
 
 		notify();
 	}
@@ -39,6 +43,7 @@ public:
 public:
 	CloseButtonAction closeAction;
 	bool saveLayout:1;
+	bool savePosition:1;
 
 	wxString configFile;
 	wxString logFile;

@@ -8,9 +8,10 @@
 #include <wx/checkbox.h>
 
 #define IDC_CLOSEBUTTON_ACTION 1000
-#define IDC_SAVE_LAYOUT_TXT 1001
-#define IDC_SAVE_LAYOUT_CHK 1002
-#define IDC_CLOSE_BUTTON_ACTION 1003
+#define IDC_CLOSE_BUTTON_ACTION 1001
+#define IDC_SAVE_LAYOUT_TXT 1002
+#define IDC_SAVE_LAYOUT_CHK 1003
+#define IDC_SAVE_POSITION 1004
 
 class GlobalSettingsPage
 : public PropertyPagePanel
@@ -25,8 +26,9 @@ public: // PropertyPage
 
 protected:
 	void OnCloseAction(wxCommandEvent &event);
-	void OnSaveLayoutTxt(wxCommandEvent &event);
-	void OnSaveLayoutChk(wxCommandEvent &event);
+	void OnLayoutName(wxCommandEvent &event);
+	void OnSaveLayout(wxCommandEvent &event);
+	void OnSavePosition(wxCommandEvent &event);
 
 	void updateSettings(void);
 
@@ -34,9 +36,10 @@ private:
 	void init(void);
 
 private:
+	wxChoice *m_closeButtonList;
 	wxTextCtrl *m_saveLayoutTxt;
 	wxCheckBox *m_saveLayoutChk;
-	wxChoice *m_closeButtonList;
+	wxCheckBox *m_savePositionChk;
 
 	ApplicationConfig m_config;
 

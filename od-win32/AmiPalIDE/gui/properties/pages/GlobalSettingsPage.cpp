@@ -7,8 +7,9 @@
 wxBEGIN_EVENT_TABLE(GlobalSettingsPage, wxPanel)
 
 	EVT_CHOICE(IDC_CLOSE_BUTTON_ACTION, GlobalSettingsPage::OnCloseAction)
-	EVT_TEXT_ENTER(IDC_SAVE_LAYOUT_TXT, GlobalSettingsPage::OnSaveLayoutTxt)
-	EVT_CHECKBOX(IDC_SAVE_LAYOUT_CHK, GlobalSettingsPage::OnSaveLayoutChk)
+	EVT_TEXT_ENTER(IDC_SAVE_LAYOUT_TXT, GlobalSettingsPage::OnLayoutName)
+	EVT_CHECKBOX(IDC_SAVE_LAYOUT_CHK, GlobalSettingsPage::OnSaveLayout)
+	EVT_CHECKBOX(IDC_SAVE_POSITION, GlobalSettingsPage::OnSavePosition)
 
 wxEND_EVENT_TABLE()
 
@@ -35,6 +36,12 @@ void GlobalSettingsPage::init(void)
 	st->Wrap(-1);
 	sizer->Add(st, wxGBPosition(0, 0), wxGBSpan(1, 1), wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
+	wxString m_closeButtonListChoices[] = { wxT("Close Window"), wxT("Minimize Window"), wxT("Ignore") };
+	int m_closeButtonListNChoices = sizeof(m_closeButtonListChoices) / sizeof(wxString);
+	m_closeButtonList = new wxChoice(this, IDC_CLOSE_BUTTON_ACTION, wxDefaultPosition, wxDefaultSize, m_closeButtonListNChoices, m_closeButtonListChoices, 0);
+	m_closeButtonList->SetSelection(0);
+	sizer->Add(m_closeButtonList, wxGBPosition(1, 0), wxGBSpan(1, 1), wxALIGN_CENTER_VERTICAL | wxALL, 5);
+
 	m_saveLayoutTxt = new wxTextCtrl(this, IDC_SAVE_LAYOUT_TXT, wxT("default"), wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 	sizer->Add(m_saveLayoutTxt, wxGBPosition(2, 1), wxGBSpan(1, 1), wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 5);
 
@@ -42,11 +49,9 @@ void GlobalSettingsPage::init(void)
 	m_saveLayoutChk->SetValue(true);
 	sizer->Add(m_saveLayoutChk, wxGBPosition(2, 0), wxGBSpan(1, 1), wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
-	wxString m_closeButtonListChoices[] = { wxT("Close Window"), wxT("Minimize Window"), wxT("Ignore") };
-	int m_closeButtonListNChoices = sizeof(m_closeButtonListChoices) / sizeof(wxString);
-	m_closeButtonList = new wxChoice(this, IDC_CLOSE_BUTTON_ACTION, wxDefaultPosition, wxDefaultSize, m_closeButtonListNChoices, m_closeButtonListChoices, 0);
-	m_closeButtonList->SetSelection(0);
-	sizer->Add(m_closeButtonList, wxGBPosition(1, 0), wxGBSpan(1, 1), wxALIGN_CENTER_VERTICAL | wxALL, 5);
+	m_savePositionChk = new wxCheckBox(this, IDC_SAVE_POSITION, wxT("Save window position and size"), wxDefaultPosition, wxDefaultSize, 0);
+	m_savePositionChk->SetValue(true);
+	sizer->Add(m_savePositionChk, wxGBPosition(3, 0), wxGBSpan(1, 2), wxALL, 5);
 
 	sizer->AddGrowableCol(1);
 
@@ -77,6 +82,7 @@ void GlobalSettingsPage::updateSettings()
 		break;
 	}
 
+	m_savePositionChk->SetValue(m_config.savePosition);
 	m_saveLayoutTxt->SetValue(m_config.layout);
 	bool enable = m_config.saveLayout;
 
@@ -84,7 +90,7 @@ void GlobalSettingsPage::updateSettings()
 	m_saveLayoutTxt->Enable(enable);
 }
 
-void GlobalSettingsPage::OnSaveLayoutTxt(wxCommandEvent &event)
+void GlobalSettingsPage::OnLayoutName(wxCommandEvent &event)
 {
 	wxString s = m_saveLayoutTxt->GetValue();
 	if (s == m_config.layout)
@@ -94,10 +100,16 @@ void GlobalSettingsPage::OnSaveLayoutTxt(wxCommandEvent &event)
 	setDirty(true);
 }
 
-void GlobalSettingsPage::OnSaveLayoutChk(wxCommandEvent &event)
+void GlobalSettingsPage::OnSaveLayout(wxCommandEvent &event)
 {
 	m_config.saveLayout = m_saveLayoutChk->GetValue();
 	m_saveLayoutTxt->Enable(m_config.saveLayout);
+	setDirty(true);
+}
+
+void GlobalSettingsPage::OnSavePosition(wxCommandEvent &event)
+{
+	m_config.savePosition = m_savePositionChk->GetValue();
 	setDirty(true);
 }
 

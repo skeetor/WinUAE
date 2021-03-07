@@ -104,6 +104,9 @@ protected:
 	BreakpointPanel *createBreakpointPanel(void);
 	ConsolePanel *createConsolePanel(void);
 
+	void saveConfig(void);
+	void restoreConfig(void);
+
 private:
 	wxMenu *createFileMenu(void);
 	wxMenu *createDebugMenu(void);
@@ -131,7 +134,8 @@ private:
 
 	wxDialog *m_modalDialog;
 
-	bool m_closeByMenu;
+	bool m_closeByMenu:1;
+	bool m_abort:1;
 
 	wxDECLARE_EVENT_TABLE();
 };

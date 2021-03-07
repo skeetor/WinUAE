@@ -16,6 +16,9 @@
 #include <wx/msgdlg.h>
 #include <wx/window.h>
 #include <wx/artprov.h>
+#include <wx/fileconf.h>
+#include <wx/stdpaths.h>
+#include <wx/wfstream.h>
 
 using namespace std;
 
@@ -67,6 +70,7 @@ MainFrame::MainFrame(const wxString& title)
 , m_consolePanel(nullptr)
 , m_modalDialog(nullptr)
 , m_closeByMenu(false)
+, m_abort(false)
 {
 	// Enable docking
 	m_manager.SetManagedWindow(this);
@@ -87,7 +91,7 @@ MainFrame::MainFrame(const wxString& title)
 		FromDIP(wxSize(430,200)),
 		wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_MIDDLE_CLICK_CLOSE);
 
-	// nb->SetArtProvider(new wxAuiSimpleTabArt);
+	// m_documents->SetArtProvider(new wxAuiSimpleTabArt);
 
 	m_manager.AddPane(m_documents, wxAuiPaneInfo().Name("notebook_content").CenterPane().PaneBorder(false));
 	m_manager.AddPane(CreateFileBrowser(), wxAuiPaneInfo().Name("filebrowser").Caption("File Browser").Left().Layer(1).Position(1).CloseButton(true).MaximizeButton(true));
@@ -106,7 +110,9 @@ MainFrame::MainFrame(const wxString& title)
 	// set the frame icon
 	SetIcon(wxICON(sample));
 
-	SetStatusText("Welcome to wxWidgets!");
+	SetStatusText("Welcome to the WinUAE GUI Debugger!");
+
+	restoreConfig();
 }
 
 MainFrame::~MainFrame(void)
@@ -266,23 +272,28 @@ void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MainFrame::OnClose(wxCloseEvent &event)
 {
-	if (event.CanVeto())
+	if (!m_abort)
 	{
-		switch (ApplicationConfig::getInstance().closeAction)
+		if (event.CanVeto())
 		{
-			case CLOSE_IGNORE:
-				event.Veto();
-			return;
+			switch (ApplicationConfig::getInstance().closeAction)
+			{
+				case CLOSE_IGNORE:
+					event.Veto();
+				return;
 
-			case CLOSE_MINIMIZE:
-				Iconize();
-				event.Veto();
-			return;
+				case CLOSE_MINIMIZE:
+					Iconize();
+					event.Veto();
+				return;
+			}
 		}
-	}
 
-	if (m_modalDialog)
-		m_modalDialog->EndModal(wxID_CANCEL);
+		if (m_modalDialog)
+			m_modalDialog->EndModal(wxID_CANCEL);
+
+		saveConfig();
+	}
 
 	Debugger->DebuggerExited();
 
@@ -391,4 +402,121 @@ BreakpointPanel *MainFrame::createBreakpointPanel(void)
 ConsolePanel *MainFrame::createConsolePanel(void)
 {
 	return CreateTextCtrl("ConsolePanel");
+}
+
+void MainFrame::saveConfig(void)
+{
+	ApplicationConfig &appCfg = ApplicationConfig::getInstance();
+	wxString fn = appCfg.configFile;
+	if (fn.empty())
+	{
+		fn = wxStandardPaths::Get().GetUserConfigDir();
+	}
+
+	wxFileOutputStream ostrm(fn);
+	if (!ostrm.Ok())
+	{
+		// TODO: error handling
+	}
+
+	wxFileConfig *config = new wxFileConfig();
+	wxConfigBase::Set(config);
+
+	config->SetPath("GlobalSettings");
+	config->Write("FrameSize", appCfg.savePosition);
+
+	if (appCfg.savePosition)
+	{
+		bool maximized = IsMaximized();
+
+		if (maximized)
+			Maximize(false);
+
+		int fx, fy, fw, fh;
+		GetPosition(&fx, &fy);
+		GetSize(&fw, &fh);
+		config->Write("FrameX", fx);
+		config->Write("FrameY", fy);
+		config->Write("FrameW", fw);
+		config->Write("FrameH", fh);
+		config->Write("FrameMaximized", maximized);
+	}
+
+	config->Write("PerspectiveSave", appCfg.saveLayout);
+	if (appCfg.saveLayout)
+	{
+		config->Write("PerspectiveName", appCfg.layout);
+		config->Write("PerspectiveLayout", m_manager.SavePerspective());
+	}
+
+	if (!config->Save(ostrm))
+	{
+		// TODO: error handling
+	}
+	ostrm.Close();
+
+	wxConfigBase::Set(nullptr);
+	delete config;
+}
+
+void MainFrame::restoreConfig(void)
+{
+	ApplicationConfig &appCfg = ApplicationConfig::getInstance();
+	wxString fn = appCfg.configFile;
+	if (fn.empty())
+	{
+		fn = wxStandardPaths::Get().GetUserConfigDir();
+	}
+
+	wxFileInputStream istrm(fn);
+	if (!istrm.Ok())
+	{
+		int rc = wxMessageBox(wxString("Unable to open file: ") + fn + wxT(" for reading! Abort?"), "Error opening config file!", wxYES_NO);
+		if (rc == wxYES)
+		{
+			m_abort = true;
+			// TODO: Shutdown application
+			//Debugger->CloseDebugger();
+		}
+
+		return;
+	}
+
+	wxFileConfig *config = new wxFileConfig(istrm);
+	wxConfigBase::Set(config);
+
+	config->SetPath("GlobalSettings");
+	appCfg.savePosition = config->ReadBool("FrameSize", true);
+
+	if (appCfg.savePosition)
+	{
+		bool maximized = config->ReadBool("FrameMaximized", false);
+		Maximize(false);
+
+		int w, h;
+		wxPoint p;
+
+		config->Read("FrameX", &p.x);
+		config->Read("FrameY", &p.y);
+		config->Read("FrameW", &w);
+		config->Read("FrameH", &h);
+
+		SetPosition(p);
+		SetSize(w, h);
+
+		if (maximized)
+			Maximize(true);
+	}
+
+	appCfg.saveLayout = config->ReadBool("PerspectiveSave", true);
+	if (appCfg.saveLayout)
+	{
+		wxString layout;
+		config->Read("PerspectiveName", appCfg.layout);
+		config->Read("PerspectiveLayout", layout);
+
+		m_manager.LoadPerspective(layout);
+	}
+
+	delete config;
 }
