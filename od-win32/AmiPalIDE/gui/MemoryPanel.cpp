@@ -279,11 +279,14 @@ size_t MemoryPanel::printDump(size_t address)
 
 		m_lockCache.resize(size);
 		memPtr = &m_lockCache[0];
-		size = DbgMemoryRead(address, memPtr, size);
+		size = Debugger->MemoryRead(address, memPtr, size);
 		m_lockCache.resize(size);
 	}
 	else
 		size = m_lockCache.size();
+
+	if (!size)
+		return 0;
 
 	memPtr = &m_lockCache[0];
 

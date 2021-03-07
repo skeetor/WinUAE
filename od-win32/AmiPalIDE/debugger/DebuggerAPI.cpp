@@ -9,14 +9,22 @@
 
 using namespace std;
 
+void initAPI(IDebugger *debugger);
+
 static const wchar_t *gAppName = L"AmiPalIDE";
 
 wxIMPLEMENT_APP(AmiPalApp);
 
-static bool gDebuggerExited = false;
+namespace
+{
+	bool gDebuggerExited = false;
+	thread *gGuiThread = nullptr;
+	wchar_t ErrorText[265];
+	IDebugger dbg;
+}
+
 AmiPalApp *gApp = nullptr;
-static thread *gGuiThread = nullptr;
-static wchar_t ErrorText[265];
+extern IDebugger *Debugger = &dbg;
 
 static vector<wstring> parseCmdLine(wchar_t *cmdLine)
 {
@@ -68,14 +76,18 @@ static bool isCompatible(uint32_t clientVersion)
 	return false;
 }
 
-extern "C" WINUAE_DEBUGGER_API wchar_t *InitDebugger(uint32_t version, wchar_t *cmdLine)
+extern "C" WINUAE_DEBUGGER_API wchar_t *InitDebugger(uint32_t version, wchar_t *cmdLine, IDebugger *debugger)
 {
+	initAPI(debugger);
+
 	if (!isCompatible(version))
 	{
 		_snwprintf(ErrorText, sizeof(ErrorText), L"Client API version %08lX is incompatible with debugger version %08lX", version, getVersion());
 
 		return ErrorText;
 	}
+
+	initAPI(debugger);
 
 	if (!gGuiThread)
 	{
@@ -99,7 +111,7 @@ extern "C" WINUAE_DEBUGGER_API wchar_t *InitDebugger(uint32_t version, wchar_t *
 	return nullptr;
 }
 
-extern "C" WINUAE_DEBUGGER_API void CloseDebugger(void)
+void CloseDebugger(void)
 {
 	if (!gDebuggerExited)
 	{
@@ -117,7 +129,7 @@ extern "C" WINUAE_DEBUGGER_API void CloseDebugger(void)
 	}
 }
 
-extern "C" WINUAE_DEBUGGER_API void ShowDebugger(int cmdShow)
+void ShowDebugger(int cmdShow)
 {
 	MainFrame *frame = getAppFrame();
 	if (!frame)
@@ -138,4 +150,28 @@ extern "C" WINUAE_DEBUGGER_API void ShowDebugger(int cmdShow)
 		case SW_HIDE:
 		break;
 	}
+}
+
+static void resetAPI(void)
+{
+	DEFAULT_FUNCTION(DebuggerExited);
+	DEFAULT_FUNCTION(MemoryRead);
+	DEFAULT_FUNCTION(MemoryWrite);
+}
+
+static void initAPI(IDebugger *debugger)
+{
+	debugger->ShowDebugger = Debugger->ShowDebugger = ShowDebugger;
+	debugger->CloseDebugger = Debugger->CloseDebugger = CloseDebugger;
+
+	if (!debugger->DebuggerExited)
+	{
+		resetAPI();
+		return;
+	}
+
+	Debugger->DebuggerExited = debugger->DebuggerExited;
+	Debugger->MemoryRead = debugger->MemoryRead;
+	Debugger->MemoryWrite = debugger->MemoryWrite;
+
 }

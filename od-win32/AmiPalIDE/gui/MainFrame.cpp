@@ -284,7 +284,7 @@ void MainFrame::OnClose(wxCloseEvent &event)
 	if (m_modalDialog)
 		m_modalDialog->EndModal(wxID_CANCEL);
 
-	DebuggerExited();
+	Debugger->DebuggerExited();
 
 	// Disable close on exit.
 	wxGetApp().m_mainFrame = nullptr;

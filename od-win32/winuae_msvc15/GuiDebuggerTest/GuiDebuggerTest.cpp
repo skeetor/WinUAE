@@ -188,11 +188,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 
 				case IDM_DEBUGGER_HIDE:
-					ShowDebugger(SW_MINIMIZE);
+					Debugger->ShowDebugger(SW_MINIMIZE);
 				break;
 
 				case IDM_DEBUGGER_RESTORE:
-					ShowDebugger(SW_RESTORE);
+					Debugger->ShowDebugger(SW_RESTORE);
 				break;
 
 				case IDM_ABOUT:

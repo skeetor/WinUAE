@@ -8,26 +8,33 @@
 
 #define DEBUGGER_DLL_PROC_IMPL
 #include "GuiDebuggerAPI.h"
+
 void loadDebuggerDLL(const TCHAR *dllName, TCHAR *cmdLine);
 void unloadDebuggerDLL(bool bForce);
-
+static void initAPI(void);
 
 using namespace std;
 
-static HMODULE gDebuggerDll = NULL;
-
-static bool gDebuggerExited = true;
-
-static void initAPI()
+namespace
 {
-	DEBUGGER_DLL_PROC_IMPORT(gDebuggerDll, InitDebugger);
-	DEBUGGER_DLL_PROC_IMPORT(gDebuggerDll, CloseDebugger);
-	DEBUGGER_DLL_PROC_IMPORT(gDebuggerDll, ShowDebugger);
+	HMODULE gDebuggerDll = NULL;
+	bool gDebuggerExited = true;
+	IDebugger dbg;
 
-	DEBUGGER_CALLBACK_PROC_IMPORT(gDebuggerDll, DebuggerExited);
-	DEBUGGER_CALLBACK_PROC_IMPORT(gDebuggerDll, DbgMemoryRead);
-	DEBUGGER_CALLBACK_PROC_IMPORT(gDebuggerDll, DbgMemoryWrite);
+	// This is just a helper, so the DLL will be unloaded when the application exits
+	// and we don't need to modify the application code, to call unloading at the right time.
+	class Unloader
+	{
+	public:
+		Unloader() {}
+		~Unloader()
+		{
+			unloadDebuggerDLL(true);
+		}
+	};
+	Unloader uld;
 }
+IDebugger *Debugger = &dbg;
 
 void loadDebuggerDLL(const TCHAR *dllName, TCHAR *cmdLine)
 {
@@ -40,7 +47,7 @@ void loadDebuggerDLL(const TCHAR *dllName, TCHAR *cmdLine)
 		else
 		{
 			// The debugger was still running, so we can just restore it.
-			ShowDebugger(SW_RESTORE);
+			Debugger->ShowDebugger(SW_RESTORE);
 			return;
 		}
 	}
@@ -62,14 +69,14 @@ void loadDebuggerDLL(const TCHAR *dllName, TCHAR *cmdLine)
 
 	gDebuggerExited = true;
 	wchar_t *error;
-	if ((error = InitDebugger(getVersion(), &cmd[0])) != nullptr)
+	if ((error = InitDebugger(getVersion(), &cmd[0], Debugger)) != nullptr)
 	{
 		MessageBoxW(NULL, error, L"Error initializing GUI Debugger", MB_OK);
 		unloadDebuggerDLL(true);
 		return;
 	}
 
-	ShowDebugger(SW_RESTORE);
+	Debugger->ShowDebugger(SW_RESTORE);
 	gDebuggerExited = false;
 }
 
@@ -81,7 +88,7 @@ void unloadDebuggerDLL(bool force)
 		{
 			if (!gDebuggerExited)
 			{
-				CloseDebugger();
+				Debugger->CloseDebugger();
 				gDebuggerExited = true;
 			}
 		}
@@ -106,8 +113,8 @@ static size_t DbgMemoryRead(size_t address, DbgByte *buffer, size_t bufferSize)
 {
 	for (size_t i = 0; i < bufferSize; i++, address++, buffer++)
 	{
-		buffer->value = get_byte_debug (address);
-		buffer->safe = (debug_safe_addr(address, 1) != 0);
+		buffer->value = get_byte_debug (static_cast<uaecptr>(address));
+		buffer->safe = (debug_safe_addr(static_cast<uaecptr>(address), 1) != 0);
 	}
 
 	return bufferSize;
@@ -116,4 +123,18 @@ static size_t DbgMemoryRead(size_t address, DbgByte *buffer, size_t bufferSize)
 static size_t DbgMemoryWrite(size_t address, DbgByte *buffer, size_t bufferSize)
 {
 	return 0;
+}
+
+static void initAPI()
+{
+	DEBUGGER_DLL_PROC_IMPORT(gDebuggerDll, InitDebugger);
+
+	Debugger->DebuggerExited = DebuggerExited;
+	Debugger->MemoryRead = DbgMemoryRead;
+	Debugger->MemoryWrite = DbgMemoryWrite;
+
+	// We use this dummy so that we can savely call the functions without
+	// constantly checking the pointers. Dummy always returns 0.
+	DEFAULT_FUNCTION(ShowDebugger);
+	DEFAULT_FUNCTION(CloseDebugger);
 }

@@ -26,6 +26,12 @@ static inline uint32_t getVersion(void)
 	return ((MAJOR_VERSION << 24) | (MINOR_VERSION << 16) | BUILD_VERSION);
 }
 
+static void *dummy(void)
+{
+	return 0;
+}
+#define DEFAULT_FUNCTION(name) Debugger->##name = (decltype(Debugger->##name))dummy
+
 /**
  * DEBUGGER_DLL_PROC creates the definitions for functions which can be called
  * from the client into the DLL.
@@ -126,49 +132,61 @@ static inline uint32_t getVersion(void)
 	set##name##Proc set##name = (set##name##Proc)GetProcAddress(dllHandle, TO_STRING(set##name));\
 	set##name(name)
 
-// ******************************************************************************
-// ****************** DLL functions to be used from the client ******************
-// ******************************************************************************
-
-/**
- * Initialize the application.
- * If the return value is not a nullptr it contains a wchar message with an error
- * description.
- */
-DEBUGGER_DLL_PROC(wchar_t *, InitDebugger, uint32_t version, wchar_t *cmdLine);
-
-/**
- * Closes teh debugger and exits the debugger application. This has to be called
- * before the FreeLibrary() is used on the DLL and the debugger has not yet exited.
- */
-DEBUGGER_DLL_PROC(void, CloseDebugger);
-
-/**
- * Show the debugger window.
- * 
- * @param nCmdShow : SW_RESTORE, SW_...
- */
-DEBUGGER_DLL_PROC(void, ShowDebugger, int nCmdShow);
-
+class IDebugger final
+{
+public:
+	IDebugger(void) {}
+	~IDebugger(void) {}
 
 // ******************************************************************************
 // *************** Callbackfunctions to be used from the Debugger ***************
 // ******************************************************************************
+// These functions have to be initialized by the client
+public:
+	/**
+	 * Called when the debugger has exited. The debugger can no longer be used after
+	 * this callback has been received and the DLL should be unloaded.
+	 * Note that the client should not unload the DLL from within this callback as the
+	 * debugger may still perform some internal processing.
+	 */
+	void (*DebuggerExited)(void);
+
+	/**
+	 * Read memory from the specified address. Returns the number of bytes read.
+	 */
+	size_t (*MemoryRead)(size_t address, DbgByte *buffer, size_t bufferSize);
+
+	/**
+	 * Write memory to the specified address. Returns the number of bytes written.
+	 */
+	size_t (*MemoryWrite)(size_t address, DbgByte *buffer, size_t bufferSize);
+
+
+// ******************************************************************************
+// ******************** Functions to be used from the client ********************
+// ******************************************************************************
+// These functions are initialized by the debugger.
+public:
+	/**
+	 * Closes the debugger and exits the debugger application. This has to be called
+	 * before the FreeLibrary() is used on the DLL and the debugger has not yet exited.
+	 * This will trigger a DebuggerExited() call.
+	 */
+	void (*CloseDebugger)(void);
+
+	/**
+	 * Show the debugger window.
+	 *
+	 * @param nCmdShow : SW_RESTORE, SW_...
+	 */
+	void (*ShowDebugger)(int nCmdShow);
+};
 
 /**
- * Called when the debugger has exited. The debugger can no longer be used after
- * this callback has been received and the DLL should be unloaded.
- * Note that the client should not unload the DLL from within this callback as the
- * debugger may still perform some internal processing.
+ * Initialize the application.
+ * If the return value is not a nullptr it contains a wchar message with an error
+ * description. If the initialization was successfull a nullptr is returned.
  */
-DEBUGGER_CALLBACK_PROC(void, DebuggerExited);
+DEBUGGER_DLL_PROC(wchar_t *, InitDebugger, uint32_t version, wchar_t *cmdLine, IDebugger *debugger);
 
-/**
- * Read memory from the specified address. Returns the number of bytes read.
- */
-DEBUGGER_CALLBACK_PROC(size_t, DbgMemoryRead, size_t address, DbgByte *buffer, size_t bufferSize);
-
-/**
- * Write memory to the specified address. Returns the number of bytes written.
- */
-DEBUGGER_CALLBACK_PROC(size_t, DbgMemoryWrite, size_t address, DbgByte *buffer, size_t bufferSize);
+extern IDebugger *Debugger;
