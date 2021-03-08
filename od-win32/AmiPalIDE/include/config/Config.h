@@ -1,7 +1,7 @@
 #pragma once
 
-#include "algorithms/observer.h"
-#include "algorithms/serialize.h"
+#include "patterns/observer.h"
+#include "patterns/serialize.h"
 
 template<typename T, typename... U>
 class Config

@@ -8,7 +8,7 @@
 #include <wx/dialog.h>
 
 #include "gui/properties/PropertyPage.h"
-#include "algorithms/observer.h"
+#include "patterns/observer.h"
 
 #define IDC_PROPERTY_SECTION_FILTER 1000
 #define IDC_PROPERTY_SECTIONS 1001

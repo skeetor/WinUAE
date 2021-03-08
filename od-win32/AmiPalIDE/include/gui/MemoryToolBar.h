@@ -1,6 +1,7 @@
 #pragma once
 
 #include "controls/ComboBoxEdit.h"
+#include "gui/DocumentWindow.h"
 
 #include <wx/textctrl.h>
 #include <wx/button.h>
@@ -21,6 +22,7 @@ class MemoryPanel;
 
 class MemoryToolBar
 : public wxAuiToolBar
+, public DocumentWindow
 {
 public:
 	MemoryToolBar(MainFrame*frame, wxWindow *parent,
@@ -32,6 +34,10 @@ public:
 
 public: // overrides
 	bool Enable(bool enable = true) override;
+
+	wxWindow *getWindow(void) override { return this; }
+	bool serialize(wxString const &groupId, wxConfigBase *config) override;
+	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
 
 public:
 	void setMemoryPanel(MemoryPanel *panel) { m_memory = panel; }

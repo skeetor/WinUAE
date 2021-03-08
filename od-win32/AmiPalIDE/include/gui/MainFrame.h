@@ -1,28 +1,23 @@
 #pragma once
 
 #include <wx/frame.h>
-#include <wx/textctrl.h>
-#include <wx/treectrl.h>
-#include <wx/aui/aui.h>
 
-#include "algorithms/serialize.h"
+#include "patterns/serialize.h"
 #include "config/ApplicationConfig.h"
-
-// TODO: Can be removed when the actual classes are implemented
-typedef wxTextCtrl RegistersPanel;
-typedef wxTextCtrl DisasmPanel;
-typedef wxTextCtrl BreakpointPanel;
-typedef wxTextCtrl ConsolePanel;
 
 class wxDialog;
 
 class MemoryPanel;
 class MemoryToolBar;
 class DocumentPanel;
-/*class RegistersPanel;
-class DisasmPanel;
-class BreakpointPanel;
-class ConsolePanel;*/
+class DocumentManager;
+
+// TODO: To be removed
+class DocumentWindow;
+typedef DocumentWindow RegistersPanel;
+typedef DocumentWindow DisasmPanel;
+typedef DocumentWindow BreakpointPanel;
+typedef DocumentWindow ConsolePanel;
 
 // IDs for the controls and the menu commands
 enum AmiPalMainFrameID
@@ -103,9 +98,9 @@ public: // Serialize
 	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
 
 protected:
-	RegistersPanel *createRegistersPanel(void);
 	MemoryPanel *createMemoryPanel(void);
 	MemoryToolBar *getMemoryToolBar(void);
+	RegistersPanel *createRegistersPanel(void);
 	DisasmPanel *createDisasmPanel(void);
 	BreakpointPanel *createBreakpointPanel(void);
 	ConsolePanel *createConsolePanel(void);
@@ -120,12 +115,10 @@ private:
 	wxMenu *createToolsMenu(void);
 	wxMenu *createHelpMenu(void);
 
-	// TODO: Dummies can be removed later
-	wxTextCtrl *CreateTextCtrl(const wxString &ctrl_text = wxEmptyString);
-	wxTreeCtrl *CreateFileBrowser();
+	DocumentWindow *createFileBrowser();
 
 private:
-	wxAuiManager m_manager;
+	DocumentManager *m_manager;
 
 	wxStatusBar *m_statusBar;
 	wxMenuBar *m_frameMenu;

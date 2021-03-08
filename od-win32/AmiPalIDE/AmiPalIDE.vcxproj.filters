@@ -58,7 +58,7 @@
     <Filter Include="Source Files\gui\properties\pages">
       <UniqueIdentifier>{4738584d-1934-4c76-b4ee-c84d2499f850}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\algorithms">
+    <Filter Include="Header Files\patterns">
       <UniqueIdentifier>{b849ff91-2e0c-4a7b-8a27-619c1042e946}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -130,13 +130,19 @@
       <Filter>Header Files\config</Filter>
     </ClInclude>
     <ClInclude Include="include\algorithms\observer.h">
-      <Filter>Header Files\algorithms</Filter>
+      <Filter>Header Files\patterns</Filter>
     </ClInclude>
     <ClInclude Include="include\config\DebuggerConfig.h">
       <Filter>Header Files\config</Filter>
     </ClInclude>
     <ClInclude Include="include\algorithms\serialize.h">
-      <Filter>Header Files\algorithms</Filter>
+      <Filter>Header Files\patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\DocumentManager.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\DocumentWindow.h">
+      <Filter>Header Files\gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="config\DebuggerConfig.cpp">
       <Filter>Source Files\config</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\DocumentManager.cpp">
+      <Filter>Source Files\gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

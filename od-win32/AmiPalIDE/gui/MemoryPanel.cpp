@@ -78,6 +78,16 @@ void MemoryPanel::Init(void)
 	lock(isLocked());
 }
 
+bool MemoryPanel::serialize(wxString const &groupId, wxConfigBase *config)
+{
+	return true;
+}
+
+bool MemoryPanel::deserialize(wxString const &groupId, wxConfigBase *config)
+{
+	return true;
+}
+
 void MemoryPanel::OnAddressChanged(wxCommandEvent &event)
 {
 	wxString addr = event.GetString();

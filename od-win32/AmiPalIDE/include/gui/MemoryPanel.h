@@ -6,7 +6,7 @@
 #include "gui/MemoryToolBar.h"
 #include "gui/Document.h"
 #include "debugger/DebuggerAPI.h"
-#include "algorithms/observer.h"
+#include "patterns/observer.h"
 #include "config/DebuggerConfig.h"
 
 #define IDC_ADDRESS_TXT 1000
@@ -37,6 +37,9 @@ public: // Document overrides
 	void activate(void) override;
 	void deactivate(void) override;
 	bool closing(bool forced, bool active) override;
+
+	bool serialize(wxString const &groupId, wxConfigBase *config) override;
+	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
 
 public: // Control overrides
 	void OnSize(wxSizeEvent &event);

@@ -4,9 +4,9 @@
 #include "gui/AmiPalIDE.h"
 #include "gui/MainFrame.h"
 #include "gui/DocumentPanel.h"
+#include "gui/DocumentManager.h"
 #include "gui/MemoryPanel.h"
 #include "gui/MemoryToolBar.h"
-
 #include "gui/properties/ConfigDlg.h"
 
 #include "config/ApplicationConfig.h"
@@ -19,23 +19,9 @@
 #include <wx/fileconf.h>
 #include <wx/stdpaths.h>
 #include <wx/wfstream.h>
+#include <wx/treectrl.h>
 
 using namespace std;
-
-wxTextCtrl* MainFrame::CreateTextCtrl(const wxString& ctrl_text)
-{
-	static int n = 0;
-
-	wxString text;
-	if ( !ctrl_text.empty() )
-		text = ctrl_text;
-	else
-		text.Printf("This is text box %d", ++n);
-
-	return new wxTextCtrl(this, wxID_ANY, text,
-		wxPoint(0,0), FromDIP(wxSize(150,90)),
-		wxNO_BORDER | wxTE_MULTILINE);
-}
 
 wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_CLOSE(MainFrame::OnClose)
@@ -72,9 +58,11 @@ MainFrame::MainFrame(const wxString& title)
 , m_closeByMenu(false)
 , m_abort(false)
 {
+	m_manager = new DocumentManager(this, wxAUI_MGR_DEFAULT);
+
 	// Enable docking
-	m_manager.SetManagedWindow(this);
-	m_manager.SetFlags(wxAUI_MGR_DEFAULT);
+	//m_manager->SetManagedWindow(this);
+	//m_manager->SetFlags(wxAUI_MGR_DEFAULT);
 
 	m_statusBar = CreateStatusBar(1, wxSTB_SIZEGRIP, IDM_STATUSBAR);
 	m_frameMenu = new wxMenuBar(0);
@@ -93,17 +81,17 @@ MainFrame::MainFrame(const wxString& title)
 
 	// m_documents->SetArtProvider(new wxAuiSimpleTabArt);
 
-	m_manager.AddPane(m_documents, wxAuiPaneInfo().Name("notebook_content").CenterPane().PaneBorder(false));
-	m_manager.AddPane(CreateFileBrowser(), wxAuiPaneInfo().Name("filebrowser").Caption("File Browser").Left().Layer(1).Position(1).CloseButton(true).MaximizeButton(true));
+	m_manager->AddPane(m_documents, wxAuiPaneInfo().Name("notebook_content").CenterPane().PaneBorder(false));
+	m_manager->AddPane(createFileBrowser(), wxAuiPaneInfo().Name("filebrowser").Caption("File Browser").Left().Layer(1).Position(1).CloseButton(true).MaximizeButton(true));
 
 	MemoryToolBar *mbar = getMemoryToolBar();
 	mbar->Disable();
 
-	m_manager.AddPane(mbar, wxAuiPaneInfo().Name("MemoryBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
+	m_manager->AddPane(mbar, wxAuiPaneInfo().Name("MemoryBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
 	createMemoryPanel();
 
 	// "commit" all changes made to wxAuiManager
-	m_manager.Update();
+	m_manager->Update();
 
 	SetMenuBar(m_frameMenu);
 
@@ -117,6 +105,7 @@ MainFrame::MainFrame(const wxString& title)
 
 MainFrame::~MainFrame(void)
 {
+	delete m_manager;
 }
 
 MainFrame *MainFrame::getInstance(void)
@@ -206,14 +195,32 @@ wxMenu *MainFrame::createToolsMenu(void)
 	return menu;
 }
 
-wxTreeCtrl *MainFrame::CreateFileBrowser()
+DocumentWindow *MainFrame::createFileBrowser()
 {
-	wxTreeCtrl* tree = new wxTreeCtrl(this, wxID_ANY,
-		wxPoint(0, 0),
-		FromDIP(wxSize(160, 250)),
-		wxTR_DEFAULT_STYLE | wxNO_BORDER);
+	class TreeDocument : public wxTreeCtrl, public DocumentWindow
+	{
+	public:
+		TreeDocument(wxWindow *parent, wxSize size)
+		: wxTreeCtrl(parent, wxID_ANY, wxPoint(0, 0), size, wxTR_DEFAULT_STYLE | wxNO_BORDER)
+		{
+		}
 
-	wxSize size = FromDIP(wxSize(16, 16));
+		wxWindow *getWindow(void) override { return this; }
+		bool serialize(wxString const &groupId, wxConfigBase *config) override
+		{
+			return true;
+		}
+
+		bool deserialize(wxString const &groupId, wxConfigBase *config) override
+		{
+			return true;
+		}
+	};
+
+	wxSize size = FromDIP(wxSize(160, 250));
+	TreeDocument * tree = new TreeDocument(this, size);
+
+	size = FromDIP(wxSize(16, 16));
 	wxImageList* imglist = new wxImageList(size.x, size.y, true, 2);
 	imglist->Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, size));
 	imglist->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, size));
@@ -222,14 +229,11 @@ wxTreeCtrl *MainFrame::CreateFileBrowser()
 	wxTreeItemId root = tree->AddRoot("wxAUI Project", 0);
 	wxArrayTreeItemIds items;
 
-
-
 	items.Add(tree->AppendItem(root, "Item 1", 0));
 	items.Add(tree->AppendItem(root, "Item 2", 0));
 	items.Add(tree->AppendItem(root, "Item 3", 0));
 	items.Add(tree->AppendItem(root, "Item 4", 0));
 	items.Add(tree->AppendItem(root, "Item 5", 0));
-
 
 	int i, count;
 	for (i = 0, count = items.Count(); i < count; ++i)
@@ -339,12 +343,12 @@ void MainFrame::OnViewMemoryToolbar(wxCommandEvent &event)
 	// to make it properly appear again.
 	// It might be more efficient, if we could get an event when the toolbar has
 	// been closed.
-	m_manager.DetachPane(m_memoryToolBar);
+	m_manager->DetachPane(m_memoryToolBar);
 
 	if (!shown)
-		m_manager.InsertPane(m_memoryToolBar, wxAuiPaneInfo().Name("MemoryBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
+		m_manager->InsertPane(m_memoryToolBar, wxAuiPaneInfo().Name("MemoryBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
 
-	m_manager.Update();
+	m_manager->Update();
 }
 
 void MainFrame::OnOptions(wxCommandEvent& event)
@@ -369,7 +373,7 @@ void MainFrame::OnLayoutLoad(wxCommandEvent& event)
 
 RegistersPanel *MainFrame::createRegistersPanel(void)
 {
-	return CreateTextCtrl("RegistersPanel");
+	return nullptr;
 }
 
 MemoryPanel *MainFrame::createMemoryPanel(void)
@@ -391,17 +395,17 @@ MemoryToolBar *MainFrame::getMemoryToolBar(void)
 
 DisasmPanel *MainFrame::createDisasmPanel(void)
 {
-	return CreateTextCtrl("DisasmPanel");
+	return nullptr;
 }
 
 BreakpointPanel *MainFrame::createBreakpointPanel(void)
 {
-	return CreateTextCtrl("BreakpointPanel");
+	return nullptr;
 }
 
 ConsolePanel *MainFrame::createConsolePanel(void)
 {
-	return CreateTextCtrl("ConsolePanel");
+	return nullptr;
 }
 
 bool MainFrame::serialize(wxString const &groupId, wxConfigBase *config)
@@ -431,9 +435,7 @@ bool MainFrame::serialize(wxString const &groupId, wxConfigBase *config)
 	}
 
 	if (appCfg.saveLayout)
-	{
-		config->Write("PerspectiveLayout", m_manager.SavePerspective());
-	}
+		m_manager->serialize("", config);
 
 	return true;
 }
@@ -468,12 +470,7 @@ bool MainFrame::deserialize(wxString const &groupId, wxConfigBase *config)
 	}
 
 	if (appCfg.saveLayout)
-	{
-		wxString layout;
-		config->Read("PerspectiveLayout", layout);
-
-		m_manager.LoadPerspective(layout);
-	}
+		m_manager->deserialize("", config);
 
 	return true;
 }
@@ -514,18 +511,23 @@ void MainFrame::restoreConfig(void)
 	wxString fn = appCfg.configFile;
 	if (fn.empty())
 	{
-		fn = wxStandardPaths::Get().GetUserConfigDir();
+		wxGetApp().configByParam = false;
+		fn = appCfg.getDefaultConfigFile();
+		appCfg.configFile = fn;
 	}
 
 	wxFileInputStream istrm(fn);
 	if (!istrm.Ok())
 	{
-		int rc = wxMessageBox(wxString("Unable to open file: ") + fn + wxT(" for reading! Abort?"), "Error opening config file!", wxYES_NO);
-		if (rc == wxYES)
+		if (wxGetApp().configByParam)
 		{
-			m_abort = true;
-			// TODO: Shutdown application
-			//Debugger->CloseDebugger();
+			int rc = wxMessageBox(wxString("Unable to open file: ") + fn + wxT(" for reading! Abort?"), "Error opening config file!", wxYES_NO);
+			if (rc == wxYES)
+			{
+				m_abort = true;
+				// TODO: Shutdown application
+				//Debugger->CloseDebugger();
+			}
 		}
 
 		return;

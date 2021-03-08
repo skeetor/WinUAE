@@ -1,6 +1,7 @@
 #include "config/ApplicationConfig.h"
 
 #include "wx/confbase.h"
+#include <wx/stdpaths.h>
 
 namespace
 {
@@ -12,8 +13,10 @@ ApplicationConfig::ApplicationConfig()
 , closeAction(CloseButtonAction::CLOSE_WINDOW)
 , saveLayout(true)
 , savePosition(true)
+, configFile("")
 , layout(wxT("default"))
-{}
+{
+}
 
 ApplicationConfig::~ApplicationConfig()
 {
@@ -22,6 +25,11 @@ ApplicationConfig::~ApplicationConfig()
 ApplicationConfig &ApplicationConfig::getInstance(void)
 {
 	return gAppConfig;
+}
+
+wxString ApplicationConfig::getDefaultConfigFile(void) const
+{
+	return wxStandardPaths::Get().GetUserConfigDir() + "\\" + APPLICATION_NAME + ".cfg";
 }
 
 void ApplicationConfig::update(const ApplicationConfig &src)
@@ -54,8 +62,10 @@ bool ApplicationConfig::deserialize(wxString const &groupId, wxConfigBase *confi
 
 	savePosition = config->ReadBool("FrameSize", true);
 	saveLayout = config->ReadBool("PerspectiveSave", true);
-	config->Read("PerspectiveName", layout);
-	config->Read("Logfile", logFile);
+	layout = config->Read("PerspectiveName", "default");
+	logFile = config->Read("Logfile", "");
+
+	notify();
 
 	return true;
 }

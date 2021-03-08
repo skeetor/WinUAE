@@ -78,6 +78,16 @@ MemoryToolBar::~MemoryToolBar()
 {
 }
 
+bool MemoryToolBar::serialize(wxString const &groupId, wxConfigBase *config)
+{
+	return true;
+}
+
+bool MemoryToolBar::deserialize(wxString const &groupId, wxConfigBase *config)
+{
+	return true;
+}
+
 void MemoryToolBar::reset(void)
 {
 	m_sizeTxt->SetValue("");

@@ -57,9 +57,7 @@ bool DebuggerConfig::deserialize(wxString const &groupId, wxConfigBase *config)
 	config->SetPath("/" + getConfigName());
 
 	askOnDeleteAllBreakpoints = config->ReadBool("AskDeleteAllBreakpoints", true);
-	wxString s;
-	config->Read("MemoryViewFont", s);
-	memoryViewFont.SetNativeFontInfo(s);
+	memoryViewFont.SetNativeFontInfo(config->Read("MemoryViewFont", ""));
 	notify();
 
 	return true;

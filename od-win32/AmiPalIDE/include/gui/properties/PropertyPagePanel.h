@@ -2,7 +2,7 @@
 
 #include <wx/panel.h>
 
-#include "algorithms/observer.h"
+#include "patterns/observer.h"
 
 class PropertyDlg;
 

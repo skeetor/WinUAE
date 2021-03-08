@@ -7,7 +7,7 @@
 
 #include "config/ApplicationConfig.h"
 
-#include <wx/fileconf.h>
+#include "wx/confbase.h"
 
 using namespace std;
 
@@ -21,6 +21,11 @@ AmiPalApp::AmiPalApp(void)
 
 bool AmiPalApp::OnInit(void)
 {
+	ApplicationConfig &config = ApplicationConfig::getInstance();
+
+	configByParam = false;
+	config.configFile = config.getDefaultConfigFile();
+
 	if (!parseCommandLine(argc, argv))
 		return false;
 
@@ -28,8 +33,6 @@ bool AmiPalApp::OnInit(void)
 
 //	if (!wxApp::OnInit())
 //		return false;
-
-	ApplicationConfig &config = ApplicationConfig::getInstance();
 
 	config.configFile = configFile;
 
@@ -64,6 +67,10 @@ bool AmiPalApp::parseCommandLine(int argc, wchar_t **argv)
 			return showCmdLineHelp();
 
 		configFile = params[0];
+		if (configFile.empty())
+			configFile = ApplicationConfig::getInstance().getDefaultConfigFile();
+		else
+			configByParam = true;
 	}
 
 	return true;

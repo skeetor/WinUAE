@@ -223,8 +223,10 @@
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\globals.h" />
     <ClInclude Include="include\gui\AmiPalIDE.h" />
+    <ClInclude Include="include\gui\DocumentManager.h" />
     <ClInclude Include="include\gui\DocumentPanel.h" />
     <ClInclude Include="include\gui\Document.h" />
+    <ClInclude Include="include\gui\DocumentWindow.h" />
     <ClInclude Include="include\gui\MainFrame.h" />
     <ClInclude Include="include\gui\MemoryPanel.h" />
     <ClInclude Include="include\gui\MemoryToolBar.h" />
@@ -244,6 +246,7 @@
     <ClCompile Include="debugger\DebuggerAPI.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="gui\AmiPalIDE.cpp" />
+    <ClCompile Include="gui\DocumentManager.cpp" />
     <ClCompile Include="gui\DocumentPanel.cpp" />
     <ClCompile Include="gui\MainFrame.cpp" />
     <ClCompile Include="gui\MemoryPanel.cpp" />

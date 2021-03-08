@@ -22,7 +22,9 @@ public:
 	static ApplicationConfig &getInstance(void);
 
 	void update(const ApplicationConfig &src);
+	wxString getDefaultConfigFile(void) const;
 
+public: // Serialize
 	bool serialize(wxString const &groupId, wxConfigBase *config) override;
 	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
 

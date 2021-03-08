@@ -89,3 +89,13 @@ void DocumentPanel::OnPageClosing(wxAuiNotebookEvent &event)
 		}
 	}
 }
+
+bool DocumentPanel::serialize(wxString const &groupId, wxConfigBase *config)
+{
+	return true;
+}
+
+bool DocumentPanel::deserialize(wxString const &groupId, wxConfigBase *config)
+{
+	return true;
+}

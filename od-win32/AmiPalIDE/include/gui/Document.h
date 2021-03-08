@@ -1,21 +1,17 @@
 #pragma once
 
-#include "wx/window.h"
+#include "gui/DocumentWindow.h"
 
 class Document
+: public DocumentWindow
 {
 public:
 	Document(void)
 	: m_locked(false)
 	{}
-	virtual ~Document() {}
+	~Document() override {}
 
 public:
-	/**
-	 * Get the window, associated with the document.
-	 */
-	virtual wxWindow *getWindow(void) = 0;
-
 	/**
 	 * Called when the document is made the active one.
 	 */
