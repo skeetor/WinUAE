@@ -211,6 +211,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\algorithms\observer.h" />
+    <ClInclude Include="include\algorithms\serialize.h" />
     <ClInclude Include="include\config\ApplicationConfig.h" />
     <ClInclude Include="include\config\Config.h" />
     <ClInclude Include="include\config\DebuggerConfig.h" />
@@ -236,7 +237,8 @@
     <ClInclude Include="include\utils\commandline.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="config\config.cpp" />
+    <ClCompile Include="config\ApplicationConfig.cpp" />
+    <ClCompile Include="config\DebuggerConfig.cpp" />
     <ClCompile Include="controls\EditBtn.cpp" />
     <ClCompile Include="controls\ComboBoxEdit.cpp" />
     <ClCompile Include="debugger\DebuggerAPI.cpp" />

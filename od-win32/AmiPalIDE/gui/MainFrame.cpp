@@ -404,26 +404,14 @@ ConsolePanel *MainFrame::createConsolePanel(void)
 	return CreateTextCtrl("ConsolePanel");
 }
 
-void MainFrame::saveConfig(void)
+bool MainFrame::serialize(wxString const &groupId, wxConfigBase *config)
 {
 	ApplicationConfig &appCfg = ApplicationConfig::getInstance();
-	wxString fn = appCfg.configFile;
-	if (fn.empty())
-	{
-		fn = wxStandardPaths::Get().GetUserConfigDir();
-	}
+	appCfg.serialize("", config);
 
-	wxFileOutputStream ostrm(fn);
-	if (!ostrm.Ok())
-	{
-		// TODO: error handling
-	}
+	DebuggerConfig::getInstance().serialize("", config);
 
-	wxFileConfig *config = new wxFileConfig();
-	wxConfigBase::Set(config);
-
-	config->SetPath("GlobalSettings");
-	config->Write("FrameSize", appCfg.savePosition);
+	config->SetPath("/GlobalSettings");
 
 	if (appCfg.savePosition)
 	{
@@ -442,12 +430,73 @@ void MainFrame::saveConfig(void)
 		config->Write("FrameMaximized", maximized);
 	}
 
-	config->Write("PerspectiveSave", appCfg.saveLayout);
 	if (appCfg.saveLayout)
 	{
-		config->Write("PerspectiveName", appCfg.layout);
 		config->Write("PerspectiveLayout", m_manager.SavePerspective());
 	}
+
+	return true;
+}
+
+bool MainFrame::deserialize(wxString const &groupId, wxConfigBase *config)
+{
+	ApplicationConfig &appCfg = ApplicationConfig::getInstance();
+	appCfg.deserialize("", config);
+
+	DebuggerConfig::getInstance().deserialize("", config);
+
+	config->SetPath("/GlobalSettings");
+
+	if (appCfg.savePosition)
+	{
+		bool maximized = config->ReadBool("FrameMaximized", false);
+		Maximize(false);
+
+		int w, h;
+		wxPoint p;
+
+		config->Read("FrameX", &p.x);
+		config->Read("FrameY", &p.y);
+		config->Read("FrameW", &w);
+		config->Read("FrameH", &h);
+
+		SetPosition(p);
+		SetSize(w, h);
+
+		if (maximized)
+			Maximize(true);
+	}
+
+	if (appCfg.saveLayout)
+	{
+		wxString layout;
+		config->Read("PerspectiveLayout", layout);
+
+		m_manager.LoadPerspective(layout);
+	}
+
+	return true;
+}
+
+void MainFrame::saveConfig(void)
+{
+	ApplicationConfig &appCfg = ApplicationConfig::getInstance();
+	wxString fn = appCfg.configFile;
+	if (fn.empty())
+	{
+		fn = wxStandardPaths::Get().GetUserConfigDir();
+	}
+
+	wxFileOutputStream ostrm(fn);
+	if (!ostrm.Ok())
+	{
+		// TODO: error handling
+	}
+
+	wxFileConfig *config = new wxFileConfig();
+	wxConfigBase::Set(config);
+
+	serialize("frame", config);
 
 	if (!config->Save(ostrm))
 	{
@@ -485,38 +534,7 @@ void MainFrame::restoreConfig(void)
 	wxFileConfig *config = new wxFileConfig(istrm);
 	wxConfigBase::Set(config);
 
-	config->SetPath("GlobalSettings");
-	appCfg.savePosition = config->ReadBool("FrameSize", true);
-
-	if (appCfg.savePosition)
-	{
-		bool maximized = config->ReadBool("FrameMaximized", false);
-		Maximize(false);
-
-		int w, h;
-		wxPoint p;
-
-		config->Read("FrameX", &p.x);
-		config->Read("FrameY", &p.y);
-		config->Read("FrameW", &w);
-		config->Read("FrameH", &h);
-
-		SetPosition(p);
-		SetSize(w, h);
-
-		if (maximized)
-			Maximize(true);
-	}
-
-	appCfg.saveLayout = config->ReadBool("PerspectiveSave", true);
-	if (appCfg.saveLayout)
-	{
-		wxString layout;
-		config->Read("PerspectiveName", appCfg.layout);
-		config->Read("PerspectiveLayout", layout);
-
-		m_manager.LoadPerspective(layout);
-	}
+	deserialize("", config);
 
 	delete config;
 }

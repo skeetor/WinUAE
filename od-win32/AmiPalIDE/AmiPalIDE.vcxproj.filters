@@ -135,6 +135,9 @@
     <ClInclude Include="include\config\DebuggerConfig.h">
       <Filter>Header Files\config</Filter>
     </ClInclude>
+    <ClInclude Include="include\algorithms\serialize.h">
+      <Filter>Header Files\algorithms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -179,7 +182,10 @@
     <ClCompile Include="gui\properties\pages\DebuggerViewPage.cpp">
       <Filter>Source Files\gui\properties\pages</Filter>
     </ClCompile>
-    <ClCompile Include="config\config.cpp">
+    <ClCompile Include="config\ApplicationConfig.cpp">
+      <Filter>Source Files\config</Filter>
+    </ClCompile>
+    <ClCompile Include="config\DebuggerConfig.cpp">
       <Filter>Source Files\config</Filter>
     </ClCompile>
   </ItemGroup>

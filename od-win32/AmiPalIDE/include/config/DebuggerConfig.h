@@ -7,27 +7,17 @@ class DebuggerConfig
 : public Config<DebuggerConfig>
 {
 public:
-	DebuggerConfig()
-	: askOnDeleteAllBreakpoints(false)
-	, memoryViewFont()
-	{
-	}
-
-	~DebuggerConfig() override
-	{
-	}
+	DebuggerConfig(void);
+	~DebuggerConfig() override;
 
 	static DebuggerConfig &getInstance(void);
 
-	void update(const DebuggerConfig &src) override
-	{
-		askOnDeleteAllBreakpoints = src.askOnDeleteAllBreakpoints;
-		memoryViewFont = src.memoryViewFont;
+	void update(const DebuggerConfig &src);
 
-		notify();
-	}
+	bool serialize(wxString const &groupId, wxConfigBase *config) override;
+	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
 
 public:
-	bool askOnDeleteAllBreakpoints;
 	wxFont memoryViewFont;
+	bool askOnDeleteAllBreakpoints;
 };

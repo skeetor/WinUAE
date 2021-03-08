@@ -16,29 +16,15 @@ class ApplicationConfig
 : public Config<ApplicationConfig>
 {
 public:
-	ApplicationConfig()
-	: closeAction(CloseButtonAction::CLOSE_WINDOW)
-	, saveLayout(true)
-	, savePosition(true)
-	, layout(wxT("default"))
-	{}
-
-	~ApplicationConfig() override
-	{}
+	ApplicationConfig();
+	~ApplicationConfig() override;
 
 	static ApplicationConfig &getInstance(void);
 
-	void update(const ApplicationConfig &src) override
-	{
-		closeAction = src.closeAction;
-		configFile = src.configFile;
-		logFile = src.logFile;
-		layout = src.layout;
-		saveLayout = src.saveLayout;
-		savePosition = src.savePosition;
+	void update(const ApplicationConfig &src);
 
-		notify();
-	}
+	bool serialize(wxString const &groupId, wxConfigBase *config) override;
+	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
 
 public:
 	CloseButtonAction closeAction;

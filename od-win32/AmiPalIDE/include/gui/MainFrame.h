@@ -5,6 +5,7 @@
 #include <wx/treectrl.h>
 #include <wx/aui/aui.h>
 
+#include "algorithms/serialize.h"
 #include "config/ApplicationConfig.h"
 
 // TODO: Can be removed when the actual classes are implemented
@@ -58,6 +59,7 @@ enum AmiPalMainFrameID
 // Define a new frame type: this is going to be our main frame
 class MainFrame
 : public wxFrame
+, public Serialize
 {
 public:
 	MainFrame(const wxString& title);
@@ -95,6 +97,10 @@ public:
 	 * to a crash on exit, so the modal dialog has to be closed on exit.
 	 */
 	void setModalDialog(wxDialog *dlg = nullptr) { m_modalDialog = dlg; }
+
+public: // Serialize
+	bool serialize(wxString const &groupId, wxConfigBase *config) override;
+	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
 
 protected:
 	RegistersPanel *createRegistersPanel(void);
