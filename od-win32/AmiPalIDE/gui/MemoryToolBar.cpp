@@ -1,7 +1,7 @@
 
 #include "gui/MemoryToolBar.h"
-#include "gui/MemoryPanel.h"
 #include "gui/MainFrame.h"
+#include "gui/panels/MemoryPanel.h"
 
 #include <wx/stattext.h>
 
@@ -26,6 +26,7 @@ wxEND_EVENT_TABLE()
 
 MemoryToolBar::MemoryToolBar(MainFrame *frame, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style)
 : wxAuiToolBar(parent, id, pos, size, style)
+, DocumentWindow("MemoryToolBar", this)
 , m_frame(frame)
 , m_memory(nullptr)
 {
@@ -34,7 +35,7 @@ MemoryToolBar::MemoryToolBar(MainFrame *frame, wxWindow *parent, wxWindowID id, 
 	st = new wxStaticText(this, wxID_ANY, wxT("Columns:"), wxDefaultPosition, wxDefaultSize, 0);
 	st->Wrap(-1);
 	AddControl(st);
-	m_columnsBox = new wxComboBox(this, IDC_COLUMNS_BOX, wxT("Auto"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER | wxBORDER_RAISED);
+	m_columnsBox = new ComboBoxEdit(this, IDC_COLUMNS_BOX, true, wxT("Auto"));
 	m_columnsBox->Append(wxT("Auto"));
 	m_columnsBox->Append(wxT("8"));
 	m_columnsBox->Append(wxT("16"));
@@ -44,7 +45,7 @@ MemoryToolBar::MemoryToolBar(MainFrame *frame, wxWindow *parent, wxWindowID id, 
 	st = new wxStaticText(this, wxID_ANY, wxT("Bytes"), wxDefaultPosition, wxDefaultSize, 0);
 	st->Wrap(-1);
 	AddControl(st);
-	m_bytesBox = new wxComboBox(this, IDC_BYTES_BOX, wxT("3"), wxDefaultPosition, wxSize(50, -1), 0, NULL, wxTE_PROCESS_ENTER | wxBORDER_RAISED);
+	m_bytesBox = new ComboBoxEdit(this, IDC_BYTES_BOX, true, wxT("3"), wxSize(50, -1));
 	m_bytesBox->Append(wxT("1"));
 	m_bytesBox->Append(wxT("2"));
 	m_bytesBox->Append(wxT("4"));
@@ -65,12 +66,14 @@ MemoryToolBar::MemoryToolBar(MainFrame *frame, wxWindow *parent, wxWindowID id, 
 	AddControl(st);
 	m_sizeTxt = new wxTextCtrl(this, IDC_SIZE_TXT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER | wxBORDER_STATIC);
 	AddControl(m_sizeTxt);
+
 	m_spacesChk = new wxCheckBox(this, IDC_SPACES_CHK, wxT("Spaces"), wxDefaultPosition, wxDefaultSize, 0);
 	m_spacesChk->SetValue(true);
 	AddControl(m_spacesChk);
 	wxButton *btn;
 	btn = new wxButton(this, IDC_MEMORY_NEW, wxT("New"), wxDefaultPosition, wxDefaultSize, 0);
 	AddControl(btn);
+
 	Realize();
 }
 
@@ -126,7 +129,7 @@ void MemoryToolBar::updateBytesBox()
 {
 	wxString s;
 
-	uint32_t val = m_memory->getBytes();
+	uint32_t val = m_memory->getColumnBytes();
 	if (!val)
 		val = 1;
 
@@ -204,7 +207,7 @@ void MemoryToolBar::OnBytesChanged(wxCommandEvent &event)
 	uint32_t val = 0;
 	val = strtod(s, nullptr);
 
-	m_memory->setBytes(val);
+	m_memory->setColumnBytes(val);
 }
 
 void MemoryToolBar::OnType(wxCommandEvent &event)

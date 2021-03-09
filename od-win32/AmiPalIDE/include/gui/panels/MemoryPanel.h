@@ -29,6 +29,10 @@ public:
 	};
 
 public:
+	static wxString displayTypeToString(DisplayType value);
+	static DisplayType stringToDisplayType(const wxString &value);
+
+public:
 	MemoryPanel(MemoryToolBar *toolBar, wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxSize(819,191), long style = wxTAB_TRAVERSAL, const wxString &name = wxEmptyString);
 	~MemoryPanel() override;
 
@@ -66,8 +70,8 @@ public:
 	void setColumns(uint32_t columns);
 	uint32_t getColumns(void) const { return m_displayColumns; }
 
-	void setBytes(uint32_t bytes);
-	uint32_t getBytes(void) const { return m_bytes; }
+	void setColumnBytes(uint32_t bytes);
+	uint32_t getColumnBytes(void) const { return m_columnBytes; }
 
 	void setType(DisplayType type);
 	DisplayType getType(void) const { return m_type; }
@@ -101,7 +105,7 @@ private:
 	size_t m_displayColumns;
 	size_t m_columns;
 	size_t m_curLines;
-	size_t m_bytes;
+	size_t m_columnBytes;
 	DisplayType m_type;
 	std::vector<DbgByte> m_lockCache;
 	size_t m_addressLimit;

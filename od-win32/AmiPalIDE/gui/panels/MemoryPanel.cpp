@@ -1,5 +1,7 @@
-#include "gui/MemoryPanel.h"
 #include "gui/MemoryToolBar.h"
+#include "gui/panels/MemoryPanel.h"
+
+#include "utils/workaround.h"
 
 #include <wx/artprov.h>
 #include <wx/string.h>
@@ -10,10 +12,13 @@
 #include <wx/gbsizer.h>
 #include <wx/stattext.h>
 #include <wx/dcclient.h>
+#include <wx/confbase.h>
 
-#include <string.h>
+#include <string>
 
 #include "controls/EditBtn.h"
+
+using namespace std;
 
 wxBEGIN_EVENT_TABLE(MemoryPanel, wxPanel)
 
@@ -27,6 +32,7 @@ wxEND_EVENT_TABLE()
 
 MemoryPanel::MemoryPanel(MemoryToolBar *toolBar, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style, const wxString &name)
 : wxPanel(parent, id, pos, size, style, name)
+, Document("MemoryPanel", this)
 , m_toolBar(toolBar)
 , m_horizSB(wxSystemMetric::wxSYS_HSCROLL_Y)
 , m_vertSB(wxSystemMetric::wxSYS_VSCROLL_X)
@@ -37,7 +43,7 @@ MemoryPanel::MemoryPanel(MemoryToolBar *toolBar, wxWindow *parent, wxWindowID id
 , m_displayColumns(0)
 , m_columns(0)
 , m_curLines(0)
-, m_bytes(2)
+, m_columnBytes(2)
 , m_type(DisplayType::DST_HEX)
 , m_addressLimit(0xffffffff)
 , m_spaces(true)
@@ -80,12 +86,50 @@ void MemoryPanel::Init(void)
 
 bool MemoryPanel::serialize(wxString const &groupId, wxConfigBase *config)
 {
+	config->Write(groupId + "MemSize", toWxString(m_memorySize));
+	config->Write(groupId + "Columns", toWxString(m_columns));
+	config->Write(groupId + "ColumnBytes", toWxString(m_columnBytes));
+	config->Write(groupId + "DisplayType", displayTypeToString(m_type));
+	wxString s;
+	s.Printf(wxT("0x%08llx"), m_addressLimit);
+	config->Write(groupId + "AddressLimit", s);
+	config->Write(groupId + "Spaces", m_spaces);
+
 	return true;
 }
 
 bool MemoryPanel::deserialize(wxString const &groupId, wxConfigBase *config)
 {
+	m_memorySize = fromWxString(config->Read(groupId + "MemSize", "0"));
+	m_columns = fromWxString(config->Read(groupId + "Columns", "0"));
+	m_columnBytes = fromWxString(config->Read(groupId + "ColumnBytes", "0"));
+	m_type = stringToDisplayType(config->Read(groupId + "DisplayType", "HEX"));
+	m_addressLimit = fromWxString(config->Read(groupId + "AddressLimit", "0x0"), 16);
+	m_spaces = config->ReadBool(groupId + "Spaces", m_spaces);
+
 	return true;
+}
+
+wxString MemoryPanel::displayTypeToString(DisplayType value)
+{
+	switch (value)
+	{
+		case DisplayType::DST_BINARY:
+			return "BINARY";
+
+		case DisplayType::DST_HEX:
+			return "HEX";
+	}
+
+	return "HEX";
+}
+
+MemoryPanel::DisplayType MemoryPanel::stringToDisplayType(const wxString &value)
+{
+	if (value == "BINARY")
+		return DisplayType::DST_BINARY;
+
+	return DisplayType::DST_HEX;
 }
 
 void MemoryPanel::OnAddressChanged(wxCommandEvent &event)
@@ -156,9 +200,9 @@ void MemoryPanel::setColumns(uint32_t columns)
 	printDump(m_curAddress);
 }
 
-void MemoryPanel::setBytes(uint32_t bytes)
+void MemoryPanel::setColumnBytes(uint32_t bytes)
 {
-	m_bytes = bytes;
+	m_columnBytes = bytes;
 	printDump(m_curAddress);
 }
 
@@ -249,10 +293,10 @@ void MemoryPanel::adjustDimensions(void)
 	else
 		columnWidth = 2;
 
-	columnWidth *= m_bytes;
+	columnWidth *= m_columnBytes;
 
 	// Account for ascii char(+1)
-	columnWidth += m_bytes;
+	columnWidth += m_columnBytes;
 	if (m_spaces)
 		columnWidth++;
 
@@ -282,7 +326,7 @@ size_t MemoryPanel::printDump(size_t address)
 	// display options might have been changed.
 	if (!isLocked())
 	{
-		size = m_curLines * m_columns * m_bytes;
+		size = m_curLines * m_columns * m_columnBytes;
 
 		if (m_memorySize != 0 && size > m_memorySize)
 			size = m_memorySize;
@@ -314,7 +358,7 @@ size_t MemoryPanel::printDump(size_t address)
 
 		for (uint32_t col = 0; col < m_columns; col++)
 		{
-			for (uint32_t b = 0; b < m_bytes; b++)
+			for (uint32_t b = 0; b < m_columnBytes; b++)
 			{
 				wxString s;
 

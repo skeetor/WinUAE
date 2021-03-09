@@ -1,5 +1,8 @@
 #include "gui/DocumentManager.h"
 #include <wx/confbase.h>
+#include <string>
+
+using namespace std;
 
 DocumentManager::DocumentManager(wxWindow *managedWnd, unsigned int flags)
 : wxAuiManager(managedWnd, flags)
@@ -34,7 +37,19 @@ bool DocumentManager::serialize(wxString const &groupId, wxConfigBase *config)
 {
 	config->SetPath("/Documents");
 
-	config->Write("PerspectiveLayout", SavePerspective());
+	wxAuiPaneInfoArray const &pa = GetAllPanes();
+
+	for (size_t i = 0; i < pa.Count(); i++)
+	{
+		wxAuiPaneInfo const &info = pa[i];
+		DocumentWindow *d = reinterpret_cast<DocumentWindow *>(info.window->GetClientData());
+		wxString id = groupId + "Pane_" + to_string(i);
+		d->serialize(id + "_", config);
+		wxString s = SavePaneInfo(info);
+		config->Write(id, s);
+	}
+
+	config->Write(groupId + "PerspectiveLayout", SavePerspective());
 
 	return true;
 }
@@ -43,7 +58,7 @@ bool DocumentManager::deserialize(wxString const &groupId, wxConfigBase *config)
 {
 	config->SetPath("/Documents");
 
-	LoadPerspective(config->Read("PerspectiveLayout", ""));
+	LoadPerspective(config->Read(groupId + "PerspectiveLayout", ""));
 
 	return true;
 }

@@ -1,4 +1,10 @@
-#include "gui/DocumentPanel.h"
+#include "gui/panels/DocumentPanel.h"
+
+#include <wx/confbase.h>
+
+#include <string>
+
+using namespace std;
 
 wxBEGIN_EVENT_TABLE(DocumentPanel, wxAuiNotebook)
 
@@ -9,6 +15,7 @@ wxEND_EVENT_TABLE()
 
 DocumentPanel::DocumentPanel(wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style)
 : wxAuiNotebook(parent, id, pos, size, style)
+, DocumentWindow("DocumentPanel", this)
 {
 }
 
@@ -18,17 +25,12 @@ DocumentPanel::~DocumentPanel()
 
 bool DocumentPanel::AddPage(Document *page, const wxString &caption, bool select, const wxBitmap &bitmap)
 {
-	wxWindow *w = page->getWindow();
-	w->SetClientData(page);
-	return wxAuiNotebook::AddPage(w, caption, select, bitmap);
+	return wxAuiNotebook::AddPage(page->getWindow(), caption, select, bitmap);
 }
 
 bool DocumentPanel::DocumentPanel::InsertPage(size_t pageIdx, Document *page, const wxString &caption, bool select, const wxBitmap &bitmap)
 {
-	wxWindow *w = page->getWindow();
-	w->SetClientData(page);
-
-	return wxAuiNotebook::InsertPage(pageIdx, w, caption, select, bitmap);
+	return wxAuiNotebook::InsertPage(pageIdx, page->getWindow(), caption, select, bitmap);
 }
 
 void DocumentPanel::OnPageChanged(wxAuiNotebookEvent &event)
@@ -92,6 +94,15 @@ void DocumentPanel::OnPageClosing(wxAuiNotebookEvent &event)
 
 bool DocumentPanel::serialize(wxString const &groupId, wxConfigBase *config)
 {
+	for (size_t i = 0; i < GetPageCount(); i++)
+	{
+		wxString id = groupId + "Panel_" + to_string(i);
+		Document *d = static_cast<Document *>(GetPage(i)->GetClientData());
+
+		config->Write(id +"_Type", d->getTypeName());
+		d->serialize(id + "_", config);
+	}
+
 	return true;
 }
 

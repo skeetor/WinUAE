@@ -69,8 +69,8 @@ private:
 	MainFrame*m_frame;
 	MemoryPanel *m_memory;
 
-	wxComboBox *m_columnsBox;
-	wxComboBox *m_bytesBox;
+	ComboBoxEdit *m_columnsBox;
+	ComboBoxEdit *m_bytesBox;
 	wxComboBox *m_typeBox;
 	wxTextCtrl *m_sizeTxt;
 	wxCheckBox *m_spacesChk;

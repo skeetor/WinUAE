@@ -210,8 +210,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\algorithms\observer.h" />
-    <ClInclude Include="include\algorithms\serialize.h" />
     <ClInclude Include="include\config\ApplicationConfig.h" />
     <ClInclude Include="include\config\Config.h" />
     <ClInclude Include="include\config\DebuggerConfig.h" />
@@ -224,19 +222,22 @@
     <ClInclude Include="include\globals.h" />
     <ClInclude Include="include\gui\AmiPalIDE.h" />
     <ClInclude Include="include\gui\DocumentManager.h" />
-    <ClInclude Include="include\gui\DocumentPanel.h" />
     <ClInclude Include="include\gui\Document.h" />
     <ClInclude Include="include\gui\DocumentWindow.h" />
     <ClInclude Include="include\gui\MainFrame.h" />
-    <ClInclude Include="include\gui\MemoryPanel.h" />
     <ClInclude Include="include\gui\MemoryToolBar.h" />
+    <ClInclude Include="include\gui\panels\DocumentPanel.h" />
+    <ClInclude Include="include\gui\panels\MemoryPanel.h" />
     <ClInclude Include="include\gui\properties\ConfigDlg.h" />
     <ClInclude Include="include\gui\properties\pages\DebuggerViewPage.h" />
     <ClInclude Include="include\gui\properties\PropertyPage.h" />
     <ClInclude Include="include\gui\properties\pages\GlobalSettingsPage.h" />
     <ClInclude Include="include\gui\properties\PropertyDlg.h" />
     <ClInclude Include="include\gui\properties\PropertyPagePanel.h" />
+    <ClInclude Include="include\patterns\observer.h" />
+    <ClInclude Include="include\patterns\serialize.h" />
     <ClInclude Include="include\utils\commandline.h" />
+    <ClInclude Include="include\utils\workaround.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="config\ApplicationConfig.cpp" />
@@ -247,10 +248,10 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="gui\AmiPalIDE.cpp" />
     <ClCompile Include="gui\DocumentManager.cpp" />
-    <ClCompile Include="gui\DocumentPanel.cpp" />
     <ClCompile Include="gui\MainFrame.cpp" />
-    <ClCompile Include="gui\MemoryPanel.cpp" />
     <ClCompile Include="gui\MemoryToolBar.cpp" />
+    <ClCompile Include="gui\panels\DocumentPanel.cpp" />
+    <ClCompile Include="gui\panels\MemoryPanel.cpp" />
     <ClCompile Include="gui\properties\ConfigDlg.cpp" />
     <ClCompile Include="gui\properties\pages\GlobalSettingsPage.cpp" />
     <ClCompile Include="gui\properties\pages\DebuggerViewPage.cpp" />

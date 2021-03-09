@@ -3,11 +3,11 @@
 
 #include "gui/AmiPalIDE.h"
 #include "gui/MainFrame.h"
-#include "gui/DocumentPanel.h"
 #include "gui/DocumentManager.h"
-#include "gui/MemoryPanel.h"
 #include "gui/MemoryToolBar.h"
 #include "gui/properties/ConfigDlg.h"
+#include "gui/panels/DocumentPanel.h"
+#include "gui/panels/MemoryPanel.h"
 
 #include "config/ApplicationConfig.h"
 
@@ -81,8 +81,8 @@ MainFrame::MainFrame(const wxString& title)
 
 	// m_documents->SetArtProvider(new wxAuiSimpleTabArt);
 
-	m_manager->AddPane(m_documents, wxAuiPaneInfo().Name("notebook_content").CenterPane().PaneBorder(false));
-	m_manager->AddPane(createFileBrowser(), wxAuiPaneInfo().Name("filebrowser").Caption("File Browser").Left().Layer(1).Position(1).CloseButton(true).MaximizeButton(true));
+	m_manager->AddPane(m_documents, wxAuiPaneInfo().Name("DocumentPanel").CenterPane().PaneBorder(false));
+	m_manager->AddPane(createFileBrowser(), wxAuiPaneInfo().Name("Filebrowser").Caption("File Browser").Left().Layer(1).Position(1).CloseButton(true).MaximizeButton(true));
 
 	MemoryToolBar *mbar = getMemoryToolBar();
 	mbar->Disable();
@@ -202,6 +202,7 @@ DocumentWindow *MainFrame::createFileBrowser()
 	public:
 		TreeDocument(wxWindow *parent, wxSize size)
 		: wxTreeCtrl(parent, wxID_ANY, wxPoint(0, 0), size, wxTR_DEFAULT_STYLE | wxNO_BORDER)
+		, DocumentWindow("FileBrowser", this)
 		{
 		}
 

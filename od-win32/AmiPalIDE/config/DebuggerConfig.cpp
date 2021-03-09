@@ -41,7 +41,6 @@ void DebuggerConfig::update(const DebuggerConfig &src)
 	notify();
 }
 
-
 bool DebuggerConfig::serialize(wxString const &groupId, wxConfigBase *config)
 {
 	config->SetPath("/"+getConfigName());

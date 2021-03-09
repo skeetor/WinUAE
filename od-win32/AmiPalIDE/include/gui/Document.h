@@ -6,9 +6,14 @@ class Document
 : public DocumentWindow
 {
 public:
-	Document(void)
-	: m_locked(false)
-	{}
+	Document(wxString const &typeName, wxWindow *window = nullptr)
+	: DocumentWindow(typeName)
+	, m_locked(false)
+	{
+		if (window)
+			window->SetClientData(this);
+	}
+
 	~Document() override {}
 
 public:

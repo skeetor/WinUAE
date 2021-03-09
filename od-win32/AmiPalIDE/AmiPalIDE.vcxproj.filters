@@ -61,6 +61,12 @@
     <Filter Include="Header Files\patterns">
       <UniqueIdentifier>{b849ff91-2e0c-4a7b-8a27-619c1042e946}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gui\panels">
+      <UniqueIdentifier>{120ceb46-c15c-4379-96dc-bbb35c713f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gui\panels">
+      <UniqueIdentifier>{423894ed-2eea-471d-8989-e6b6e3a7f0e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\debugger\DebuggerAPI.h">
@@ -78,13 +84,7 @@
     <ClInclude Include="include\gui\AmiPalIDE.h">
       <Filter>Header Files\gui</Filter>
     </ClInclude>
-    <ClInclude Include="include\gui\MemoryPanel.h">
-      <Filter>Header Files\gui</Filter>
-    </ClInclude>
     <ClInclude Include="include\gui\MemoryToolBar.h">
-      <Filter>Header Files\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\gui\DocumentPanel.h">
       <Filter>Header Files\gui</Filter>
     </ClInclude>
     <ClInclude Include="include\controls\ComboBoxEdit.h">
@@ -129,20 +129,29 @@
     <ClInclude Include="include\config\Config.h">
       <Filter>Header Files\config</Filter>
     </ClInclude>
-    <ClInclude Include="include\algorithms\observer.h">
-      <Filter>Header Files\patterns</Filter>
-    </ClInclude>
     <ClInclude Include="include\config\DebuggerConfig.h">
       <Filter>Header Files\config</Filter>
-    </ClInclude>
-    <ClInclude Include="include\algorithms\serialize.h">
-      <Filter>Header Files\patterns</Filter>
     </ClInclude>
     <ClInclude Include="include\gui\DocumentManager.h">
       <Filter>Header Files\gui</Filter>
     </ClInclude>
     <ClInclude Include="include\gui\DocumentWindow.h">
       <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\panels\DocumentPanel.h">
+      <Filter>Header Files\gui\panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gui\panels\MemoryPanel.h">
+      <Filter>Header Files\gui\panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\patterns\observer.h">
+      <Filter>Header Files\patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="include\patterns\serialize.h">
+      <Filter>Header Files\patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\workaround.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -155,13 +164,7 @@
     <ClCompile Include="gui\AmiPalIDE.cpp">
       <Filter>Source Files\gui</Filter>
     </ClCompile>
-    <ClCompile Include="gui\MemoryPanel.cpp">
-      <Filter>Source Files\gui</Filter>
-    </ClCompile>
     <ClCompile Include="gui\MemoryToolBar.cpp">
-      <Filter>Source Files\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\DocumentPanel.cpp">
       <Filter>Source Files\gui</Filter>
     </ClCompile>
     <ClCompile Include="controls\ComboBoxEdit.cpp">
@@ -196,6 +199,12 @@
     </ClCompile>
     <ClCompile Include="gui\DocumentManager.cpp">
       <Filter>Source Files\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\panels\DocumentPanel.cpp">
+      <Filter>Source Files\gui\panels</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\panels\MemoryPanel.cpp">
+      <Filter>Source Files\gui\panels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
