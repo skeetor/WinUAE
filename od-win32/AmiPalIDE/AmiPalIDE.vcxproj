@@ -237,7 +237,7 @@
     <ClInclude Include="include\patterns\observer.h" />
     <ClInclude Include="include\patterns\serialize.h" />
     <ClInclude Include="include\utils\commandline.h" />
-    <ClInclude Include="include\utils\workaround.h" />
+    <ClInclude Include="include\utils\StringUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="config\ApplicationConfig.cpp" />
@@ -248,6 +248,7 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="gui\AmiPalIDE.cpp" />
     <ClCompile Include="gui\DocumentManager.cpp" />
+    <ClCompile Include="gui\DocumentWindow.cpp" />
     <ClCompile Include="gui\MainFrame.cpp" />
     <ClCompile Include="gui\MemoryToolBar.cpp" />
     <ClCompile Include="gui\panels\DocumentPanel.cpp" />

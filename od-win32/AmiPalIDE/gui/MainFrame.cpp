@@ -10,6 +10,7 @@
 #include "gui/panels/MemoryPanel.h"
 
 #include "config/ApplicationConfig.h"
+#include "utils/StringUtils.h"
 
 #include <wx/app.h>
 #include <wx/menu.h>
@@ -488,6 +489,7 @@ void MainFrame::saveConfig(void)
 	wxFileOutputStream ostrm(fn);
 	if (!ostrm.Ok())
 	{
+		string msg = string("Unable to open file: ") + string(fn.c_str());
 		// TODO: error handling
 	}
 
@@ -526,8 +528,9 @@ void MainFrame::restoreConfig(void)
 			if (rc == wxYES)
 			{
 				m_abort = true;
+				string msg = string("Unable to open file: ") + string(fn.c_str());
 				// TODO: Shutdown application
-				//Debugger->CloseDebugger();
+				// throw runtime_error(msg);
 			}
 		}
 

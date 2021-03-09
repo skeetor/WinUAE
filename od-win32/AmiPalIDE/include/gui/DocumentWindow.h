@@ -8,14 +8,8 @@ class DocumentWindow
 : public Serialize
 {
 public:
-	DocumentWindow(wxString const &typeName, wxWindow *window = nullptr)
-	: m_typeName(typeName)
-	{
-		if (window)
-			window->SetClientData(this);
-	}
-
-	virtual ~DocumentWindow() {}
+	DocumentWindow(wxString const &typeInfo, wxWindow *window = nullptr);
+	virtual ~DocumentWindow(void);
 
 public:
 	/**
@@ -23,12 +17,21 @@ public:
 	 */
 	virtual wxWindow *getWindow(void) = 0;
 
+public:
+	/**
+	 * Factory method to create the document from a serialized typeinfo string.
+	 */
+	static DocumentWindow *createFromInfo(wxWindow *parent, wxString typeInfo);
+
 	/**
 	 * Returns a string which identfies the document type and must be
 	 * unique for all documents.
 	 */
-	const wxString &getTypeName(void) { return m_typeName; }
+	const wxString &getTypeInfo(void) { return m_typeInfo; }
+
+protected:
+	void setTypeInfo(const wxString &typeInfo) { m_typeInfo = typeInfo; }
 
 private:
-	wxString m_typeName;
+	wxString m_typeInfo;
 };

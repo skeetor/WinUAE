@@ -3,6 +3,8 @@
 #include "gui/MainFrame.h"
 #include "gui/panels/MemoryPanel.h"
 
+#include "utils/StringUtils.h"
+
 #include <wx/stattext.h>
 
 wxBEGIN_EVENT_TABLE(MemoryToolBar, wxAuiToolBar)
@@ -26,7 +28,7 @@ wxEND_EVENT_TABLE()
 
 MemoryToolBar::MemoryToolBar(MainFrame *frame, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style)
 : wxAuiToolBar(parent, id, pos, size, style)
-, DocumentWindow("MemoryToolBar", this)
+, DocumentWindow("MemoryToolBar|" + toHexString(id), this)
 , m_frame(frame)
 , m_memory(nullptr)
 {

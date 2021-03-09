@@ -150,7 +150,7 @@
     <ClInclude Include="include\patterns\serialize.h">
       <Filter>Header Files\patterns</Filter>
     </ClInclude>
-    <ClInclude Include="include\utils\workaround.h">
+    <ClInclude Include="include\utils\StringUtils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
@@ -205,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="gui\panels\MemoryPanel.cpp">
       <Filter>Source Files\gui\panels</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\DocumentWindow.cpp">
+      <Filter>Source Files\gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

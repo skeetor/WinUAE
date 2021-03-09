@@ -1,6 +1,8 @@
 #include "gui/DocumentManager.h"
 #include <wx/confbase.h>
+
 #include <string>
+#include <exception>
 
 using namespace std;
 
@@ -44,12 +46,13 @@ bool DocumentManager::serialize(wxString const &groupId, wxConfigBase *config)
 		wxAuiPaneInfo const &info = pa[i];
 		DocumentWindow *d = reinterpret_cast<DocumentWindow *>(info.window->GetClientData());
 		wxString id = groupId + "Pane_" + to_string(i);
+
+		config->Write(id + "_Type", d->getTypeInfo());
+		config->Write(id + "_TypeInfo", SavePaneInfo(info));
 		d->serialize(id + "_", config);
-		wxString s = SavePaneInfo(info);
-		config->Write(id, s);
 	}
 
-	config->Write(groupId + "PerspectiveLayout", SavePerspective());
+	//config->Write(groupId + "layout", SavePerspective());
 
 	return true;
 }
@@ -58,7 +61,46 @@ bool DocumentManager::deserialize(wxString const &groupId, wxConfigBase *config)
 {
 	config->SetPath("/Documents");
 
-	LoadPerspective(config->Read(groupId + "PerspectiveLayout", ""));
+	size_t i = 0;
+	wxString v;
+	wxString id = groupId + "Pane_" + to_string(i);
+
+	while ((v = config->Read(id + "_Type", "")) != "")
+	{
+
+		DocumentWindow *d = DocumentWindow::createFromInfo(GetManagedWindow(), v);
+		if (!d)
+		{
+			string msg = string(id.c_str()) + "=" + string(v.c_str());
+			//throw runtime_error("Unknown typeinfo: " + msg);
+			return false;
+		}
+
+		v = config->Read(id + "_TypeInfo", "");
+		if (v.empty())
+		{
+			string msg = string(id.c_str()) + "=" + string(v.c_str());
+			//throw runtime_error("Unknown typeinfo: " + msg);
+			return false;
+		}
+
+		wxAuiPaneInfo info;
+		LoadPaneInfo(v, info);
+
+		if (!d->deserialize(id + "_", config))
+		{
+			string msg = string(id.c_str()) + "=" + string(v.c_str());
+			//throw runtime_error("Unknown typeinfo: " + msg);
+			return false;
+		}
+
+		AddPane(d, info);
+
+		i++;
+		id = groupId + "Pane_" + to_string(i);
+	}
+
+	//LoadPerspective(config->Read(groupId + "layout", ""));
 
 	return true;
 }

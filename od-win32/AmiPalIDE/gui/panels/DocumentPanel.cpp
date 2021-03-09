@@ -1,4 +1,5 @@
 #include "gui/panels/DocumentPanel.h"
+#include "utils/StringUtils.h"
 
 #include <wx/confbase.h>
 
@@ -15,7 +16,7 @@ wxEND_EVENT_TABLE()
 
 DocumentPanel::DocumentPanel(wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style)
 : wxAuiNotebook(parent, id, pos, size, style)
-, DocumentWindow("DocumentPanel", this)
+, DocumentWindow("DocumentPanel|" + toHexString(id), this)
 {
 }
 
@@ -99,7 +100,7 @@ bool DocumentPanel::serialize(wxString const &groupId, wxConfigBase *config)
 		wxString id = groupId + "Panel_" + to_string(i);
 		Document *d = static_cast<Document *>(GetPage(i)->GetClientData());
 
-		config->Write(id +"_Type", d->getTypeName());
+		config->Write(id +"_Type", d->getTypeInfo());
 		d->serialize(id + "_", config);
 	}
 

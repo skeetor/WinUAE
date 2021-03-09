@@ -6,8 +6,8 @@ class Document
 : public DocumentWindow
 {
 public:
-	Document(wxString const &typeName, wxWindow *window = nullptr)
-	: DocumentWindow(typeName)
+	Document(wxString const &typeInfo, wxWindow *window = nullptr)
+	: DocumentWindow(typeInfo)
 	, m_locked(false)
 	{
 		if (window)

@@ -1,7 +1,7 @@
 #include "gui/MemoryToolBar.h"
 #include "gui/panels/MemoryPanel.h"
 
-#include "utils/workaround.h"
+#include "utils/StringUtils.h"
 
 #include <wx/artprov.h>
 #include <wx/string.h>
@@ -32,7 +32,7 @@ wxEND_EVENT_TABLE()
 
 MemoryPanel::MemoryPanel(MemoryToolBar *toolBar, wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style, const wxString &name)
 : wxPanel(parent, id, pos, size, style, name)
-, Document("MemoryPanel", this)
+, Document("MemoryPanel|" + toHexString(id), this)
 , m_toolBar(toolBar)
 , m_horizSB(wxSystemMetric::wxSYS_HSCROLL_Y)
 , m_vertSB(wxSystemMetric::wxSYS_VSCROLL_X)
@@ -87,12 +87,10 @@ void MemoryPanel::Init(void)
 bool MemoryPanel::serialize(wxString const &groupId, wxConfigBase *config)
 {
 	config->Write(groupId + "MemSize", toWxString(m_memorySize));
-	config->Write(groupId + "Columns", toWxString(m_columns));
+	config->Write(groupId + "Columns", toWxString(m_displayColumns));
 	config->Write(groupId + "ColumnBytes", toWxString(m_columnBytes));
 	config->Write(groupId + "DisplayType", displayTypeToString(m_type));
-	wxString s;
-	s.Printf(wxT("0x%08llx"), m_addressLimit);
-	config->Write(groupId + "AddressLimit", s);
+	config->Write(groupId + "AddressLimit", toHexString(m_addressLimit));
 	config->Write(groupId + "Spaces", m_spaces);
 
 	return true;
@@ -101,11 +99,13 @@ bool MemoryPanel::serialize(wxString const &groupId, wxConfigBase *config)
 bool MemoryPanel::deserialize(wxString const &groupId, wxConfigBase *config)
 {
 	m_memorySize = fromWxString(config->Read(groupId + "MemSize", "0"));
-	m_columns = fromWxString(config->Read(groupId + "Columns", "0"));
+	m_displayColumns = fromWxString(config->Read(groupId + "Columns", "0"));
 	m_columnBytes = fromWxString(config->Read(groupId + "ColumnBytes", "0"));
 	m_type = stringToDisplayType(config->Read(groupId + "DisplayType", "HEX"));
 	m_addressLimit = fromWxString(config->Read(groupId + "AddressLimit", "0x0"), 16);
 	m_spaces = config->ReadBool(groupId + "Spaces", m_spaces);
+
+	printDump(m_address);
 
 	return true;
 }
