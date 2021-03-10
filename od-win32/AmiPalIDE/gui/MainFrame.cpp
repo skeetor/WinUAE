@@ -5,6 +5,7 @@
 #include "gui/MainFrame.h"
 #include "gui/properties/ConfigDlg.h"
 #include "gui/document/DocumentManager.h"
+#include "gui/document/MemoryToolBar.h"
 #include "gui/document/panels/DocumentPanel.h"
 
 #include "config/ApplicationConfig.h"
@@ -53,6 +54,8 @@ MainFrame::MainFrame(const wxString& title)
 , m_closeByMenu(false)
 , m_abort(false)
 {
+	wxGetApp().m_mainFrame = this;
+
 	init();
 	restoreConfig();
 
@@ -96,9 +99,8 @@ void MainFrame::createDefaultIDE(void)
 									wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_MIDDLE_CLICK_CLOSE);
 
 	// m_documents->SetArtProvider(new wxAuiSimpleTabArt);
-	DocumentWindow *dw = DocumentWindow::createFromInfo(this, "MemoryToolBar");
-	dw->getWindow()->Disable();
-	m_manager->AddPane(dw, wxAuiPaneInfo().Name("MemoryBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
+	MemoryToolBar *m = getMemoryToolBar();
+	m->Disable();
 
 	Document *d = Document::createDocumentFromInfo(this, "MemoryPanel");
 	documents->AddPage(d, "Memory", false);
@@ -277,20 +279,21 @@ void MainFrame::OnConsole(wxCommandEvent& event)
 
 void MainFrame::OnViewMemoryToolbar(wxCommandEvent &event)
 {
-/*	bool shown = m_memoryToolBar->IsShown();
-	m_memoryToolBar->Show(!shown);
+	MemoryToolBar *m = getMemoryToolBar();
+	bool shown = m->IsShown();
+	m->Show(!shown);
 
 	// In case the toolbar was floating and has been closed by the user, we need
 	// to make sure that it becomes visible, so we always detach, and insert it
 	// to make it properly appear again.
 	// It might be more efficient, if we could get an event when the toolbar has
 	// been closed.
-	m_manager->DetachPane(m_memoryToolBar);
+	m_manager->DetachPane(m);
 
 	if (!shown)
-		m_manager->InsertPane(m_memoryToolBar, wxAuiPaneInfo().Name("MemoryBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
+		m_manager->InsertPane(m, wxAuiPaneInfo().Name("MemoryBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
 
-	m_manager->Update();*/
+	m_manager->Update();
 }
 
 void MainFrame::OnOptions(wxCommandEvent& event)
@@ -315,11 +318,15 @@ void MainFrame::OnLayoutLoad(wxCommandEvent& event)
 
 MemoryToolBar *MainFrame::getMemoryToolBar(void)
 {
-/*	if (!m_memoryToolBar)
-		m_memoryToolBar = new MemoryToolBar(this, this);
+	MemoryToolBar *w = reinterpret_cast<MemoryToolBar *>(m_manager->GetPane("MemoryToolBar").window);
 
-	return m_memoryToolBar;*/
-	return nullptr;
+	if (!w)
+	{
+		w = reinterpret_cast<MemoryToolBar *>(DocumentWindow::createFromInfo(this, "MemoryToolBar")->getWindow());
+		m_manager->AddPane(w, wxAuiPaneInfo().Name("MemoryToolBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
+	}
+
+	return w;
 }
 
 bool MainFrame::serialize(wxString const &groupId, wxConfigBase *config)
@@ -431,8 +438,7 @@ void MainFrame::restoreConfig(void)
 		appCfg.configFile = fn;
 	}
 
-	wxFileInputStream istrm(fn);
-	if (!istrm.Ok())
+	if (!wxFile::Exists(fn))
 	{
 		if (wxGetApp().configByParam)
 		{
@@ -448,6 +454,13 @@ void MainFrame::restoreConfig(void)
 		createDefaultIDE();
 
 		return;
+	}
+
+	wxFileInputStream istrm(fn);
+	if (!istrm.Ok())
+	{
+		string msg = string("Unable to open config file: ") + string(fn.c_str());
+		throw invalid_argument(msg);
 	}
 
 	wxFileConfig *config = new wxFileConfig(istrm);
