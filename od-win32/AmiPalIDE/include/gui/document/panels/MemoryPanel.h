@@ -2,9 +2,9 @@
 
 #include <wx/control.h>
 #include <wx/panel.h>
+#include <wx/textctrl.h>
 
-#include "gui/MemoryToolBar.h"
-#include "gui/Document.h"
+#include "gui/document/Document.h"
 #include "debugger/DebuggerAPI.h"
 #include "patterns/observer.h"
 #include "config/DebuggerConfig.h"

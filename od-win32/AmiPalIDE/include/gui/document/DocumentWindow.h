@@ -32,6 +32,14 @@ public:
 protected:
 	void setTypeInfo(const wxString &typeInfo) { m_typeInfo = typeInfo; }
 
+	/**
+	 * Removes the next token from the info string, and returns it.
+	 * If there are no more tokens, an empty string is returned.
+	 */
+	static wxString getInfoToken(wxString &typeInfo);
+
+private:
+
 private:
 	wxString m_typeInfo;
 };

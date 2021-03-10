@@ -1,13 +1,15 @@
 
 #include "framework.h"
 
-#include "gui/AmiPalIDE.h"
+#include "AmiPalIDE.h"
 #include "gui/MainFrame.h"
 #include "utils/commandline.h"
 
 #include "config/ApplicationConfig.h"
 
 #include "wx/confbase.h"
+
+#include <stdexcept>
 
 using namespace std;
 
@@ -35,11 +37,23 @@ bool AmiPalApp::OnInit(void)
 //		return false;
 
 	config.configFile = configFile;
-
-	m_mainFrame = new MainFrame(_T("AmiPalIDE v0.01"));
-	m_mainFrame->Show(true);
-
 	gApp = this;
+
+	try
+	{
+		m_mainFrame = new MainFrame(_T("AmiPalIDE v0.01"));
+		m_mainFrame->Show(true);
+	}
+	catch (const invalid_argument &ex)
+	{
+		UNUSED(ex);
+		return false;
+	}
+	catch (const runtime_error &ex)
+	{
+		UNUSED(ex);
+		return false;
+	}
 
 	return true;
 }

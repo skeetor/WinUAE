@@ -7,17 +7,9 @@
 
 class wxDialog;
 
-class MemoryPanel;
-class MemoryToolBar;
-class DocumentPanel;
 class DocumentManager;
-
-// TODO: To be removed
 class DocumentWindow;
-typedef DocumentWindow RegistersPanel;
-typedef DocumentWindow DisasmPanel;
-typedef DocumentWindow BreakpointPanel;
-typedef DocumentWindow ConsolePanel;
+class MemoryToolBar;
 
 // IDs for the controls and the menu commands
 enum AmiPalMainFrameID
@@ -97,14 +89,9 @@ public: // Serialize
 	bool serialize(wxString const &groupId, wxConfigBase *config) override;
 	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
 
-protected:
-	MemoryPanel *createMemoryPanel(void);
 	MemoryToolBar *getMemoryToolBar(void);
-	RegistersPanel *createRegistersPanel(void);
-	DisasmPanel *createDisasmPanel(void);
-	BreakpointPanel *createBreakpointPanel(void);
-	ConsolePanel *createConsolePanel(void);
 
+protected:
 	void saveConfig(void);
 	void restoreConfig(void);
 
@@ -115,21 +102,14 @@ private:
 	wxMenu *createToolsMenu(void);
 	wxMenu *createHelpMenu(void);
 
-	DocumentWindow *createFileBrowser();
+	void init(void);
+	void createDefaultIDE(void);
 
 private:
 	DocumentManager *m_manager;
 
 	wxStatusBar *m_statusBar;
 	wxMenuBar *m_frameMenu;
-	DocumentPanel *m_documents;
-
-	RegistersPanel *m_registerPanel;
-	MemoryPanel *m_memoryPanel;
-	MemoryToolBar *m_memoryToolBar;
-	DisasmPanel *m_disasmPanel;
-	BreakpointPanel *m_breakpointPanel;
-	ConsolePanel *m_consolePanel;
 
 	wxDialog *m_modalDialog;
 

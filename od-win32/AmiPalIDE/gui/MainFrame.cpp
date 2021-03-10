@@ -1,16 +1,17 @@
 
 #include "framework.h"
 
-#include "gui/AmiPalIDE.h"
+#include "AmiPalIDE.h"
 #include "gui/MainFrame.h"
-#include "gui/DocumentManager.h"
-#include "gui/MemoryToolBar.h"
 #include "gui/properties/ConfigDlg.h"
-#include "gui/panels/DocumentPanel.h"
-#include "gui/panels/MemoryPanel.h"
+#include "gui/document/DocumentManager.h"
+#include "gui/document/panels/DocumentPanel.h"
 
 #include "config/ApplicationConfig.h"
+#include "config/DebuggerConfig.h"
+
 #include "utils/StringUtils.h"
+#include "debugger/DebuggerAPI.h"
 
 #include <wx/app.h>
 #include <wx/menu.h>
@@ -48,60 +49,14 @@ MainFrame::MainFrame(const wxString& title)
 : wxFrame(NULL, wxID_ANY, title)
 , m_statusBar(nullptr)
 , m_frameMenu(nullptr)
-, m_documents(nullptr)
-, m_registerPanel(nullptr)
-, m_memoryPanel(nullptr)
-, m_memoryToolBar(nullptr)
-, m_disasmPanel(nullptr)
-, m_breakpointPanel(nullptr)
-, m_consolePanel(nullptr)
 , m_modalDialog(nullptr)
 , m_closeByMenu(false)
 , m_abort(false)
 {
-	m_manager = new DocumentManager(this, wxAUI_MGR_DEFAULT);
-
-	// Enable docking
-	//m_manager->SetManagedWindow(this);
-	//m_manager->SetFlags(wxAUI_MGR_DEFAULT);
-
-	m_statusBar = CreateStatusBar(1, wxSTB_SIZEGRIP, IDM_STATUSBAR);
-	m_frameMenu = new wxMenuBar(0);
-
-	m_frameMenu->Append(createFileMenu(), "File");
-	m_frameMenu->Append(createDebugMenu(), "Debug");
-	m_frameMenu->Append(createViewMenu(), "View");
-	m_frameMenu->Append(createToolsMenu(), "Tools");
-	m_frameMenu->Append(createHelpMenu(), "Help");
-
-	wxSize client_size = GetClientSize();
-	m_documents = new DocumentPanel(this, wxID_ANY,
-		wxPoint(client_size.x, client_size.y),
-		FromDIP(wxSize(430,200)),
-		wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_MIDDLE_CLICK_CLOSE);
-
-	// m_documents->SetArtProvider(new wxAuiSimpleTabArt);
-
-	m_manager->AddPane(m_documents, wxAuiPaneInfo().Name("DocumentPanel").CenterPane().PaneBorder(false));
-	m_manager->AddPane(createFileBrowser(), wxAuiPaneInfo().Name("Filebrowser").Caption("File Browser").Left().Layer(1).Position(1).CloseButton(true).MaximizeButton(true));
-
-	MemoryToolBar *mbar = getMemoryToolBar();
-	mbar->Disable();
-
-	m_manager->AddPane(mbar, wxAuiPaneInfo().Name("MemoryBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
-	createMemoryPanel();
-
-	// "commit" all changes made to wxAuiManager
-	m_manager->Update();
-
-	SetMenuBar(m_frameMenu);
-
-	// set the frame icon
-	SetIcon(wxICON(sample));
-
-	SetStatusText("Welcome to the WinUAE GUI Debugger!");
-
+	init();
 	restoreConfig();
+
+	SetStatusText("Welcome to the AmiPal Debugger!");
 }
 
 MainFrame::~MainFrame(void)
@@ -112,6 +67,48 @@ MainFrame::~MainFrame(void)
 MainFrame *MainFrame::getInstance(void)
 {
 	return wxGetApp().m_mainFrame;
+}
+
+void MainFrame::init(void)
+{
+	m_manager = new DocumentManager(this, wxAUI_MGR_DEFAULT);
+
+	m_statusBar = CreateStatusBar(1, wxSTB_SIZEGRIP, IDM_STATUSBAR);
+	m_frameMenu = new wxMenuBar(0);
+
+	m_frameMenu->Append(createFileMenu(), "File");
+	m_frameMenu->Append(createDebugMenu(), "Debug");
+	m_frameMenu->Append(createViewMenu(), "View");
+	m_frameMenu->Append(createToolsMenu(), "Tools");
+	m_frameMenu->Append(createHelpMenu(), "Help");
+	SetMenuBar(m_frameMenu);
+
+	// set the frame icon
+	SetIcon(wxICON(sample));
+}
+
+void MainFrame::createDefaultIDE(void)
+{
+	wxSize client_size = GetClientSize();
+	DocumentPanel *documents = new DocumentPanel(this, wxID_ANY,
+									wxPoint(client_size.x, client_size.y),
+									FromDIP(wxSize(430, 200)),
+									wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_MIDDLE_CLICK_CLOSE);
+
+	// m_documents->SetArtProvider(new wxAuiSimpleTabArt);
+	DocumentWindow *dw = DocumentWindow::createFromInfo(this, "MemoryToolBar");
+	dw->getWindow()->Disable();
+	m_manager->AddPane(dw, wxAuiPaneInfo().Name("MemoryBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
+
+	Document *d = Document::createDocumentFromInfo(this, "MemoryPanel");
+	documents->AddPage(d, "Memory", false);
+	documents->SetSelection(documents->GetPageCount() - 1);
+
+	m_manager->AddPane(documents, wxAuiPaneInfo().Name("DocumentPanel").CenterPane().PaneBorder(false));
+	m_manager->AddPane(DocumentWindow::createFromInfo(this, "FileTree"), wxAuiPaneInfo().Name("FileTree").Caption("File Browser").Left().Layer(1).Position(1).CloseButton(true).MaximizeButton(true));
+
+	// "commit" all changes made to wxAuiManager
+	m_manager->Update();
 }
 
 wxMenu *MainFrame::createFileMenu(void)
@@ -196,63 +193,6 @@ wxMenu *MainFrame::createToolsMenu(void)
 	return menu;
 }
 
-DocumentWindow *MainFrame::createFileBrowser()
-{
-	class TreeDocument : public wxTreeCtrl, public DocumentWindow
-	{
-	public:
-		TreeDocument(wxWindow *parent, wxSize size)
-		: wxTreeCtrl(parent, wxID_ANY, wxPoint(0, 0), size, wxTR_DEFAULT_STYLE | wxNO_BORDER)
-		, DocumentWindow("FileBrowser", this)
-		{
-		}
-
-		wxWindow *getWindow(void) override { return this; }
-		bool serialize(wxString const &groupId, wxConfigBase *config) override
-		{
-			return true;
-		}
-
-		bool deserialize(wxString const &groupId, wxConfigBase *config) override
-		{
-			return true;
-		}
-	};
-
-	wxSize size = FromDIP(wxSize(160, 250));
-	TreeDocument * tree = new TreeDocument(this, size);
-
-	size = FromDIP(wxSize(16, 16));
-	wxImageList* imglist = new wxImageList(size.x, size.y, true, 2);
-	imglist->Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, size));
-	imglist->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, size));
-	tree->AssignImageList(imglist);
-
-	wxTreeItemId root = tree->AddRoot("wxAUI Project", 0);
-	wxArrayTreeItemIds items;
-
-	items.Add(tree->AppendItem(root, "Item 1", 0));
-	items.Add(tree->AppendItem(root, "Item 2", 0));
-	items.Add(tree->AppendItem(root, "Item 3", 0));
-	items.Add(tree->AppendItem(root, "Item 4", 0));
-	items.Add(tree->AppendItem(root, "Item 5", 0));
-
-	int i, count;
-	for (i = 0, count = items.Count(); i < count; ++i)
-	{
-		wxTreeItemId id = items.Item(i);
-		tree->AppendItem(id, "Subitem 1", 1);
-		tree->AppendItem(id, "Subitem 2", 1);
-		tree->AppendItem(id, "Subitem 3", 1);
-		tree->AppendItem(id, "Subitem 4", 1);
-		tree->AppendItem(id, "Subitem 5", 1);
-	}
-
-	tree->Expand(root);
-
-	return tree;
-}
-
 void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
 	m_closeByMenu = true;
@@ -322,7 +262,7 @@ void MainFrame::OnDisasm(wxCommandEvent& event)
 
 void MainFrame::OnMemory(wxCommandEvent& event)
 {
-	createMemoryPanel();
+	//createMemoryPanel();
 }
 
 void MainFrame::OnBreakpoints(wxCommandEvent& event)
@@ -337,7 +277,7 @@ void MainFrame::OnConsole(wxCommandEvent& event)
 
 void MainFrame::OnViewMemoryToolbar(wxCommandEvent &event)
 {
-	bool shown = m_memoryToolBar->IsShown();
+/*	bool shown = m_memoryToolBar->IsShown();
 	m_memoryToolBar->Show(!shown);
 
 	// In case the toolbar was floating and has been closed by the user, we need
@@ -350,7 +290,7 @@ void MainFrame::OnViewMemoryToolbar(wxCommandEvent &event)
 	if (!shown)
 		m_manager->InsertPane(m_memoryToolBar, wxAuiPaneInfo().Name("MemoryBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
 
-	m_manager->Update();
+	m_manager->Update();*/
 }
 
 void MainFrame::OnOptions(wxCommandEvent& event)
@@ -373,40 +313,12 @@ void MainFrame::OnLayoutLoad(wxCommandEvent& event)
 {
 }
 
-RegistersPanel *MainFrame::createRegistersPanel(void)
-{
-	return nullptr;
-}
-
-MemoryPanel *MainFrame::createMemoryPanel(void)
-{
-	MemoryPanel *mp = new MemoryPanel(getMemoryToolBar(), this);
-	m_documents->AddPage(mp, "Memory", false);
-	m_documents->SetSelection(m_documents->GetPageCount()-1);
-
-	return mp;
-}
-
 MemoryToolBar *MainFrame::getMemoryToolBar(void)
 {
-	if (!m_memoryToolBar)
+/*	if (!m_memoryToolBar)
 		m_memoryToolBar = new MemoryToolBar(this, this);
 
-	return m_memoryToolBar;
-}
-
-DisasmPanel *MainFrame::createDisasmPanel(void)
-{
-	return nullptr;
-}
-
-BreakpointPanel *MainFrame::createBreakpointPanel(void)
-{
-	return nullptr;
-}
-
-ConsolePanel *MainFrame::createConsolePanel(void)
-{
+	return m_memoryToolBar;*/
 	return nullptr;
 }
 
@@ -528,11 +440,12 @@ void MainFrame::restoreConfig(void)
 			if (rc == wxYES)
 			{
 				m_abort = true;
-				string msg = string("Unable to open file: ") + string(fn.c_str());
-				// TODO: Shutdown application
-				// throw runtime_error(msg);
+				string msg = string("Unable to open config file: ") + string(fn.c_str());
+				throw invalid_argument(msg);
 			}
 		}
+
+		createDefaultIDE();
 
 		return;
 	}

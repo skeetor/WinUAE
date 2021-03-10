@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gui/DocumentWindow.h"
+#include "gui/document/DocumentWindow.h"
 
 class Document
 : public DocumentWindow
@@ -15,6 +15,8 @@ public:
 	}
 
 	~Document() override {}
+
+	static Document *createDocumentFromInfo(wxWindow *parent, wxString typeInfo);
 
 public:
 	/**

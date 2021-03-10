@@ -1,7 +1,8 @@
 #pragma once
 
 #include <wx/aui/aui.h>
-#include "gui/Document.h"
+
+#include "gui/document/Document.h"
 
 ///////////////////////////////////////////////////////////////////////////
 class DocumentPanel

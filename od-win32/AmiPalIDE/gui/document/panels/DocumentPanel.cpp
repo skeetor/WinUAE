@@ -1,4 +1,4 @@
-#include "gui/panels/DocumentPanel.h"
+#include "gui/document/panels/DocumentPanel.h"
 #include "utils/StringUtils.h"
 
 #include <wx/confbase.h>

@@ -210,6 +210,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\AmiPalIDE.h" />
     <ClInclude Include="include\config\ApplicationConfig.h" />
     <ClInclude Include="include\config\Config.h" />
     <ClInclude Include="include\config\DebuggerConfig.h" />
@@ -220,14 +221,14 @@
     <ClInclude Include="include\debugger\Machine.h" />
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\globals.h" />
-    <ClInclude Include="include\gui\AmiPalIDE.h" />
-    <ClInclude Include="include\gui\DocumentManager.h" />
-    <ClInclude Include="include\gui\Document.h" />
-    <ClInclude Include="include\gui\DocumentWindow.h" />
+    <ClInclude Include="include\gui\document\DocumentManager.h" />
+    <ClInclude Include="include\gui\document\Document.h" />
+    <ClInclude Include="include\gui\document\DocumentWindow.h" />
+    <ClInclude Include="include\gui\document\FileTree.h" />
     <ClInclude Include="include\gui\MainFrame.h" />
-    <ClInclude Include="include\gui\MemoryToolBar.h" />
-    <ClInclude Include="include\gui\panels\DocumentPanel.h" />
-    <ClInclude Include="include\gui\panels\MemoryPanel.h" />
+    <ClInclude Include="include\gui\document\MemoryToolBar.h" />
+    <ClInclude Include="include\gui\document\panels\DocumentPanel.h" />
+    <ClInclude Include="include\gui\document\panels\MemoryPanel.h" />
     <ClInclude Include="include\gui\properties\ConfigDlg.h" />
     <ClInclude Include="include\gui\properties\pages\DebuggerViewPage.h" />
     <ClInclude Include="include\gui\properties\PropertyPage.h" />
@@ -240,19 +241,20 @@
     <ClInclude Include="include\utils\StringUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AmiPalIDE.cpp" />
     <ClCompile Include="config\ApplicationConfig.cpp" />
     <ClCompile Include="config\DebuggerConfig.cpp" />
     <ClCompile Include="controls\EditBtn.cpp" />
     <ClCompile Include="controls\ComboBoxEdit.cpp" />
     <ClCompile Include="debugger\DebuggerAPI.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="gui\AmiPalIDE.cpp" />
-    <ClCompile Include="gui\DocumentManager.cpp" />
-    <ClCompile Include="gui\DocumentWindow.cpp" />
+    <ClCompile Include="gui\document\DocumentManager.cpp" />
+    <ClCompile Include="gui\document\DocumentWindow.cpp" />
+    <ClCompile Include="gui\document\FileTree.cpp" />
     <ClCompile Include="gui\MainFrame.cpp" />
-    <ClCompile Include="gui\MemoryToolBar.cpp" />
-    <ClCompile Include="gui\panels\DocumentPanel.cpp" />
-    <ClCompile Include="gui\panels\MemoryPanel.cpp" />
+    <ClCompile Include="gui\document\MemoryToolBar.cpp" />
+    <ClCompile Include="gui\document\panels\DocumentPanel.cpp" />
+    <ClCompile Include="gui\document\panels\MemoryPanel.cpp" />
     <ClCompile Include="gui\properties\ConfigDlg.cpp" />
     <ClCompile Include="gui\properties\pages\GlobalSettingsPage.cpp" />
     <ClCompile Include="gui\properties\pages\DebuggerViewPage.cpp" />

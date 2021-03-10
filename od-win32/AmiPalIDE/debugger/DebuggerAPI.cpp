@@ -2,7 +2,7 @@
 
 #include <thread>
 
-#include "gui/AmiPalIDE.h"
+#include "AmiPalIDE.h"
 #include "gui/MainFrame.h"
 
 #include "debugger/DebuggerAPI.h"

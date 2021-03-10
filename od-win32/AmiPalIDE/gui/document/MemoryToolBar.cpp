@@ -1,7 +1,7 @@
 
-#include "gui/MemoryToolBar.h"
 #include "gui/MainFrame.h"
-#include "gui/panels/MemoryPanel.h"
+#include "gui/document/MemoryToolBar.h"
+#include "gui/document/panels/MemoryPanel.h"
 
 #include "utils/StringUtils.h"
 

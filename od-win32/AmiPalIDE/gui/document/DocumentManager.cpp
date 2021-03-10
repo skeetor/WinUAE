@@ -1,8 +1,9 @@
-#include "gui/DocumentManager.h"
+#include "gui/document/DocumentManager.h"
+
 #include <wx/confbase.h>
 
 #include <string>
-#include <exception>
+#include <stdexcept>
 
 using namespace std;
 
@@ -67,12 +68,11 @@ bool DocumentManager::deserialize(wxString const &groupId, wxConfigBase *config)
 
 	while ((v = config->Read(id + "_Type", "")) != "")
 	{
-
 		DocumentWindow *d = DocumentWindow::createFromInfo(GetManagedWindow(), v);
 		if (!d)
 		{
 			string msg = string(id.c_str()) + "=" + string(v.c_str());
-			//throw runtime_error("Unknown typeinfo: " + msg);
+			throw runtime_error("Unknown type: " + msg);
 			return false;
 		}
 
@@ -80,20 +80,14 @@ bool DocumentManager::deserialize(wxString const &groupId, wxConfigBase *config)
 		if (v.empty())
 		{
 			string msg = string(id.c_str()) + "=" + string(v.c_str());
-			//throw runtime_error("Unknown typeinfo: " + msg);
+			throw runtime_error("Unknown typeinfo: " + msg);
 			return false;
 		}
 
 		wxAuiPaneInfo info;
 		LoadPaneInfo(v, info);
 
-		if (!d->deserialize(id + "_", config))
-		{
-			string msg = string(id.c_str()) + "=" + string(v.c_str());
-			//throw runtime_error("Unknown typeinfo: " + msg);
-			return false;
-		}
-
+		d->deserialize(id + "_", config);
 		AddPane(d, info);
 
 		i++;

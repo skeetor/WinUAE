@@ -1,7 +1,7 @@
 #pragma once
 
 #include "controls/ComboBoxEdit.h"
-#include "gui/DocumentWindow.h"
+#include "gui/document/DocumentWindow.h"
 
 #include <wx/textctrl.h>
 #include <wx/button.h>

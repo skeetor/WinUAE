@@ -1,6 +1,6 @@
-#include "gui/properties/PropertyDlg.h"
-#include "gui/AmiPalIDE.h"
+#include "AmiPalIDE.h"
 #include "gui/MainFrame.h"
+#include "gui/properties/PropertyDlg.h"
 
 #include <wx/gbsizer.h>
 #include <wx/button.h>
