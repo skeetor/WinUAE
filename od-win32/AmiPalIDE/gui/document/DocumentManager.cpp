@@ -53,7 +53,7 @@ bool DocumentManager::serialize(wxString const &groupId, wxConfigBase *config)
 		d->serialize(id + "_", config);
 	}
 
-	//config->Write(groupId + "layout", SavePerspective());
+	config->Write(groupId + "layout", SavePerspective());
 
 	return true;
 }
@@ -69,20 +69,9 @@ bool DocumentManager::deserialize(wxString const &groupId, wxConfigBase *config)
 	while ((v = config->Read(id + "_Type", "")) != "")
 	{
 		DocumentWindow *d = DocumentWindow::createFromInfo(GetManagedWindow(), v);
-		if (!d)
-		{
-			string msg = string(id.c_str()) + "=" + string(v.c_str());
-			throw runtime_error("Unknown type: " + msg);
-			return false;
-		}
 
-		v = config->Read(id + "_TypeInfo", "");
-		if (v.empty())
-		{
-			string msg = string(id.c_str()) + "=" + string(v.c_str());
-			throw runtime_error("Unknown typeinfo: " + msg);
-			return false;
-		}
+		checkException(!d, "Unknown type: ", id + "_Type", v);
+		checkException((v = config->Read(id + "_TypeInfo", "")).empty(), "", id + "_TypeInfo", v);
 
 		wxAuiPaneInfo info;
 		LoadPaneInfo(v, info);
@@ -94,7 +83,7 @@ bool DocumentManager::deserialize(wxString const &groupId, wxConfigBase *config)
 		id = groupId + "Pane_" + to_string(i);
 	}
 
-	//LoadPerspective(config->Read(groupId + "layout", ""));
+	LoadPerspective(config->Read(groupId + "layout", ""));
 
 	return true;
 }

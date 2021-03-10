@@ -238,6 +238,7 @@
     <ClInclude Include="include\patterns\observer.h" />
     <ClInclude Include="include\patterns\serialize.h" />
     <ClInclude Include="include\utils\commandline.h" />
+    <ClInclude Include="include\utils\exceptions.h" />
     <ClInclude Include="include\utils\StringUtils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -260,6 +261,7 @@
     <ClCompile Include="gui\properties\pages\DebuggerViewPage.cpp" />
     <ClCompile Include="gui\properties\PropertyDlg.cpp" />
     <ClCompile Include="utils\commandline.cpp" />
+    <ClCompile Include="utils\exceptions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

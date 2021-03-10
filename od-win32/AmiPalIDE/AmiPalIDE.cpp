@@ -4,10 +4,12 @@
 #include "AmiPalIDE.h"
 #include "gui/MainFrame.h"
 #include "utils/commandline.h"
+#include "utils/exceptions.h"
 
 #include "config/ApplicationConfig.h"
 
-#include "wx/confbase.h"
+#include <wx/confbase.h>
+#include <wx/msgdlg.h>
 
 #include <stdexcept>
 
@@ -23,6 +25,7 @@ AmiPalApp::AmiPalApp(void)
 
 bool AmiPalApp::OnInit(void)
 {
+	gApp = nullptr;
 	ApplicationConfig &config = ApplicationConfig::getInstance();
 
 	configByParam = false;
@@ -37,23 +40,30 @@ bool AmiPalApp::OnInit(void)
 //		return false;
 
 	config.configFile = configFile;
-	gApp = this;
 
 	try
 	{
 		m_mainFrame = new MainFrame(_T("AmiPalIDE v0.01"));
 		m_mainFrame->Show(true);
 	}
-	catch (const invalid_argument &ex)
+	catch (SerializeException const &ex)
+	{
+		wxString s;
+
+		s += "Invalid configuration in file: " + config.configFile + "\n\n";
+		s += ex.what();
+		s += ex.getKey() + " = " + ex.getValue() + "\n";
+
+		wxMessageBox(s, "Error reading config file!", wxOK);
+		return false;
+	}
+	catch (const SilentException &ex)
 	{
 		UNUSED(ex);
 		return false;
 	}
-	catch (const runtime_error &ex)
-	{
-		UNUSED(ex);
-		return false;
-	}
+
+	gApp = this;
 
 	return true;
 }

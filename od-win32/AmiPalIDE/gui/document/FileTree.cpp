@@ -5,7 +5,7 @@
 
 FileTree::FileTree(wxWindow *parent, wxWindowID id, wxSize size)
 : wxTreeCtrl(parent, id, wxPoint(0, 0), size, wxTR_DEFAULT_STYLE | wxNO_BORDER)
-, DocumentWindow("FileBrowser", this)
+, DocumentWindow("FileTree", this)
 {
 	size = FromDIP(wxSize(16, 16));
 	wxImageList *imglist = new wxImageList(size.x, size.y, true, 2);

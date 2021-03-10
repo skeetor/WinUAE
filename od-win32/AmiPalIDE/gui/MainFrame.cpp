@@ -12,6 +12,7 @@
 #include "config/DebuggerConfig.h"
 
 #include "utils/StringUtils.h"
+#include "utils/exceptions.h"
 #include "debugger/DebuggerAPI.h"
 
 #include <wx/app.h>
@@ -102,7 +103,7 @@ void MainFrame::createDefaultIDE(void)
 	MemoryToolBar *m = getMemoryToolBar();
 	m->Disable();
 
-	Document *d = Document::createDocumentFromInfo(this, "MemoryPanel");
+	Document *d = Document::createDocumentFromInfo(documents, "MemoryPanel");
 	documents->AddPage(d, "Memory", false);
 	documents->SetSelection(documents->GetPageCount() - 1);
 
@@ -264,7 +265,9 @@ void MainFrame::OnDisasm(wxCommandEvent& event)
 
 void MainFrame::OnMemory(wxCommandEvent& event)
 {
-	//createMemoryPanel();
+	DocumentPanel *p = getDocumentPanel();
+
+	p->AddPage(Document::createDocumentFromInfo(p, "MemoryPanel"), "Memory", true);
 }
 
 void MainFrame::OnBreakpoints(wxCommandEvent& event)
@@ -329,6 +332,18 @@ MemoryToolBar *MainFrame::getMemoryToolBar(void)
 	return w;
 }
 
+DocumentPanel *MainFrame::getDocumentPanel(void)
+{
+	DocumentPanel *p = reinterpret_cast<DocumentPanel *>(m_manager->GetPane("DocumentPanel").window);
+	if (!p)
+	{
+		p = reinterpret_cast<DocumentPanel *>(DocumentWindow::createFromInfo(this, "DocumentPanel")->getWindow());
+		m_manager->AddPane(p, wxAuiPaneInfo().Name("DocumentPanel").CenterPane().PaneBorder(false));
+	}
+
+	return p;
+}
+
 bool MainFrame::serialize(wxString const &groupId, wxConfigBase *config)
 {
 	ApplicationConfig &appCfg = ApplicationConfig::getInstance();
@@ -380,11 +395,12 @@ bool MainFrame::deserialize(wxString const &groupId, wxConfigBase *config)
 
 		config->Read("FrameX", &p.x);
 		config->Read("FrameY", &p.y);
-		config->Read("FrameW", &w);
-		config->Read("FrameH", &h);
+		w = ((config->Read("FrameW", &w) != false) * w);
+		h = ((config->Read("FrameH", &h) != false) * w);
 
 		SetPosition(p);
-		SetSize(w, h);
+		if (w != 0 && h != 0)
+			SetSize(w, h);
 
 		if (maximized)
 			Maximize(true);
@@ -447,7 +463,7 @@ void MainFrame::restoreConfig(void)
 			{
 				m_abort = true;
 				string msg = string("Unable to open config file: ") + string(fn.c_str());
-				throw invalid_argument(msg);
+				throw SilentException(msg);
 			}
 		}
 

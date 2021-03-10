@@ -98,9 +98,11 @@ bool DocumentPanel::serialize(wxString const &groupId, wxConfigBase *config)
 	for (size_t i = 0; i < GetPageCount(); i++)
 	{
 		wxString id = groupId + "Panel_" + to_string(i);
-		Document *d = static_cast<Document *>(GetPage(i)->GetClientData());
+		wxWindow *w = GetPage(i);
+		Document *d = static_cast<Document *>(w->GetClientData());
 
 		config->Write(id +"_Type", d->getTypeInfo());
+		config->Write(id +"_Title", GetPageText(i));
 		d->serialize(id + "_", config);
 	}
 
@@ -109,5 +111,24 @@ bool DocumentPanel::serialize(wxString const &groupId, wxConfigBase *config)
 
 bool DocumentPanel::deserialize(wxString const &groupId, wxConfigBase *config)
 {
+	size_t i = 0;
+	wxString v;
+	wxString id = groupId + "Panel_" + to_string(i);
+
+	while ((v = config->Read(id + "_Type", "")) != "")
+	{
+		Document *d = Document::createDocumentFromInfo(this, v);
+		wxWindow *w = d->getWindow();
+
+		checkException(!d, "Unknown type: ", id + "_Type", v);
+		checkException((v = config->Read(id + "_Title", "")).empty(), "", id + "_Title", v);
+
+		d->deserialize(id + "_", config);
+		AddPage(d, v, false);
+
+		i++;
+		id = groupId + "Panel_" + to_string(i);
+	}
+
 	return true;
 }

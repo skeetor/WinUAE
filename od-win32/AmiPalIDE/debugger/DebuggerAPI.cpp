@@ -105,8 +105,11 @@ extern "C" WINUAE_DEBUGGER_API wchar_t *InitDebugger(uint32_t version, wchar_t *
 
 	// Wait until the debugger window has initialized.
 	volatile AmiPalApp **app = (volatile AmiPalApp **)&gApp;
-	while (!(*app))
+	while (!(*app) && gDebuggerExited != true)
 		Sleep(100);
+
+	if (gDebuggerExited)
+		return (wchar_t *)(L"Unable to initialize debugger framework!");
 
 	return nullptr;
 }

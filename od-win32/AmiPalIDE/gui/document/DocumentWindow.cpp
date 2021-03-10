@@ -1,5 +1,3 @@
-#include "AmiPalIDE.h"
-
 #include "gui/MainFrame.h"
 #include "gui/document/DocumentWindow.h"
 #include "gui/document/panels/DocumentPanel.h"
@@ -41,7 +39,7 @@ wxString DocumentWindow::getInfoToken(wxString &typeInfo)
 DocumentWindow *DocumentWindow::createFromInfo(wxWindow *parent, wxString typeInfo)
 {
 	wxWindowID id = wxID_ANY;
-	MainFrame *frame = wxGetApp().m_mainFrame;
+	MainFrame *frame = MainFrame::getInstance();
 	wxString type = getInfoToken(typeInfo);
 
 	if (!typeInfo.empty())
@@ -62,7 +60,7 @@ DocumentWindow *DocumentWindow::createFromInfo(wxWindow *parent, wxString typeIn
 Document *Document::createDocumentFromInfo(wxWindow *parent, wxString typeInfo)
 {
 	wxWindowID id = wxID_ANY;
-	MainFrame *frame = wxGetApp().m_mainFrame;
+	MainFrame *frame = MainFrame::getInstance();
 
 	wxString type = getInfoToken(typeInfo);
 

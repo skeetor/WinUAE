@@ -7,9 +7,11 @@
 
 class wxDialog;
 
-class DocumentManager;
+class Document;
 class DocumentWindow;
+class DocumentManager;
 class MemoryToolBar;
+class DocumentPanel;
 
 // IDs for the controls and the menu commands
 enum AmiPalMainFrameID
@@ -48,6 +50,9 @@ class MainFrame
 : public wxFrame
 , public Serialize
 {
+	friend class DocumentWindow;
+	friend class Document;
+
 public:
 	MainFrame(const wxString& title);
 	~MainFrame(void) override;
@@ -89,11 +94,13 @@ public: // Serialize
 	bool serialize(wxString const &groupId, wxConfigBase *config) override;
 	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
 
-	MemoryToolBar *getMemoryToolBar(void);
 
 protected:
 	void saveConfig(void);
 	void restoreConfig(void);
+
+	MemoryToolBar *getMemoryToolBar(void);
+	DocumentPanel *getDocumentPanel(void);
 
 private:
 	wxMenu *createFileMenu(void);
