@@ -6,7 +6,9 @@
 #include "gui/properties/ConfigDlg.h"
 #include "gui/document/DocumentManager.h"
 #include "gui/document/MemoryToolBar.h"
+#include "gui/document/FileTree.h"
 #include "gui/document/panels/DocumentPanel.h"
+#include "gui/document/panels/MemoryPanel.h"
 
 #include "config/ApplicationConfig.h"
 #include "config/DebuggerConfig.h"
@@ -100,15 +102,16 @@ void MainFrame::createDefaultIDE(void)
 									wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_MIDDLE_CLICK_CLOSE);
 
 	// m_documents->SetArtProvider(new wxAuiSimpleTabArt);
-	MemoryToolBar *m = getMemoryToolBar();
-	m->Disable();
+	MemoryToolBar *mbar = getMemoryToolBar();
+	mbar->Disable();
 
-	Document *d = Document::createDocumentFromInfo(documents, "MemoryPanel");
-	documents->AddPage(d, "Memory", false);
+	MemoryPanel *mp = CREATE_DOCUMENT(MemoryPanel, documents);
+
+	documents->AddPage(mp, "Memory", true);
 	documents->SetSelection(documents->GetPageCount() - 1);
 
 	m_manager->AddPane(documents, wxAuiPaneInfo().Name("DocumentPanel").CenterPane().PaneBorder(false));
-	m_manager->AddPane(DocumentWindow::createFromInfo(this, "FileTree"), wxAuiPaneInfo().Name("FileTree").Caption("File Browser").Left().Layer(1).Position(1).CloseButton(true).MaximizeButton(true));
+	m_manager->AddPane(CREATE_DOCUMENT_WINDOW(FileTree, this), wxAuiPaneInfo().Name(STRINGIFY(FileTree)).Caption("File Browser").Left().Layer(1).Position(1).CloseButton(true).MaximizeButton(true));
 
 	// "commit" all changes made to wxAuiManager
 	m_manager->Update();
@@ -267,7 +270,7 @@ void MainFrame::OnMemory(wxCommandEvent& event)
 {
 	DocumentPanel *p = getDocumentPanel();
 
-	p->AddPage(Document::createDocumentFromInfo(p, "MemoryPanel"), "Memory", true);
+	p->AddPage(CREATE_DOCUMENT(MemoryPanel, p), "Memory", true);
 }
 
 void MainFrame::OnBreakpoints(wxCommandEvent& event)
@@ -325,7 +328,8 @@ MemoryToolBar *MainFrame::getMemoryToolBar(void)
 
 	if (!w)
 	{
-		w = reinterpret_cast<MemoryToolBar *>(DocumentWindow::createFromInfo(this, "MemoryToolBar")->getWindow());
+		w = CREATE_DOCUMENT_WINDOW(MemoryToolBar, this);
+		//w = DocumentWindow::createFromInfo<MemoryToolBar>(this);
 		m_manager->AddPane(w, wxAuiPaneInfo().Name("MemoryToolBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
 	}
 
@@ -337,7 +341,7 @@ DocumentPanel *MainFrame::getDocumentPanel(void)
 	DocumentPanel *p = reinterpret_cast<DocumentPanel *>(m_manager->GetPane("DocumentPanel").window);
 	if (!p)
 	{
-		p = reinterpret_cast<DocumentPanel *>(DocumentWindow::createFromInfo(this, "DocumentPanel")->getWindow());
+		p = CREATE_DOCUMENT_WINDOW(DocumentPanel, this);
 		m_manager->AddPane(p, wxAuiPaneInfo().Name("DocumentPanel").CenterPane().PaneBorder(false));
 	}
 

@@ -117,7 +117,7 @@ bool DocumentPanel::deserialize(wxString const &groupId, wxConfigBase *config)
 
 	while ((v = config->Read(id + "_Type", "")) != "")
 	{
-		Document *d = Document::createDocumentFromInfo(this, v);
+		Document *d = Document::createFromInfo(this, v);
 		wxWindow *w = d->getWindow();
 
 		checkException(!d, "Unknown type: ", id + "_Type", v);

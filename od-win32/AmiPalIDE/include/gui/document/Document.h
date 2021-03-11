@@ -5,6 +5,9 @@
 class Document
 : public DocumentWindow
 {
+	friend class DocumentManager;
+	friend class DocumentPanel;
+
 public:
 	Document(wxString const &typeInfo, wxWindow *window = nullptr)
 	: DocumentWindow(typeInfo)
@@ -15,8 +18,6 @@ public:
 	}
 
 	~Document() override {}
-
-	static Document *createDocumentFromInfo(wxWindow *parent, wxString typeInfo);
 
 public:
 	/**
@@ -44,6 +45,11 @@ public:
 	virtual void lock(bool state) { m_locked = state; }
 	virtual bool isLocked(void) { return m_locked; }
 
+
+	static Document *createFromInfo(wxWindow *parent, wxString typeInfo);
+
 private:
 	bool m_locked:1;
 };
+
+#define CREATE_DOCUMENT(className, parent) dynamic_cast<className *>(Document::createFromInfo(parent, STRINGIFY(className)))

@@ -7,6 +7,8 @@
 
 #include "utils/StringUtils.h"
 
+#include <wx/msgdlg.h>
+
 DocumentWindow::DocumentWindow(wxString const &typeInfo, wxWindow *window)
 : m_typeInfo(typeInfo)
 {
@@ -57,7 +59,7 @@ DocumentWindow *DocumentWindow::createFromInfo(wxWindow *parent, wxString typeIn
 	return nullptr;
 }
 
-Document *Document::createDocumentFromInfo(wxWindow *parent, wxString typeInfo)
+Document *Document::createFromInfo(wxWindow *parent, wxString typeInfo)
 {
 	wxWindowID id = wxID_ANY;
 	MainFrame *frame = MainFrame::getInstance();

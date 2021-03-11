@@ -1,6 +1,7 @@
 #pragma once
 
 #include "patterns/serialize.h"
+#include "framework.h"
 
 #include <wx/window.h>
 
@@ -18,16 +19,17 @@ public:
 	virtual wxWindow *getWindow(void) = 0;
 
 public:
-	/**
-	 * Factory method to create the document from a serialized typeinfo string.
-	 */
-	static DocumentWindow *createFromInfo(wxWindow *parent, wxString typeInfo);
 
 	/**
 	 * Returns a string which identfies the document type and must be
 	 * unique for all documents.
 	 */
 	const wxString &getTypeInfo(void) { return m_typeInfo; }
+
+	/**
+	 * Factory method to create the document from a serialized typeinfo string.
+	 */
+	static DocumentWindow *createFromInfo(wxWindow *parent, wxString typeInfo);
 
 protected:
 	void setTypeInfo(const wxString &typeInfo) { m_typeInfo = typeInfo; }
@@ -39,7 +41,7 @@ protected:
 	static wxString getInfoToken(wxString &typeInfo);
 
 private:
-
-private:
 	wxString m_typeInfo;
 };
+
+#define CREATE_DOCUMENT_WINDOW(className, parent) dynamic_cast<className *>(DocumentWindow::createFromInfo(parent, STRINGIFY(className)))
