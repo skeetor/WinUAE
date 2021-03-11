@@ -43,7 +43,7 @@ bool AmiPalApp::OnInit(void)
 
 	try
 	{
-		m_mainFrame = new MainFrame(_T("AmiPalIDE v0.01"));
+		m_mainFrame = MainFrame::getInstance();
 		m_mainFrame->Show(true);
 	}
 	catch (SerializeException const &ex)

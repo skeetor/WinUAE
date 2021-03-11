@@ -14,8 +14,8 @@ wxBEGIN_EVENT_TABLE(DocumentPanel, wxAuiNotebook)
 
 wxEND_EVENT_TABLE()
 
-DocumentPanel::DocumentPanel(wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style)
-: wxAuiNotebook(parent, id, pos, size, style)
+DocumentPanel::DocumentPanel(wxWindow *parent, wxWindowID id)
+: wxAuiNotebook(parent, id, wxDefaultPosition, parent->FromDIP(wxSize(430, 200)), wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_MIDDLE_CLICK_CLOSE)
 , DocumentWindow("DocumentPanel|" + toHexString(id), this)
 {
 }

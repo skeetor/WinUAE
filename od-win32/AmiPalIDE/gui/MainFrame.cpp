@@ -49,8 +49,8 @@ wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
 
 wxEND_EVENT_TABLE()
 
-MainFrame::MainFrame(const wxString& title)
-: wxFrame(NULL, wxID_ANY, title)
+MainFrame::MainFrame(void)
+: wxFrame(NULL, wxID_ANY, _T("AmiPalIDE v0.01"))
 , m_statusBar(nullptr)
 , m_frameMenu(nullptr)
 , m_modalDialog(nullptr)
@@ -72,7 +72,14 @@ MainFrame::~MainFrame(void)
 
 MainFrame *MainFrame::getInstance(void)
 {
-	return wxGetApp().m_mainFrame;
+	MainFrame *frame = wxGetApp().m_mainFrame;
+	if (!frame)
+	{
+		frame = new MainFrame();
+		wxGetApp().m_mainFrame = frame;
+	}
+
+	return frame;
 }
 
 void MainFrame::init(void)
@@ -96,12 +103,9 @@ void MainFrame::init(void)
 void MainFrame::createDefaultIDE(void)
 {
 	wxSize client_size = GetClientSize();
-	DocumentPanel *documents = new DocumentPanel(this, wxID_ANY,
-									wxPoint(client_size.x, client_size.y),
-									FromDIP(wxSize(430, 200)),
-									wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_MIDDLE_CLICK_CLOSE);
+	DocumentPanel *documents = CREATE_DOCUMENT_WINDOW(DocumentPanel, this);
 
-	// m_documents->SetArtProvider(new wxAuiSimpleTabArt);
+	// documents->SetArtProvider(new wxAuiSimpleTabArt);
 	MemoryToolBar *mbar = getMemoryToolBar();
 	mbar->Disable();
 

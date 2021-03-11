@@ -10,7 +10,7 @@ class DocumentPanel
 , public DocumentWindow
 {
 public:
-	DocumentPanel(wxWindow *parent, wxWindowID id = wxID_ANY, const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, long style = wxAUI_NB_DEFAULT_STYLE);
+	DocumentPanel(wxWindow *parent, wxWindowID id = wxID_ANY);
 	~DocumentPanel() override;
 
 public:

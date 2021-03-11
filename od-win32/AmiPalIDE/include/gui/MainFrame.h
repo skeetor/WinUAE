@@ -54,7 +54,7 @@ class MainFrame
 	friend class Document;
 
 public:
-	MainFrame(const wxString& title);
+	MainFrame(void);
 	~MainFrame(void) override;
 
 	static MainFrame *getInstance(void);
@@ -93,7 +93,6 @@ public:
 public: // Serialize
 	bool serialize(wxString const &groupId, wxConfigBase *config) override;
 	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
-
 
 protected:
 	void saveConfig(void);
