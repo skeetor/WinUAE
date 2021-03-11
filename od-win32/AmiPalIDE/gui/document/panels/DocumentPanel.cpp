@@ -24,6 +24,16 @@ DocumentPanel::~DocumentPanel()
 {
 }
 
+wxString DocumentPanel::savePerspective(void)
+{
+	return m_mgr.SavePerspective();
+}
+
+void DocumentPanel::loadPerspective(wxString const &layout)
+{
+	m_mgr.LoadPerspective(layout);
+}
+
 bool DocumentPanel::AddPage(Document *page, const wxString &caption, bool select, const wxBitmap &bitmap)
 {
 	return wxAuiNotebook::AddPage(page->getWindow(), caption, select, bitmap);
@@ -106,6 +116,8 @@ bool DocumentPanel::serialize(wxString const &groupId, wxConfigBase *config)
 		d->serialize(id + "_", config);
 	}
 
+	config->Write(groupId +"Layout", savePerspective());
+
 	return true;
 }
 
@@ -113,9 +125,11 @@ bool DocumentPanel::deserialize(wxString const &groupId, wxConfigBase *config)
 {
 	size_t i = 0;
 	wxString v;
-	wxString id = groupId + "Panel_" + to_string(i);
+	wxString id;
 
-	while ((v = config->Read(id + "_Type", "")) != "")
+	Freeze();
+
+	while ((v = config->Read((id = groupId + "Panel_" + to_string(i++)) + "_Type", "")) != "")
 	{
 		Document *d = Document::createFromInfo(this, v);
 		wxWindow *w = d->getWindow();
@@ -125,10 +139,10 @@ bool DocumentPanel::deserialize(wxString const &groupId, wxConfigBase *config)
 
 		d->deserialize(id + "_", config);
 		AddPage(d, v, false);
-
-		i++;
-		id = groupId + "Panel_" + to_string(i);
 	}
+
+	loadPerspective(config->Read(groupId + "Layout", ""));
+	Thaw();
 
 	return true;
 }

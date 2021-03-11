@@ -1,6 +1,7 @@
 #pragma once
 
 #include <wx/frame.h>
+#include <wx/aui/tabmdi.h>
 
 #include "patterns/serialize.h"
 #include "config/ApplicationConfig.h"
@@ -118,6 +119,10 @@ private:
 	wxMenuBar *m_frameMenu;
 
 	wxDialog *m_modalDialog;
+	
+	// TODO: Replace with perspective handling
+	wxString m_perspective;
+	wxString m_perspectivePanel;
 
 	bool m_closeByMenu:1;
 	bool m_abort:1;

@@ -320,10 +320,18 @@ void MainFrame::OnOptions(wxCommandEvent& event)
 
 void MainFrame::OnLayoutSave(wxCommandEvent& event)
 {
+	m_perspective = m_manager->SavePerspective();
+	m_perspectivePanel = getDocumentPanel()->savePerspective();
+
+	SetStatusText("Perspective saved...");
 }
 
 void MainFrame::OnLayoutLoad(wxCommandEvent& event)
 {
+	getDocumentPanel()->loadPerspective(m_perspectivePanel);
+	m_manager->LoadPerspective(m_perspective);
+	m_manager->Update();
+	SetStatusText("Perspective loaded...");
 }
 
 MemoryToolBar *MainFrame::getMemoryToolBar(void)

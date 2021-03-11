@@ -67,14 +67,14 @@ void MemoryPanel::Init(void)
 	sizer->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_SPECIFIED);
 
 	m_addressTxt = new EditBtn(this, IDC_ADDRESS_TXT, wxT("Address"), wxT("Lock"), wxDefaultPosition, wxDefaultSize, 0);
-	sizer->Add(m_addressTxt, wxGBPosition(0, 0), wxGBSpan(1, 1), wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 5);
+	sizer->Add(m_addressTxt, wxGBPosition(0, 0), wxGBSpan(1, 1), wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, GetParent()->FromDIP(5));
 
 	m_memoryTxt = new wxTextCtrl(this, IDC_MEMORY_TXT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_DONTWRAP | wxTE_MULTILINE | wxTE_NOHIDESEL | wxTE_PROCESS_ENTER | wxTE_READONLY | wxBORDER_STATIC);
 	m_memoryTxt->SetFont(DebuggerConfig::getInstance().memoryViewFont);
 	m_memoryTxt->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
 	m_memoryTxt->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
 
-	sizer->Add(m_memoryTxt, wxGBPosition(1, 0), wxGBSpan(1, 1), wxALL | wxEXPAND, 5);
+	sizer->Add(m_memoryTxt, wxGBPosition(1, 0), wxGBSpan(1, 1), wxALL | wxEXPAND, GetParent()->FromDIP(5));
 
 	sizer->AddGrowableCol(0);
 	sizer->AddGrowableRow(1);

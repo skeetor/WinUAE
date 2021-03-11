@@ -22,6 +22,9 @@ public:
 	bool serialize(wxString const &groupId, wxConfigBase *config) override;
 	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
 
+	wxString savePerspective(void);
+	void loadPerspective(wxString const &layout);
+
 protected:
 	virtual void OnPageChanged(wxAuiNotebookEvent &event);
 	virtual void OnPageClosing(wxAuiNotebookEvent &event);
