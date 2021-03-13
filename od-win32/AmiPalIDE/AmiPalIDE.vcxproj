@@ -262,6 +262,7 @@
     <ClCompile Include="gui\properties\PropertyDlg.cpp" />
     <ClCompile Include="utils\commandline.cpp" />
     <ClCompile Include="utils\exceptions.cpp" />
+    <ClCompile Include="utils\StringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -20,32 +20,14 @@ DocumentWindow::~DocumentWindow(void)
 {
 }
 
-wxString DocumentWindow::getInfoToken(wxString &typeInfo)
-{
-	size_t pos = typeInfo.find('|');
-	wxString token;
-
-	if (pos == wxString::npos)
-	{
-		token = typeInfo;
-		typeInfo = "";
-		return token;
-	}
-
-	token = typeInfo.substr(0, pos);
-	typeInfo = typeInfo.substr(pos + 1);
-
-	return token;
-}
-
 DocumentWindow *DocumentWindow::createFromInfo(wxWindow *parent, wxString typeInfo)
 {
 	wxWindowID id = wxID_ANY;
 	MainFrame *frame = MainFrame::getInstance();
-	wxString type = getInfoToken(typeInfo);
+	wxString type = getToken(typeInfo, "|");
 
 	if (!typeInfo.empty())
-		id = fromWxString(getInfoToken(typeInfo), 16);
+		id = fromWxString(getToken(typeInfo, "|"), 16);
 
 	if (type == "DocumentPanel")
 		return new DocumentPanel(parent, id);
@@ -64,7 +46,7 @@ Document *Document::createFromInfo(wxWindow *parent, wxString typeInfo)
 	wxWindowID id = wxID_ANY;
 	MainFrame *frame = MainFrame::getInstance();
 
-	wxString type = getInfoToken(typeInfo);
+	wxString type = getToken(typeInfo, "|");
 
 	if (type == "MemoryPanel")
 		return new MemoryPanel(frame->getMemoryToolBar(), parent, id);

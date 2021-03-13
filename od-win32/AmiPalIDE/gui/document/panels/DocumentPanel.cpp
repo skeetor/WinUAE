@@ -15,7 +15,8 @@ wxBEGIN_EVENT_TABLE(DocumentPanel, wxAuiNotebook)
 wxEND_EVENT_TABLE()
 
 DocumentPanel::DocumentPanel(wxWindow *parent, wxWindowID id)
-: wxAuiNotebook(parent, id, wxDefaultPosition, parent->FromDIP(wxSize(430, 200)), wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_MIDDLE_CLICK_CLOSE)
+: wxAuiNotebook(parent, id, wxDefaultPosition, parent->FromDIP(wxSize(430, 200)),
+	wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_MIDDLE_CLICK_CLOSE)
 , DocumentWindow("DocumentPanel|" + toHexString(id), this)
 {
 }
@@ -24,22 +25,34 @@ DocumentPanel::~DocumentPanel()
 {
 }
 
-wxString DocumentPanel::savePerspective(void)
+wxString DocumentPanel::SavePerspective(void)
 {
 	return m_mgr.SavePerspective();
 }
 
-void DocumentPanel::loadPerspective(wxString const &layout)
+void DocumentPanel::LoadPerspective(wxString const &layout, bool update)
 {
-	m_mgr.LoadPerspective(layout);
+	m_mgr.LoadPerspective(layout, update);
 }
 
-bool DocumentPanel::AddPage(Document *page, const wxString &caption, bool select, const wxBitmap &bitmap)
+wxAuiManager *DocumentPanel::GetManager()
 {
-	return wxAuiNotebook::AddPage(page->getWindow(), caption, select, bitmap);
+	return &m_mgr;
 }
 
-bool DocumentPanel::DocumentPanel::InsertPage(size_t pageIdx, Document *page, const wxString &caption, bool select, const wxBitmap &bitmap)
+bool DocumentPanel::AddPage(Document *page, const wxString &caption, bool select, wxAuiPaneInfo *paneInfo, const wxBitmap &bitmap)
+{
+	bool rc = wxAuiNotebook::AddPage(page->getWindow(), caption, select, bitmap);
+/*	if (rc && paneInfo)
+	{
+		wxWindow *w = page->getWindow();
+		wxAuiPaneInfo p = m_mgr.GetPane(w);
+	}*/
+
+	return rc;
+}
+
+bool DocumentPanel::DocumentPanel::InsertPage(size_t pageIdx, Document *page, const wxString &caption, bool select, wxAuiPaneInfo *p, const wxBitmap &bitmap)
 {
 	return wxAuiNotebook::InsertPage(pageIdx, page->getWindow(), caption, select, bitmap);
 }
@@ -105,18 +118,18 @@ void DocumentPanel::OnPageClosing(wxAuiNotebookEvent &event)
 
 bool DocumentPanel::serialize(wxString const &groupId, wxConfigBase *config)
 {
+	//config->Write(groupId +"_Layout", SavePerspective());
+
 	for (size_t i = 0; i < GetPageCount(); i++)
 	{
-		wxString id = groupId + "Panel_" + to_string(i);
+		wxString id = groupId + "Panel_" + to_string(i) + "_";
 		wxWindow *w = GetPage(i);
 		Document *d = static_cast<Document *>(w->GetClientData());
 
-		config->Write(id +"_Type", d->getTypeInfo());
-		config->Write(id +"_Title", GetPageText(i));
-		d->serialize(id + "_", config);
+		config->Write(id +"Type", d->getTypeInfo());
+		config->Write(id +"Title", GetPageText(i));
+		d->serialize(id , config);
 	}
-
-	config->Write(groupId +"Layout", savePerspective());
 
 	return true;
 }
@@ -129,20 +142,23 @@ bool DocumentPanel::deserialize(wxString const &groupId, wxConfigBase *config)
 
 	Freeze();
 
-	while ((v = config->Read((id = groupId + "Panel_" + to_string(i++)) + "_Type", "")) != "")
+	while ((v = config->Read((id = groupId + "Panel_" + to_string(i++) + "_") + "Type", "")) != "")
 	{
 		Document *d = Document::createFromInfo(this, v);
 		wxWindow *w = d->getWindow();
 
-		checkException(!d, "Unknown type: ", id + "_Type", v);
-		checkException((v = config->Read(id + "_Title", "")).empty(), "", id + "_Title", v);
+		checkException(!d, "Unknown type: ", id + "Type", v);
+		checkException((v = config->Read(id + "Title", "")).empty(), "", id + "Title", v);
 
-		d->deserialize(id + "_", config);
+		d->deserialize(id, config);
 		AddPage(d, v, false);
 	}
 
-	loadPerspective(config->Read(groupId + "Layout", ""));
+	// TODO: This doesn't work for a notbook and must wait on a fix from wxWidgets
+	//LoadPerspective(config->Read(groupId + "_Layout", ""));
+
 	Thaw();
+	//m_mgr.Update();
 
 	return true;
 }

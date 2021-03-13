@@ -31,3 +31,9 @@ static inline size_t fromWxString(const wxString value, int base = 10)
 {
 	return std::strtoull(value.c_str(), nullptr, base);
 }
+
+/**
+ * Removes the next token from the string, and returns it.
+ * If there are no more tokens, an empty string is returned.
+ */
+wxString getToken(wxString &typeInfo, wxString const &separator);

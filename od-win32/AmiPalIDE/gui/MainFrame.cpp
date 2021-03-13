@@ -102,7 +102,8 @@ void MainFrame::init(void)
 
 void MainFrame::createDefaultIDE(void)
 {
-	wxSize client_size = GetClientSize();
+	SetSize(1024,600);
+
 	DocumentPanel *documents = CREATE_DOCUMENT_WINDOW(DocumentPanel, this);
 
 	// documents->SetArtProvider(new wxAuiSimpleTabArt);
@@ -110,9 +111,11 @@ void MainFrame::createDefaultIDE(void)
 	mbar->Disable();
 
 	MemoryPanel *mp = CREATE_DOCUMENT(MemoryPanel, documents);
-
 	documents->AddPage(mp, "Memory", true);
-	documents->SetSelection(documents->GetPageCount() - 1);
+	mp = CREATE_DOCUMENT(MemoryPanel, documents);
+	documents->AddPage(mp, "Memory", false);
+	mp = CREATE_DOCUMENT(MemoryPanel, documents);
+	documents->AddPage(mp, "Memory", false);
 
 	m_manager->AddPane(documents, wxAuiPaneInfo().Name("DocumentPanel").CenterPane().PaneBorder(false));
 	m_manager->AddPane(CREATE_DOCUMENT_WINDOW(FileTree, this), wxAuiPaneInfo().Name(STRINGIFY(FileTree)).Caption("File Browser").Left().Layer(1).Position(1).CloseButton(true).MaximizeButton(true));
@@ -320,17 +323,25 @@ void MainFrame::OnOptions(wxCommandEvent& event)
 
 void MainFrame::OnLayoutSave(wxCommandEvent& event)
 {
+	DocumentPanel *p = getDocumentPanel();
+	wxAuiManager *m = p->GetManager();
+
 	m_perspective = m_manager->SavePerspective();
-	m_perspectivePanel = getDocumentPanel()->savePerspective();
+	m_perspectivePanel = m->SavePerspective();
 
 	SetStatusText("Perspective saved...");
 }
 
 void MainFrame::OnLayoutLoad(wxCommandEvent& event)
 {
-	getDocumentPanel()->loadPerspective(m_perspectivePanel);
+	DocumentPanel *p = getDocumentPanel();
+	wxAuiManager *m = p->GetManager();
+
+	m->LoadPerspective(m_perspectivePanel);
+	m->Update();
 	m_manager->LoadPerspective(m_perspective);
 	m_manager->Update();
+
 	SetStatusText("Perspective loaded...");
 }
 
@@ -341,7 +352,6 @@ MemoryToolBar *MainFrame::getMemoryToolBar(void)
 	if (!w)
 	{
 		w = CREATE_DOCUMENT_WINDOW(MemoryToolBar, this);
-		//w = DocumentWindow::createFromInfo<MemoryToolBar>(this);
 		m_manager->AddPane(w, wxAuiPaneInfo().Name("MemoryToolBar").Caption("Memory Toolbar").ToolbarPane().Top().Row(1));
 	}
 
@@ -369,25 +379,23 @@ bool MainFrame::serialize(wxString const &groupId, wxConfigBase *config)
 
 	config->SetPath("/GlobalSettings");
 
-	if (appCfg.savePosition)
-	{
-		bool maximized = IsMaximized();
+	bool maximized = IsMaximized();
 
-		if (maximized)
-			Maximize(false);
+	if (maximized)
+		Maximize(false);
 
-		int fx, fy, fw, fh;
-		GetPosition(&fx, &fy);
-		GetSize(&fw, &fh);
-		config->Write("FrameX", fx);
-		config->Write("FrameY", fy);
-		config->Write("FrameW", fw);
-		config->Write("FrameH", fh);
-		config->Write("FrameMaximized", maximized);
-	}
+	wxPoint p = GetPosition();
+	wxSize sz = GetSize();
+	p = ToDIP(p);
+	sz = ToDIP(sz);
 
-	if (appCfg.saveLayout)
-		m_manager->serialize("", config);
+	config->Write("FrameX", p.x);
+	config->Write("FrameY", p.y);
+	config->Write("FrameW", sz.x);
+	config->Write("FrameH", sz.y);
+	config->Write("FrameMaximized", maximized);
+
+	m_manager->serialize("", config);
 
 	return true;
 }
@@ -401,29 +409,30 @@ bool MainFrame::deserialize(wxString const &groupId, wxConfigBase *config)
 
 	config->SetPath("/GlobalSettings");
 
-	if (appCfg.savePosition)
-	{
-		bool maximized = config->ReadBool("FrameMaximized", false);
-		Maximize(false);
+	bool maximized = config->ReadBool("FrameMaximized", false);
+	Maximize(false);
 
-		int w, h;
-		wxPoint p;
+	wxPoint p;
+	wxSize sz;
 
-		config->Read("FrameX", &p.x);
-		config->Read("FrameY", &p.y);
-		w = ((config->Read("FrameW", &w) != false) * w);
-		h = ((config->Read("FrameH", &h) != false) * w);
+	config->Read("FrameX", &p.x);
+	config->Read("FrameY", &p.y);
+	p = FromDIP(p);
 
-		SetPosition(p);
-		if (w != 0 && h != 0)
-			SetSize(w, h);
+	config->Read("FrameW", &sz.x);
+	config->Read("FrameH", &sz.y);
+	sz = FromDIP(sz);
 
-		if (maximized)
-			Maximize(true);
-	}
+	SetPosition(p);
+	if (sz.x != 0 && sz.y != 0)
+		SetSize(sz);
 
-	if (appCfg.saveLayout)
-		m_manager->deserialize("", config);
+	if (maximized)
+		Maximize(true);
+
+	m_manager->deserialize("", config);
+	m_manager->Update();
+	Update();
 
 	return true;
 }
@@ -472,7 +481,7 @@ void MainFrame::restoreConfig(void)
 
 	if (!wxFile::Exists(fn))
 	{
-		if (wxGetApp().configByParam)
+		/*if (wxGetApp().configByParam)
 		{
 			int rc = wxMessageBox(wxString("Unable to open file: ") + fn + wxT(" for reading! Abort?"), "Error opening config file!", wxYES_NO);
 			if (rc == wxYES)
@@ -481,7 +490,7 @@ void MainFrame::restoreConfig(void)
 				string msg = string("Unable to open config file: ") + string(fn.c_str());
 				throw SilentException(msg);
 			}
-		}
+		}*/
 
 		createDefaultIDE();
 

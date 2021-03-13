@@ -14,16 +14,18 @@ public:
 	~DocumentPanel() override;
 
 public:
-	bool AddPage(Document *page, const wxString &caption, bool select = false, const wxBitmap &bitmap = wxNullBitmap);
-	bool InsertPage(size_t pageIdx, Document *page, const wxString &caption, bool select = false, const wxBitmap &bitmap = wxNullBitmap);
+	bool AddPage(Document *page, const wxString &caption, bool select = false, wxAuiPaneInfo *paneInfo = nullptr, const wxBitmap &bitmap = wxNullBitmap);
+	bool InsertPage(size_t pageIdx, Document *page, const wxString &caption, bool select = false, wxAuiPaneInfo *p = nullptr, const wxBitmap &bitmap = wxNullBitmap);
 
 	wxWindow *getWindow(void) override { return this; }
 
 	bool serialize(wxString const &groupId, wxConfigBase *config) override;
 	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
 
-	wxString savePerspective(void);
-	void loadPerspective(wxString const &layout);
+	wxString SavePerspective(void);
+	void LoadPerspective(wxString const &layout, bool update = true);
+
+	wxAuiManager *GetManager();
 
 protected:
 	virtual void OnPageChanged(wxAuiNotebookEvent &event);
