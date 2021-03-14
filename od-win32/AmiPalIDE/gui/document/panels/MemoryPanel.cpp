@@ -47,7 +47,13 @@ MemoryPanel::MemoryPanel(MemoryToolBar *toolBar, wxWindow *parent, wxWindowID id
 , m_type(DisplayType::DST_HEX)
 , m_addressLimit(0xffffffff)
 , m_spaces(true)
+, m_visible(true)
 {
+	static uint32_t current = 0;
+
+	wxString title = "Memory:" + to_string(++current);
+	setTitle(title);
+
 	Init();
 
 	DebuggerConfig::getInstance().addListener(this);
@@ -84,11 +90,14 @@ void MemoryPanel::Init(void)
 	lock(isLocked());
 }
 
-bool MemoryPanel::serialize(wxString const &groupId, wxConfigBase *config)
+bool MemoryPanel::serialize(wxString groupId, wxConfigBase *config)
 {
-	config->Write(groupId + "MemSize", toWxString(m_memorySize));
-	config->Write(groupId + "Columns", toWxString(m_displayColumns));
-	config->Write(groupId + "ColumnBytes", toWxString(m_columnBytes));
+	if (!Document::serialize(groupId, config))
+		return false;
+
+	config->Write(groupId + "MemSize", m_memorySize);
+	config->Write(groupId + "Columns", m_displayColumns);
+	config->Write(groupId + "ColumnBytes", m_columnBytes);
 	config->Write(groupId + "DisplayType", displayTypeToString(m_type));
 	config->Write(groupId + "AddressLimit", toHexString(m_addressLimit));
 	config->Write(groupId + "Spaces", m_spaces);
@@ -96,8 +105,11 @@ bool MemoryPanel::serialize(wxString const &groupId, wxConfigBase *config)
 	return true;
 }
 
-bool MemoryPanel::deserialize(wxString const &groupId, wxConfigBase *config)
+bool MemoryPanel::deserialize(wxString groupId, wxConfigBase *config)
 {
+	if (!Document::deserialize(groupId, config))
+		return false;
+
 	m_memorySize = fromWxString(config->Read(groupId + "MemSize", "0"));
 	m_displayColumns = fromWxString(config->Read(groupId + "Columns", "0"));
 	m_columnBytes = fromWxString(config->Read(groupId + "ColumnBytes", "0"));
@@ -316,6 +328,9 @@ void MemoryPanel::OnSize(wxSizeEvent &event)
 
 size_t MemoryPanel::printDump(size_t address)
 {
+	if (!m_visible)
+		return 0;
+
 	adjustDimensions();
 
 	DbgByte *memPtr;

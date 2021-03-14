@@ -40,13 +40,13 @@ FileTree::~FileTree(void)
 {
 }
 
-bool FileTree::serialize(wxString const &groupId, wxConfigBase *config)
+bool FileTree::serialize(wxString groupId, wxConfigBase *config)
 {
-	return true;
+	return DocumentWindow::serialize(groupId, config);
 }
 
-bool FileTree::deserialize(wxString const &groupId, wxConfigBase *config)
+bool FileTree::deserialize(wxString groupId, wxConfigBase *config)
 {
-	return true;
+	return DocumentWindow::deserialize(groupId, config);
 }
 

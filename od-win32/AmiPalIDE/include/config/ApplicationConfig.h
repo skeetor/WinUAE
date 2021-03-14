@@ -25,8 +25,8 @@ public:
 	wxString getDefaultConfigFile(void) const;
 
 public: // Serialize
-	bool serialize(wxString const &groupId, wxConfigBase *config) override;
-	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
+	bool serialize(wxString groupId, wxConfigBase *config) override;
+	bool deserialize(wxString groupId, wxConfigBase *config) override;
 
 public:
 	CloseButtonAction closeAction;

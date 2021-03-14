@@ -36,7 +36,7 @@ bool DocumentManager::InsertPane(DocumentWindow *document, const wxAuiPaneInfo &
 	return wxAuiManager::InsertPane(document->getWindow(), insertLocation, insertLevel);
 }
 
-bool DocumentManager::serialize(wxString const &groupId, wxConfigBase *config)
+bool DocumentManager::serialize(wxString groupId, wxConfigBase *config)
 {
 	config->SetPath("/Documents");
 
@@ -59,7 +59,7 @@ bool DocumentManager::serialize(wxString const &groupId, wxConfigBase *config)
 	return true;
 }
 
-bool DocumentManager::deserialize(wxString const &groupId, wxConfigBase *config)
+bool DocumentManager::deserialize(wxString groupId, wxConfigBase *config)
 {
 	config->SetPath("/Documents");
 
@@ -76,7 +76,7 @@ bool DocumentManager::deserialize(wxString const &groupId, wxConfigBase *config)
 		wxAuiPaneInfo info;
 		LoadPaneInfo(v, info);
 
-		d->deserialize(id, config);
+		d->deserialize(id+"Panel_", config);
 		AddPane(d, info);
 	}
 

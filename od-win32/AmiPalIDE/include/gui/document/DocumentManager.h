@@ -19,6 +19,6 @@ public:
 	bool AddPane(DocumentWindow *document, int direction = wxLEFT, const wxString &caption = wxEmptyString);
 	bool InsertPane(DocumentWindow *document, const wxAuiPaneInfo &insertLocation, int insertLevel = wxAUI_INSERT_PANE);
 
-	bool serialize(wxString const &groupId, wxConfigBase *config) override;
-	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
+	bool serialize(wxString groupId, wxConfigBase *config) override;
+	bool deserialize(wxString groupId, wxConfigBase *config) override;
 };

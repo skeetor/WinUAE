@@ -44,7 +44,7 @@ void ApplicationConfig::update(const ApplicationConfig &src)
 	notify();
 }
 
-bool ApplicationConfig::serialize(wxString const &groupId, wxConfigBase *config)
+bool ApplicationConfig::serialize(wxString groupId, wxConfigBase *config)
 {
 	config->SetPath("/" + getConfigName());
 
@@ -56,7 +56,7 @@ bool ApplicationConfig::serialize(wxString const &groupId, wxConfigBase *config)
 	return true;
 }
 
-bool ApplicationConfig::deserialize(wxString const &groupId, wxConfigBase *config)
+bool ApplicationConfig::deserialize(wxString groupId, wxConfigBase *config)
 {
 	config->SetPath("/" + getConfigName());
 

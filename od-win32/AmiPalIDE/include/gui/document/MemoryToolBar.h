@@ -36,8 +36,8 @@ public: // overrides
 	bool Enable(bool enable = true) override;
 
 	wxWindow *getWindow(void) override { return this; }
-	bool serialize(wxString const &groupId, wxConfigBase *config) override;
-	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
+	bool serialize(wxString groupId, wxConfigBase *config) override;
+	bool deserialize(wxString groupId, wxConfigBase *config) override;
 
 public:
 	void setMemoryPanel(MemoryPanel *panel) { m_memory = panel; }

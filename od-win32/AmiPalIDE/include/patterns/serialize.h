@@ -12,8 +12,8 @@ public:
 	Serialize(void) = default;
 	~Serialize(void) = default;
 
-	virtual bool serialize(wxString const &groupId, wxConfigBase *config) = 0;
-	virtual bool deserialize(wxString const &groupId, wxConfigBase *config) = 0;
+	virtual bool serialize(wxString groupId, wxConfigBase *config) = 0;
+	virtual bool deserialize(wxString groupId, wxConfigBase *config) = 0;
 };
 
 class SerializeException
@@ -35,4 +35,8 @@ private:
 	std::string m_value;
 };
 
+/**
+ * Throws an exception if Throw is true. The exception will be shown to the user via a dialog
+ * for diagnosis of internal errors.
+ */
 void checkException(bool Throw, const wxString &msg, const wxString &key, const wxString &value);

@@ -18,13 +18,19 @@ public:
 	 */
 	virtual wxWindow *getWindow(void) = 0;
 
+	bool serialize(wxString groupId, wxConfigBase *config) override;
+	bool deserialize(wxString groupId, wxConfigBase *config) override;
+
 public:
 
 	/**
 	 * Returns a string which identfies the document type and must be
 	 * unique for all documents.
 	 */
-	const wxString &getTypeInfo(void) { return m_typeInfo; }
+	const wxString &getTypeInfo(void) const { return m_typeInfo; }
+
+	const wxString &getTitle(void) const { return m_title; }
+	void setTitle(const wxString &title) { m_title = title; }
 
 	/**
 	 * Factory method to create the document from a serialized typeinfo string.
@@ -36,6 +42,8 @@ protected:
 
 private:
 	wxString m_typeInfo;
+	wxString m_title;
+	wxString m_tooltip;
 };
 
 #define CREATE_DOCUMENT_WINDOW(className, parent) dynamic_cast<className *>(DocumentWindow::createFromInfo(parent, STRINGIFY(className)))

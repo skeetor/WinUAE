@@ -41,7 +41,7 @@ void DebuggerConfig::update(const DebuggerConfig &src)
 	notify();
 }
 
-bool DebuggerConfig::serialize(wxString const &groupId, wxConfigBase *config)
+bool DebuggerConfig::serialize(wxString groupId, wxConfigBase *config)
 {
 	config->SetPath("/"+getConfigName());
 
@@ -51,7 +51,7 @@ bool DebuggerConfig::serialize(wxString const &groupId, wxConfigBase *config)
 	return true;
 }
 
-bool DebuggerConfig::deserialize(wxString const &groupId, wxConfigBase *config)
+bool DebuggerConfig::deserialize(wxString groupId, wxConfigBase *config)
 {
 	config->SetPath("/" + getConfigName());
 

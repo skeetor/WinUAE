@@ -83,14 +83,14 @@ MemoryToolBar::~MemoryToolBar()
 {
 }
 
-bool MemoryToolBar::serialize(wxString const &groupId, wxConfigBase *config)
+bool MemoryToolBar::serialize(wxString groupId, wxConfigBase *config)
 {
-	return true;
+	return DocumentWindow::serialize(groupId, config);
 }
 
-bool MemoryToolBar::deserialize(wxString const &groupId, wxConfigBase *config)
+bool MemoryToolBar::deserialize(wxString groupId, wxConfigBase *config)
 {
-	return true;
+	return DocumentWindow::deserialize(groupId, config);
 }
 
 void MemoryToolBar::reset(void)

@@ -42,8 +42,8 @@ public: // Document overrides
 	void deactivate(void) override;
 	bool closing(bool forced, bool active) override;
 
-	bool serialize(wxString const &groupId, wxConfigBase *config) override;
-	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
+	bool serialize(wxString groupId, wxConfigBase *config) override;
+	bool deserialize(wxString groupId, wxConfigBase *config) override;
 
 public: // Control overrides
 	void OnSize(wxSizeEvent &event);
@@ -111,6 +111,7 @@ private:
 	size_t m_addressLimit;
 
 	bool m_spaces:1;
+	bool m_visible:1;
 
 	wxDECLARE_EVENT_TABLE();
 };

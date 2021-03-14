@@ -14,8 +14,8 @@ public:
 
 	void update(const DebuggerConfig &src);
 
-	bool serialize(wxString const &groupId, wxConfigBase *config) override;
-	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
+	bool serialize(wxString groupId, wxConfigBase *config) override;
+	bool deserialize(wxString groupId, wxConfigBase *config) override;
 
 public:
 	wxFont memoryViewFont;

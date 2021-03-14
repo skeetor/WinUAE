@@ -92,12 +92,14 @@ public:
 	void setModalDialog(wxDialog *dlg = nullptr) { m_modalDialog = dlg; }
 
 public: // Serialize
-	bool serialize(wxString const &groupId, wxConfigBase *config) override;
-	bool deserialize(wxString const &groupId, wxConfigBase *config) override;
+	bool serialize(wxString groupId, wxConfigBase *config) override;
+	bool deserialize(wxString groupId, wxConfigBase *config) override;
 
 protected:
 	void saveConfig(void);
 	void restoreConfig(void);
+
+	void newMemoryPanel(bool select = false);
 
 	MemoryToolBar *getMemoryToolBar(void);
 	DocumentPanel *getDocumentPanel(void);

@@ -20,6 +20,20 @@ DocumentWindow::~DocumentWindow(void)
 {
 }
 
+bool DocumentWindow::serialize(wxString groupId, wxConfigBase *config)
+{
+	config->Write(groupId + "Title", getTitle());
+
+	return true;
+}
+
+bool DocumentWindow::deserialize(wxString groupId, wxConfigBase *config)
+{
+	setTitle(config->Read(groupId + "Title", ""));
+
+	return true;
+}
+
 DocumentWindow *DocumentWindow::createFromInfo(wxWindow *parent, wxString typeInfo)
 {
 	wxWindowID id = wxID_ANY;
@@ -52,4 +66,14 @@ Document *Document::createFromInfo(wxWindow *parent, wxString typeInfo)
 		return new MemoryPanel(frame->getMemoryToolBar(), parent, id);
 
 	return nullptr;
+}
+
+bool Document::serialize(wxString groupId, wxConfigBase *config)
+{
+	return DocumentWindow::serialize(groupId, config);
+}
+
+bool Document::deserialize(wxString groupId, wxConfigBase *config)
+{
+	return DocumentWindow::deserialize(groupId, config);
 }

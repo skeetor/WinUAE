@@ -45,6 +45,8 @@ public:
 	virtual void lock(bool state) { m_locked = state; }
 	virtual bool isLocked(void) { return m_locked; }
 
+	bool serialize(wxString groupId, wxConfigBase *config) override;
+	bool deserialize(wxString groupId, wxConfigBase *config) override;
 
 	static Document *createFromInfo(wxWindow *parent, wxString typeInfo);
 

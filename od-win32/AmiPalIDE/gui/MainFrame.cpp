@@ -110,18 +110,25 @@ void MainFrame::createDefaultIDE(void)
 	MemoryToolBar *mbar = getMemoryToolBar();
 	mbar->Disable();
 
-	MemoryPanel *mp = CREATE_DOCUMENT(MemoryPanel, documents);
-	documents->AddPage(mp, "Memory", true);
-	mp = CREATE_DOCUMENT(MemoryPanel, documents);
-	documents->AddPage(mp, "Memory", false);
-	mp = CREATE_DOCUMENT(MemoryPanel, documents);
-	documents->AddPage(mp, "Memory", false);
-
 	m_manager->AddPane(documents, wxAuiPaneInfo().Name("DocumentPanel").CenterPane().PaneBorder(false));
+	newMemoryPanel(true);
+	newMemoryPanel();
+	newMemoryPanel();
+	newMemoryPanel();
+/*	newMemoryPanel();
+	newMemoryPanel();
+	newMemoryPanel();
+	newMemoryPanel();*/
+
 	m_manager->AddPane(CREATE_DOCUMENT_WINDOW(FileTree, this), wxAuiPaneInfo().Name(STRINGIFY(FileTree)).Caption("File Browser").Left().Layer(1).Position(1).CloseButton(true).MaximizeButton(true));
 
 	// "commit" all changes made to wxAuiManager
 	m_manager->Update();
+
+	documents->Split(documents->GetPageCount() - 2, wxRIGHT);
+	documents->Split(documents->GetPageCount() - 1, wxRIGHT);
+	wxString perspective = documents->SavePerspective();
+
 }
 
 wxMenu *MainFrame::createFileMenu(void)
@@ -273,11 +280,17 @@ void MainFrame::OnDisasm(wxCommandEvent& event)
 	//m_documents->AddPage(createDisasmPanel(), "Disasm", false);
 }
 
-void MainFrame::OnMemory(wxCommandEvent& event)
+void MainFrame::newMemoryPanel(bool select)
 {
 	DocumentPanel *p = getDocumentPanel();
 
-	p->AddPage(CREATE_DOCUMENT(MemoryPanel, p), "Memory", true);
+	MemoryPanel *m = CREATE_DOCUMENT(MemoryPanel, p);
+	p->AddPage(m, m->getTitle(), select);
+}
+
+void MainFrame::OnMemory(wxCommandEvent& event)
+{
+	newMemoryPanel(true);
 }
 
 void MainFrame::OnBreakpoints(wxCommandEvent& event)
@@ -326,8 +339,13 @@ void MainFrame::OnLayoutSave(wxCommandEvent& event)
 	DocumentPanel *p = getDocumentPanel();
 	wxAuiManager *m = p->GetManager();
 
+	wxWindow *page = p->GetPage(p->GetSelection());
+	wxAuiTabCtrl *tctrl = nullptr;
+	int idx = 0;
+	bool found = p->FindTab(page, &tctrl, &idx);
+
 	m_perspective = m_manager->SavePerspective();
-	m_perspectivePanel = m->SavePerspective();
+	m_perspectivePanel = p->SavePerspective();
 
 	SetStatusText("Perspective saved...");
 }
@@ -337,8 +355,7 @@ void MainFrame::OnLayoutLoad(wxCommandEvent& event)
 	DocumentPanel *p = getDocumentPanel();
 	wxAuiManager *m = p->GetManager();
 
-	m->LoadPerspective(m_perspectivePanel);
-	m->Update();
+	p->LoadPerspective(m_perspectivePanel);
 	m_manager->LoadPerspective(m_perspective);
 	m_manager->Update();
 
@@ -370,7 +387,7 @@ DocumentPanel *MainFrame::getDocumentPanel(void)
 	return p;
 }
 
-bool MainFrame::serialize(wxString const &groupId, wxConfigBase *config)
+bool MainFrame::serialize(wxString groupId, wxConfigBase *config)
 {
 	ApplicationConfig &appCfg = ApplicationConfig::getInstance();
 	appCfg.serialize("", config);
@@ -400,7 +417,7 @@ bool MainFrame::serialize(wxString const &groupId, wxConfigBase *config)
 	return true;
 }
 
-bool MainFrame::deserialize(wxString const &groupId, wxConfigBase *config)
+bool MainFrame::deserialize(wxString groupId, wxConfigBase *config)
 {
 	ApplicationConfig &appCfg = ApplicationConfig::getInstance();
 	appCfg.deserialize("", config);
@@ -479,7 +496,7 @@ void MainFrame::restoreConfig(void)
 		appCfg.configFile = fn;
 	}
 
-	if (!wxFile::Exists(fn))
+	//if (!wxFile::Exists(fn))
 	{
 		/*if (wxGetApp().configByParam)
 		{
