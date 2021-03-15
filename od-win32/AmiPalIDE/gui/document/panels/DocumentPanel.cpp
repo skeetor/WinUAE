@@ -7,49 +7,6 @@
 
 using namespace std;
 
-class wxAuiTabCtrlInfo
-{
-public:
-	class PageInfo
-	{
-	public:
-		PageInfo(wxWindow *page = nullptr, int index = -1)
-			: m_page(page)
-			, m_tabIndex(index)
-		{
-		}
-
-		wxWindow *m_page;
-		int m_tabIndex;
-	};
-
-public:
-	wxAuiTabCtrlInfo()
-		: m_tabCtrl(nullptr)
-	{
-	}
-
-	wxAuiTabCtrlInfo(wxAuiTabCtrl *ctrl, wxWindow *page, int tabIndex)
-	{
-		m_tabCtrl = ctrl;
-		m_position = page->GetPosition();
-		addPage(page, tabIndex);
-	}
-
-	operator wxAuiTabCtrl *() { return m_tabCtrl; }
-	operator wxAuiTabCtrl const *() const { return m_tabCtrl; }
-
-	void addPage(wxWindow *page, int tabIndex)
-	{
-		PageInfo pi(page, tabIndex);
-		m_pages.push_back(pi);
-	}
-
-	wxAuiTabCtrl *m_tabCtrl;
-	std::vector<PageInfo> m_pages;
-	wxPoint m_position;
-};
-
 wxBEGIN_EVENT_TABLE(DocumentPanel, wxAuiNotebook)
 
 	EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, DocumentPanel::OnPageChanged)
@@ -58,7 +15,7 @@ wxBEGIN_EVENT_TABLE(DocumentPanel, wxAuiNotebook)
 wxEND_EVENT_TABLE()
 
 DocumentPanel::DocumentPanel(wxWindow *parent, wxWindowID id)
-: wxAuiNotebook(parent, id, wxDefaultPosition, parent->FromDIP(wxSize(430, 200)),
+: wxDockingNotebook(parent, id, wxDefaultPosition, parent->FromDIP(wxSize(430, 200)),
 	wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_MIDDLE_CLICK_CLOSE)
 , DocumentWindow("DocumentPanel|" + toHexString(id), this)
 {
@@ -66,11 +23,6 @@ DocumentPanel::DocumentPanel(wxWindow *parent, wxWindowID id)
 
 DocumentPanel::~DocumentPanel()
 {
-}
-
-wxAuiManager *DocumentPanel::GetManager()
-{
-	return &m_mgr;
 }
 
 bool DocumentPanel::AddPage(Document *page, const wxString &caption, bool select, wxAuiPaneInfo *paneInfo, const wxBitmap &bitmap)
@@ -147,113 +99,6 @@ void DocumentPanel::OnPageClosing(wxAuiNotebookEvent &event)
 			d->activate();
 		}
 	}
-}
-
-class wxAuiTabCtrlRelation
-{
-public:
-	wxAuiTabCtrlRelation()
-	{
-	}
-
-	wxAuiTabCtrlInfo m_refCtrl;
-	vector<wxAuiTabCtrlInfo> m_tabs;
-};
-
-int DocumentPanel::getDirection(wxAuiTabCtrlInfo &refCtrl, wxAuiTabCtrlInfo &tabCtrl)
-{
-	int rc = 0;
-
-	if (refCtrl.m_position.x != tabCtrl.m_position.x)
-	{
-		if (refCtrl.m_position.x < tabCtrl.m_position.x)
-			rc |= wxLEFT;
-		else
-			rc |= wxRIGHT;
-	}
-
-	if (refCtrl.m_position.y != tabCtrl.m_position.y)
-	{
-		if (refCtrl.m_position.y < tabCtrl.m_position.y)
-			rc |= wxBOTTOM;
-		else
-			rc |= wxTOP;
-	}
-
-	return rc;
-}
-
-wxAuiTabCtrlRelation *findRelation()
-{
-	return nullptr;
-}
-
-wxString DocumentPanel::SavePerspective(void)
-{
-	wxString perspective = "pages=" + to_string(GetPageCount());
-	vector<wxAuiTabCtrlInfo> infos;
-
-	// First we group all pages into their tabcontrols. This will not be
-	// neccessary when we move the code to wxAuiBook, as this information
-	// is already there in wxTabFrame which is not accessible outside.
-	for (size_t i = 0; i < GetPageCount(); i++)
-	{
-		wxWindow *page = GetPage(i);
-		wxAuiTabCtrl *ctrl;
-		int tabIndex;
-
-		if (!FindTab(page, &ctrl, &tabIndex))
-			continue;
-
-		for (wxAuiTabCtrlInfo &tci : infos)
-		{
-			if (tci.m_tabCtrl == ctrl)
-			{
-				tci.addPage(page, tabIndex);
-				ctrl = nullptr;
-				break;
-			}
-		}
-
-		if (ctrl)
-			infos.push_back(wxAuiTabCtrlInfo(ctrl, page, tabIndex));
-	}
-
-	wxAuiTabCtrlRelation *curRelation = nullptr;
-	vector<wxAuiTabCtrlRelation> relations;
-/*	{
-		if (curRelation)
-		{
-			int direction = getDirection(curRelation->m_refCtrl, info.m_tabCtrl);
-			if (direction == 0)
-			{
-				curRelation->m_tabs.push_back(info);
-				continue;
-			}
-			else
-			{
-			}
-		}
-
-		wxAuiTabCtrlRelation relation;
-		relation.m_refCtrl = info;
-		relations.push_back(relation);
-		curRelation = &relations[relations.size() - 1];
-	}*/
-
-	return perspective;
-}
-
-bool DocumentPanel::LoadPerspective(wxString layout, bool update)
-{
-	wxString field = getToken(layout, "|");
-
-	if (field.empty())
-		return true;
-
-	field = getToken(layout, "pages=");
-
-	return true;
 }
 
 bool DocumentPanel::serialize(wxString groupId, wxConfigBase *config)

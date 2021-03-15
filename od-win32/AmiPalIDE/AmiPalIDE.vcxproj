@@ -235,6 +235,7 @@
     <ClInclude Include="include\gui\properties\pages\GlobalSettingsPage.h" />
     <ClInclude Include="include\gui\properties\PropertyDlg.h" />
     <ClInclude Include="include\gui\properties\PropertyPagePanel.h" />
+    <ClInclude Include="include\gui\wxDockingNotebook.h" />
     <ClInclude Include="include\patterns\observer.h" />
     <ClInclude Include="include\patterns\serialize.h" />
     <ClInclude Include="include\utils\commandline.h" />
@@ -260,6 +261,7 @@
     <ClCompile Include="gui\properties\pages\GlobalSettingsPage.cpp" />
     <ClCompile Include="gui\properties\pages\DebuggerViewPage.cpp" />
     <ClCompile Include="gui\properties\PropertyDlg.cpp" />
+    <ClCompile Include="gui\wxDockingNotebook.cpp" />
     <ClCompile Include="utils\commandline.cpp" />
     <ClCompile Include="utils\exceptions.cpp" />
     <ClCompile Include="utils\StringUtils.cpp" />
