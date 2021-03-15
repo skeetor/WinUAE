@@ -152,11 +152,9 @@ bool DocumentPanel::deserialize(wxString groupId, wxConfigBase *config)
 		AddPage(d, d->getTitle(), false);
 	}
 
-	// TODO: This doesn't work for a notebook and must wait on a fix from wxWidgets
 	LoadPerspective(config->Read(groupId + "Layout", ""));
 
 	Thaw();
-	//m_mgr.Update();
 
 	return true;
 }

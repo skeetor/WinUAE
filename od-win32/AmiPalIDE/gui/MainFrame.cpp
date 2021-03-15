@@ -337,12 +337,6 @@ void MainFrame::OnOptions(wxCommandEvent& event)
 void MainFrame::OnLayoutSave(wxCommandEvent& event)
 {
 	DocumentPanel *p = getDocumentPanel();
-	wxAuiManager *m = p->GetManager();
-
-	wxWindow *page = p->GetPage(p->GetSelection());
-	wxAuiTabCtrl *tctrl = nullptr;
-	int idx = 0;
-	bool found = p->FindTab(page, &tctrl, &idx);
 
 	m_perspective = m_manager->SavePerspective();
 	m_perspectivePanel = p->SavePerspective();
