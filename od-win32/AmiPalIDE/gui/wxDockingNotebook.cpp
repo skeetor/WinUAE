@@ -7,6 +7,43 @@
 
 using namespace std;
 
+#define PARSE_RELATION(direction) \
+	n = -2;\
+	readToken(layout, wxSTRINGIZE(direction), n);\
+	if (n == -2)\
+		return false;\
+	if (n != -1)\
+		info.m_##direction = &infos[n]
+
+bool readToken(wxString & s, wxString const &name, wxString & value, bool allowEmptyValue = false)
+{
+	value = getToken(s, "|");
+	if (value.empty())
+		return false;
+
+	wxString token = getToken(value, "=");
+	if (token != name || (!allowEmptyValue && value.empty()))
+		return false;
+
+	return true;
+}
+
+bool readToken(wxString & s, wxString const &name, unsigned long &value, unsigned long defaultValue = -1)
+{
+	wxString v;
+
+	if (!readToken(s, name, v, true))
+		return false;
+
+	if (!v.ToCULong(&value))
+	{
+		value = defaultValue;
+		return false;
+	}
+
+	return true;
+}
+
 wxDockingNotebook::wxDockingNotebook(wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style)
 : wxAuiNotebook(parent, id, pos, size, style)
 {
@@ -48,7 +85,7 @@ vector<wxAuiTabCtrlInfo> wxDockingNotebook::getTabControls(void)
 		}
 
 		if (ctrl)
-			infos.push_back(wxAuiTabCtrlInfo(ctrl, page, tabIndex, i, infos.size(), GetPageText(i)));
+			infos.push_back(wxAuiTabCtrlInfo(ctrl, page, tabIndex, infos.size(), infos.size(), GetPageText(i)));
 	}
 
 	return infos;
@@ -209,8 +246,8 @@ void wxDockingNotebook::MovePage(wxAuiTabCtrl *src, int tabPageIndex, wxAuiTabCt
 
 wxString wxDockingNotebook::SavePerspective(void)
 {
-	wxString perspective = "pages=" + to_string(GetPageCount());
 	vector<wxAuiTabCtrlInfo> infos = getTabControls();
+	wxString perspective = "views=" + to_string(infos.size());
 	updateTabRelations(infos);
 
 	for (wxAuiTabCtrlInfo const &info : infos)
@@ -234,35 +271,6 @@ wxString wxDockingNotebook::SavePerspective(void)
 	return perspective;
 }
 
-bool readToken(wxString &s, wxString const &name, wxString &value, bool checkValueEmpty = true)
-{
-	value = getToken(s, "|");
-	if (value.empty())
-		return false;
-
-	wxString token = getToken(value, "=");
-	if (token != name || (checkValueEmpty && value.empty()))
-		return false;
-
-	return true;
-}
-
-bool readToken(wxString &s, wxString const &name, unsigned long &value, unsigned long defaultValue = -1)
-{
-	wxString v;
-
-	if (!readToken(s, name, v))
-		return false;
-
-	if (!v.ToCULong(&value))
-	{
-		value = defaultValue;
-		return false;
-	}
-
-	return true;
-}
-
 bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiTabCtrlInfo> &outInfos)
 {
 	outInfos.clear();
@@ -270,13 +278,16 @@ bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiTabCtrlIn
 	wxString value;
 	unsigned long n;
 
-	if (!readToken(layout, "pages", n))
+	if (!readToken(layout, "views", n))
 		return false;
 
 	vector<wxAuiTabCtrlInfo> infos(n);
 
+	uint32_t i = 0;
 	for (wxAuiTabCtrlInfo &info : infos)
 	{
+		info.m_saveIndex = i++;
+
 		if (!readToken(layout, "tabctrl", n))
 			return false;
 		info.m_saveIndex = n;
@@ -307,18 +318,10 @@ bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiTabCtrlIn
 			page.m_pageIndex = n;
 		}
 
-		// -2 can never be a valid value, so we know that the function failed if it is
-		// still -2. In case of an empty value, it will be set to -1.
-		n = -2;
-		readToken(layout, "left", n);
-		if (n == -2 )
-			return false;
-		/*
-		perspective += "|left=" + ((info.m_left) ? to_string(info.m_left->m_saveIndex) : "");
-		perspective += "|right=" + ((info.m_right) ? to_string(info.m_right->m_saveIndex) : "");
-		perspective += "|top=" + ((info.m_top) ? to_string(info.m_top->m_saveIndex) : "");
-		perspective += "|bottom=" + ((info.m_bottom) ? to_string(info.m_bottom->m_saveIndex) : "");
-		*/
+		PARSE_RELATION(left);
+		PARSE_RELATION(right);
+		PARSE_RELATION(top);
+		PARSE_RELATION(bottom);
 	}
 
 	outInfos = move(infos);
@@ -328,9 +331,48 @@ bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiTabCtrlIn
 
 bool wxDockingNotebook::LoadPerspective(wxString layout, bool update)
 {
+	// If the current notebook doesn't have enough pages, there is nothing
+	// we can do, so we don't need to proceed. The LoadPerspective() only
+	// reconstructs the layout, but it can not create any pages.
+	// We could create empty dummy pages, so that the layout will always
+	// be created, but should we do this? Another solution might be that
+	// the user can pass a producer function which will create the required
+	// pages if they are missing.
+	size_t pages = GetPageCount();
+	if (pages <= 1)
+		return true;
+
+	wxWindow *page = GetPage(0);
+	wxAuiTabCtrl *root;
+	int tabIndex;
+
+	// Hmmmm.... There should be one page...
+	if (!FindTab(page, &root, &tabIndex))
+		return false;
+
 	vector<wxAuiTabCtrlInfo> infos;
 	if (!parseTabControls(layout, infos))
 		return false;
+
+	// First we need to move all pages to the same ctrl.
+	for (size_t i = 1; i < pages; i++)
+	{
+		wxAuiTabCtrl *src;
+
+		page = GetPage(i);
+		if (!FindTab(page, &src, &tabIndex))
+			return false;
+
+		MovePage(src, tabIndex, root, false);
+	}
+
+	for (wxAuiTabCtrlInfo &info : infos)
+	{
+		if (info.m_left)
+		{
+
+		}
+	}
 
 	return true;
 }
