@@ -8,14 +8,12 @@ public:
 	class PageInfo
 	{
 	public:
-		PageInfo(wxWindow *page = nullptr, int index = -1, int pageIndex = -1)
-		: m_page(page)
-		, m_tabIndex(index)
+		PageInfo(int tabIndex = -1, int pageIndex = -1)
+		: m_tabIndex(tabIndex)
 		, m_pageIndex(pageIndex)
 		{
 		}
 
-		wxWindow *m_page;
 		int m_tabIndex;
 		int m_pageIndex;
 	};
@@ -23,50 +21,46 @@ public:
 public:
 	wxAuiTabCtrlInfo()
 	: m_tabCtrl(nullptr)
-	, m_saveIndex(-1)
-	, m_left(nullptr)
-	, m_right(nullptr)
-	, m_top(nullptr)
-	, m_bottom(nullptr)
+	, m_left(-1)
+	, m_right(-1)
+	, m_top(-1)
+	, m_bottom(-1)
 	{
 	}
 
 	wxAuiTabCtrlInfo(wxAuiTabCtrl *ctrl, wxWindow *page, int tabIndex, int pageIndex, uint32_t saveIndex, wxString const &name)
-	: m_saveIndex(saveIndex)
-	, m_left(nullptr)
-	, m_right(nullptr)
-	, m_top(nullptr)
-	, m_bottom(nullptr)
-	, m_name(name)		// Just for debugging
+	: m_tabCtrl(ctrl)
+	, m_left(-1)
+	, m_right(-1)
+	, m_top(-1)
+	, m_bottom(-1)
 	{
-		m_tabCtrl = ctrl;
-
 		// When restoring, this may be a nullptr
 		if(page)
 			m_position = page->GetPosition();
 
-		addPage(page, tabIndex, pageIndex);
+		addPage(tabIndex, pageIndex);
 	}
 
 	operator wxAuiTabCtrl *() { return m_tabCtrl; }
 	operator wxAuiTabCtrl const *() const { return m_tabCtrl; }
 
-	void addPage(wxWindow *page, int tabIndex, int pageIndex)
+	void addPage(int tabIndex, int pageIndex)
 	{
-		PageInfo pi(page, tabIndex, pageIndex);
+		PageInfo pi(tabIndex, pageIndex);
 		m_pages.push_back(pi);
 	}
 
 	wxAuiTabCtrl *m_tabCtrl;
-	uint32_t m_saveIndex;
 	std::vector<PageInfo> m_pages;
 	wxPoint m_position;
 	wxSize m_size;
-	wxString m_name;	// Only for debugging
-	wxAuiTabCtrlInfo *m_left;
-	wxAuiTabCtrlInfo *m_right;
-	wxAuiTabCtrlInfo *m_top;
-	wxAuiTabCtrlInfo *m_bottom;
+
+	// Index of the TabCtrlInfo
+	int32_t m_left;
+	int32_t m_right;
+	int32_t m_top;
+	int32_t m_bottom;
 };
 
 class wxDockingNotebook
@@ -104,7 +98,7 @@ protected: // wxAuiNotebook internals
 	 * one of wxLEFT, wxRIGHT, wxTOP or wxBOTTOM. They also may not be combined
 	 * like wxLEFT|wxTOP.
 	 */
-	wxAuiTabCtrlInfo *nearestTab(wxAuiTabCtrlInfo const &ctrl, int direction, std::vector<wxAuiTabCtrlInfo> &tabInfos);
+	int32_t nearestTab(wxAuiTabCtrlInfo const &ctrl, int direction, std::vector<wxAuiTabCtrlInfo> &tabInfos);
 
 	std::vector<wxAuiTabCtrlInfo> getTabControls(void);
 

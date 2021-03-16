@@ -13,7 +13,7 @@ using namespace std;
 	if (n == -2)\
 		return false;\
 	if (n != -1)\
-		info.m_##direction = &infos[n]
+		info.m_##direction = n
 
 bool readToken(wxString & s, wxString const &name, wxString & value, bool allowEmptyValue = false)
 {
@@ -78,7 +78,7 @@ vector<wxAuiTabCtrlInfo> wxDockingNotebook::getTabControls(void)
 		{
 			if (tci.m_tabCtrl == ctrl)
 			{
-				tci.addPage(page, tabIndex, i);
+				tci.addPage(tabIndex, i);
 				ctrl = nullptr;
 				break;
 			}
@@ -102,13 +102,16 @@ void wxDockingNotebook::updateTabRelations(vector<wxAuiTabCtrlInfo> &infos)
 	}
 }
 
-wxAuiTabCtrlInfo *wxDockingNotebook::nearestTab(wxAuiTabCtrlInfo const &ctrl, int direction, std::vector<wxAuiTabCtrlInfo> &infos)
+int32_t wxDockingNotebook::nearestTab(wxAuiTabCtrlInfo const &ctrl, int direction, std::vector<wxAuiTabCtrlInfo> &infos)
 {
 	wxPoint const &ctrlPos = ctrl.m_position;
 	wxAuiTabCtrlInfo *nearest = nullptr;
+	int32_t rc = -1;
 
-	for (wxAuiTabCtrlInfo &info : infos)
+	for (int32_t i = 0; i < infos.size(); i++)
 	{
+		wxAuiTabCtrlInfo &info = infos[i];
+
 		if (info.m_tabCtrl == ctrl.m_tabCtrl)
 			continue;
 
@@ -125,12 +128,14 @@ wxAuiTabCtrlInfo *wxDockingNotebook::nearestTab(wxAuiTabCtrlInfo const &ctrl, in
 					if (!nearest)
 					{
 						nearest = &info;
+						rc = i;
 						continue;
 					}
 
 					if (pi.x > nearest->m_position.x)
 					{
 						nearest = &info;
+						rc = i;
 						continue;
 					}
 				}
@@ -147,12 +152,14 @@ wxAuiTabCtrlInfo *wxDockingNotebook::nearestTab(wxAuiTabCtrlInfo const &ctrl, in
 					if (!nearest)
 					{
 						nearest = &info;
+						rc = i;
 						continue;
 					}
 
 					if (pi.x < nearest->m_position.x)
 					{
 						nearest = &info;
+						rc = i;
 						continue;
 					}
 				}
@@ -169,12 +176,14 @@ wxAuiTabCtrlInfo *wxDockingNotebook::nearestTab(wxAuiTabCtrlInfo const &ctrl, in
 					if (!nearest)
 					{
 						nearest = &info;
+						rc = i;
 						continue;
 					}
 
 					if (pi.y < nearest->m_position.y)
 					{
 						nearest = &info;
+						rc = i;
 						continue;
 					}
 				}
@@ -191,12 +200,14 @@ wxAuiTabCtrlInfo *wxDockingNotebook::nearestTab(wxAuiTabCtrlInfo const &ctrl, in
 					if (!nearest)
 					{
 						nearest = &info;
+						rc = i;
 						continue;
 					}
 
 					if (pi.y > nearest->m_position.y)
 					{
 						nearest = &info;
+						rc = i;
 						continue;
 					}
 				}
@@ -205,7 +216,7 @@ wxAuiTabCtrlInfo *wxDockingNotebook::nearestTab(wxAuiTabCtrlInfo const &ctrl, in
 		}
 	}
 
-	return nearest;
+	return rc;
 }
 
 void wxDockingNotebook::MovePage(wxAuiTabCtrl *src, int tabPageIndex, wxAuiTabCtrl *dest, bool select)
@@ -250,9 +261,10 @@ wxString wxDockingNotebook::SavePerspective(void)
 	wxString perspective = "views=" + to_string(infos.size());
 	updateTabRelations(infos);
 
+	int32_t ctrlId = 0;
 	for (wxAuiTabCtrlInfo const &info : infos)
 	{
-		perspective += "|tabctrl=" + to_string(info.m_saveIndex);
+		perspective += "|tabctrl=" + to_string(ctrlId++);
 		wxSize sz = info.m_tabCtrl->GetSize();
 		perspective += "|sz=" + to_string(sz.x) + ":" + to_string(sz.y);
 		perspective += "|pagecnt=" + to_string(info.m_pages.size());
@@ -262,10 +274,10 @@ wxString wxDockingNotebook::SavePerspective(void)
 			perspective += "|tabindex=" + to_string(page.m_tabIndex);
 			perspective += "|pageindex=" + to_string(page.m_pageIndex);
 		}
-		perspective += "|left=" + ((info.m_left) ? to_string(info.m_left->m_saveIndex) : "");
-		perspective += "|right=" + ((info.m_right) ? to_string(info.m_right->m_saveIndex) : "");
-		perspective += "|top=" + ((info.m_top) ? to_string(info.m_top->m_saveIndex) : "");
-		perspective += "|bottom=" + ((info.m_bottom) ? to_string(info.m_bottom->m_saveIndex) : "");
+		perspective += "|left=" + to_string(info.m_left);
+		perspective += "|right=" + to_string(info.m_right);
+		perspective += "|top=" + to_string(info.m_top);
+		perspective += "|bottom=" + to_string(info.m_bottom);
 	}
 
 	return perspective;
@@ -286,11 +298,8 @@ bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiTabCtrlIn
 	uint32_t i = 0;
 	for (wxAuiTabCtrlInfo &info : infos)
 	{
-		info.m_saveIndex = i++;
-
 		if (!readToken(layout, "tabctrl", n))
 			return false;
-		info.m_saveIndex = n;
 
 		if (!readToken(layout, "sz", value))
 			return false;
@@ -368,9 +377,8 @@ bool wxDockingNotebook::LoadPerspective(wxString layout, bool update)
 
 	for (wxAuiTabCtrlInfo &info : infos)
 	{
-		if (info.m_left)
+		if (info.m_left != -1)
 		{
-
 		}
 	}
 
