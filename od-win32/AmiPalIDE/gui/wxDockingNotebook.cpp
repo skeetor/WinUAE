@@ -219,8 +219,11 @@ int32_t wxDockingNotebook::nearestTab(wxAuiTabCtrlInfo const &ctrl, int directio
 	return rc;
 }
 
-void wxDockingNotebook::MovePage(wxAuiTabCtrl *src, int tabPageIndex, wxAuiTabCtrl *dest, bool select)
+bool wxDockingNotebook::MovePage(wxAuiTabCtrl *src, int tabPageIndex, wxAuiTabCtrl *dest, bool select)
 {
+	if (src == dest)
+		return false;
+
 	// remove the page from the source tabs
 	wxAuiNotebookPage pageInfo = src->GetPage(tabPageIndex);
 	pageInfo.active = false;
@@ -253,6 +256,8 @@ void wxDockingNotebook::MovePage(wxAuiTabCtrl *src, int tabPageIndex, wxAuiTabCt
 	}
 
 	UpdateHintWindowSize();
+
+	return true;
 }
 
 wxString wxDockingNotebook::SavePerspective(void)
@@ -338,6 +343,68 @@ bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiTabCtrlIn
 	return true;
 }
 
+bool wxDockingNotebook::RestoreSplit(vector<wxAuiTabCtrlInfo> &infos, wxAuiTabCtrlInfo &info, int32_t targetIndex, int direction)
+{
+	// The first item is considered as the root of all pages where we can select
+	// pages from, so this has to exist already and can not be a split target.
+	if (!targetIndex)
+		return true;
+
+	if (targetIndex < 0 || targetIndex >= infos.size())
+		return false;
+
+	wxAuiTabCtrlInfo *target = &infos[targetIndex];
+
+	// We assume that root contains all pages, so we can choose one from there
+	// if we need to split.
+	wxAuiTabCtrlInfo *root = &infos[0];
+
+	size_t pageindex = -1;
+	wxWindow *w = nullptr;
+
+	// The target was already split, so we are done.
+	if (target->m_tabCtrl != nullptr)
+		return true;
+
+	// If the current control doesn't have enough pages, we try to move one
+	// from root here, so we can split it.
+	pageindex = info.m_tabCtrl->GetPageCount()-1;
+	if (pageindex <= 0)
+	{
+		pageindex = root->m_tabCtrl->GetPageCount()-1;
+		if (pageindex <= 0)
+			return false;
+
+		// If we split to the left, we only want one tab in the new control
+		// so we have to take the first one, otherwise all tabs would end up
+		// in the new tabctrl, and we don't know where the vanished to. We
+		// need them to stay in root, remember?
+		if (direction == wxLEFT)
+			pageindex = 0;
+
+		w = root->m_tabCtrl->GetPage(pageindex).window;
+		if (!MovePage(root->m_tabCtrl, pageindex, info.m_tabCtrl))
+			return false;
+	}
+	else
+	{
+		if (direction == wxLEFT)
+			pageindex = 0;
+
+		w = info.m_tabCtrl->GetPage(pageindex).window;
+	}
+
+	// Until now this was the tabindex, but for the split we need to know
+	// the page index from the notebook itself.
+	pageindex = GetPageIndex(w);
+
+	Split(pageindex, direction);
+
+	// After the split we need to update the tabctrl with the newly created one
+	int idx;
+	return FindTab(w, &target->m_tabCtrl, &idx);
+}
+
 bool wxDockingNotebook::LoadPerspective(wxString layout, bool update)
 {
 	// If the current notebook doesn't have enough pages, there is nothing
@@ -363,6 +430,8 @@ bool wxDockingNotebook::LoadPerspective(wxString layout, bool update)
 	if (!parseTabControls(layout, infos))
 		return false;
 
+	infos[0].m_tabCtrl = root;
+
 	// First we need to move all pages to the same ctrl.
 	for (size_t i = 1; i < pages; i++)
 	{
@@ -377,9 +446,10 @@ bool wxDockingNotebook::LoadPerspective(wxString layout, bool update)
 
 	for (wxAuiTabCtrlInfo &info : infos)
 	{
-		if (info.m_left != -1)
-		{
-		}
+		RestoreSplit(infos, info, info.m_left, wxLEFT);
+		RestoreSplit(infos, info, info.m_right, wxRIGHT);
+		RestoreSplit(infos, info, info.m_top, wxTOP);
+		RestoreSplit(infos, info, info.m_bottom, wxBOTTOM);
 	}
 
 	return true;

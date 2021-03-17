@@ -80,13 +80,12 @@ public:
 
 	wxAuiManager *GetManager();
 
+protected: // wxAuiNotebook internals
 	/**
 	 * Move the page from the source tab ctrl to the destination. If this was the last
-	 * page, the tab ctrl will be removed.
+	 * page, the tab ctrl will be removed. If src == dest, false is returned.
 	 */
-	void MovePage(wxAuiTabCtrl *src, int tabPageIndex, wxAuiTabCtrl *dest, bool select = true);
-
-protected: // wxAuiNotebook internals
+	bool MovePage(wxAuiTabCtrl *src, int tabPageIndex, wxAuiTabCtrl *dest, bool select = true);
 
 	/**
 	 * Update the relations left/top/... in the list.
@@ -106,4 +105,13 @@ protected: // wxAuiNotebook internals
 	 * Parse the layout from a string created by SavePerspective().
 	 */
 	bool parseTabControls(wxString &layout, std::vector<wxAuiTabCtrlInfo> &infos);
+
+	/**
+	 * Creates a new tabcontrol in the specified direction. If the direction already has a
+	 * tabcontrol, then nothing happens. The control to be splitted must have at least two
+	 * pages, otherwise it couldn't split. In that case it assumes that the first entry
+	 * has enough pages, and moves the last page to the splitter, so it can be splitted.
+	 * If that also fails, false is returned.
+	 */
+	bool RestoreSplit(std::vector<wxAuiTabCtrlInfo> &infos, wxAuiTabCtrlInfo &splitter, int32_t targetIndex, int direction);
 };
