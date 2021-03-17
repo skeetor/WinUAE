@@ -127,7 +127,7 @@ void MainFrame::createDefaultIDE(void)
 
 	documents->Split(documents->GetPageCount() - 2, wxRIGHT);
 	documents->Split(documents->GetPageCount() - 1, wxRIGHT);
-	wxString perspective = documents->SavePerspective();
+	wxString perspective = documents->SerializeLayout();
 
 }
 
@@ -339,7 +339,7 @@ void MainFrame::OnLayoutSave(wxCommandEvent& event)
 	DocumentPanel *p = getDocumentPanel();
 
 	m_perspective = m_manager->SavePerspective();
-	m_perspectivePanel = p->SavePerspective();
+	m_perspectivePanel = p->SerializeLayout();
 
 	SetStatusText("Perspective saved...");
 }
@@ -349,7 +349,7 @@ void MainFrame::OnLayoutLoad(wxCommandEvent& event)
 	DocumentPanel *p = getDocumentPanel();
 	wxAuiManager *m = p->GetManager();
 
-	p->LoadPerspective(m_perspectivePanel);
+	p->DeserializeLayout(m_perspectivePanel);
 	m_manager->LoadPerspective(m_perspective);
 	m_manager->Update();
 

@@ -2,13 +2,13 @@
 
 #include <wx/aui/aui.h>
 
-class wxAuiTabCtrlInfo
+class wxAuiLayoutInfo
 {
 public:
-	class PageInfo
+	class PageCtrlMapping
 	{
 	public:
-		PageInfo(int tabIndex = -1, int pageIndex = -1)
+		PageCtrlMapping(int tabIndex = -1, int pageIndex = -1)
 		: m_tabIndex(tabIndex)
 		, m_pageIndex(pageIndex)
 		{
@@ -19,7 +19,7 @@ public:
 	};
 
 public:
-	wxAuiTabCtrlInfo()
+	wxAuiLayoutInfo()
 	: m_tabCtrl(nullptr)
 	, m_left(-1)
 	, m_right(-1)
@@ -28,7 +28,7 @@ public:
 	{
 	}
 
-	wxAuiTabCtrlInfo(wxAuiTabCtrl *ctrl, wxWindow *page, int tabIndex, int pageIndex, uint32_t saveIndex, wxString const &name)
+	wxAuiLayoutInfo(wxAuiTabCtrl *ctrl, wxWindow *page, int tabIndex, int pageIndex, uint32_t saveIndex, wxString const &name)
 	: m_tabCtrl(ctrl)
 	, m_left(-1)
 	, m_right(-1)
@@ -47,12 +47,23 @@ public:
 
 	void addPage(int tabIndex, int pageIndex)
 	{
-		PageInfo pi(tabIndex, pageIndex);
-		m_pages.push_back(pi);
+		PageCtrlMapping pm(tabIndex, pageIndex);
+		m_pages.push_back(pm);
+	}
+
+	bool ownsPage(int pageIndex)
+	{
+		for (PageCtrlMapping const &pm : m_pages)
+		{
+			if (pm.m_pageIndex == pageIndex)
+				return true;
+		}
+
+		return false;
 	}
 
 	wxAuiTabCtrl *m_tabCtrl;
-	std::vector<PageInfo> m_pages;
+	std::vector<PageCtrlMapping> m_pages;
 	wxPoint m_position;
 	wxSize m_size;
 
@@ -75,8 +86,8 @@ public:
 	~wxDockingNotebook() override;
 
 public:
-	wxString SavePerspective(void);
-	bool LoadPerspective(wxString layout, bool update = true);
+	wxString SerializeLayout(void);
+	bool DeserializeLayout(wxString layout, bool update = true);
 
 	wxAuiManager *GetManager();
 
@@ -90,21 +101,21 @@ protected: // wxAuiNotebook internals
 	/**
 	 * Update the relations left/top/... in the list.
 	 */
-	void updateTabRelations(std::vector<wxAuiTabCtrlInfo> &tabInfos);
+	void updateTabRelations(std::vector<wxAuiLayoutInfo> &tabInfos);
 
 	/**
 	 * Return the nearest tab in the specified direction. direction may only be
 	 * one of wxLEFT, wxRIGHT, wxTOP or wxBOTTOM. They also may not be combined
 	 * like wxLEFT|wxTOP.
 	 */
-	int32_t nearestTab(wxAuiTabCtrlInfo const &ctrl, int direction, std::vector<wxAuiTabCtrlInfo> &tabInfos);
+	int32_t nearestTab(wxAuiLayoutInfo const &ctrl, int direction, std::vector<wxAuiLayoutInfo> &tabInfos);
 
-	std::vector<wxAuiTabCtrlInfo> getTabControls(void);
+	std::vector<wxAuiLayoutInfo> getTabControls(void);
 
 	/**
 	 * Parse the layout from a string created by SavePerspective().
 	 */
-	bool parseTabControls(wxString &layout, std::vector<wxAuiTabCtrlInfo> &infos);
+	bool parseTabControls(wxString &layout, std::vector<wxAuiLayoutInfo> &infos);
 
 	/**
 	 * Creates a new tabcontrol in the specified direction. If the direction already has a
@@ -113,5 +124,5 @@ protected: // wxAuiNotebook internals
 	 * has enough pages, and moves the last page to the splitter, so it can be splitted.
 	 * If that also fails, false is returned.
 	 */
-	bool RestoreSplit(std::vector<wxAuiTabCtrlInfo> &infos, wxAuiTabCtrlInfo &splitter, int32_t targetIndex, int direction);
+	bool RestoreSplit(std::vector<wxAuiLayoutInfo> &infos, std::vector<wxAuiLayoutInfo::PageCtrlMapping> &pages, wxAuiLayoutInfo &splitter, int32_t targetIndex, int direction);
 };

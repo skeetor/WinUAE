@@ -61,9 +61,9 @@ wxAuiManager *wxDockingNotebook::GetManager()
 // Group all pages into their tabcontrols. This will not be
 // neccessary when we move the code to wxAuiBook, as this information
 // is already there in wxTabFrame which is not accessible outside.
-vector<wxAuiTabCtrlInfo> wxDockingNotebook::getTabControls(void)
+vector<wxAuiLayoutInfo> wxDockingNotebook::getTabControls(void)
 {
-	vector<wxAuiTabCtrlInfo> infos;
+	vector<wxAuiLayoutInfo> infos;
 
 	for (size_t i = 0; i < GetPageCount(); i++)
 	{
@@ -74,7 +74,7 @@ vector<wxAuiTabCtrlInfo> wxDockingNotebook::getTabControls(void)
 		if (!FindTab(page, &ctrl, &tabIndex))
 			continue;
 
-		for (wxAuiTabCtrlInfo &tci : infos)
+		for (wxAuiLayoutInfo &tci : infos)
 		{
 			if (tci.m_tabCtrl == ctrl)
 			{
@@ -85,15 +85,15 @@ vector<wxAuiTabCtrlInfo> wxDockingNotebook::getTabControls(void)
 		}
 
 		if (ctrl)
-			infos.push_back(wxAuiTabCtrlInfo(ctrl, page, tabIndex, infos.size(), infos.size(), GetPageText(i)));
+			infos.push_back(wxAuiLayoutInfo(ctrl, page, tabIndex, infos.size(), infos.size(), GetPageText(i)));
 	}
 
 	return infos;
 }
 
-void wxDockingNotebook::updateTabRelations(vector<wxAuiTabCtrlInfo> &infos)
+void wxDockingNotebook::updateTabRelations(vector<wxAuiLayoutInfo> &infos)
 {
-	for (wxAuiTabCtrlInfo &info : infos)
+	for (wxAuiLayoutInfo &info : infos)
 	{
 		info.m_left = nearestTab(info, wxLEFT, infos);
 		info.m_right = nearestTab(info, wxRIGHT, infos);
@@ -102,15 +102,15 @@ void wxDockingNotebook::updateTabRelations(vector<wxAuiTabCtrlInfo> &infos)
 	}
 }
 
-int32_t wxDockingNotebook::nearestTab(wxAuiTabCtrlInfo const &ctrl, int direction, std::vector<wxAuiTabCtrlInfo> &infos)
+int32_t wxDockingNotebook::nearestTab(wxAuiLayoutInfo const &ctrl, int direction, std::vector<wxAuiLayoutInfo> &infos)
 {
 	wxPoint const &ctrlPos = ctrl.m_position;
-	wxAuiTabCtrlInfo *nearest = nullptr;
+	wxAuiLayoutInfo *nearest = nullptr;
 	int32_t rc = -1;
 
 	for (int32_t i = 0; i < infos.size(); i++)
 	{
-		wxAuiTabCtrlInfo &info = infos[i];
+		wxAuiLayoutInfo &info = infos[i];
 
 		if (info.m_tabCtrl == ctrl.m_tabCtrl)
 			continue;
@@ -260,21 +260,21 @@ bool wxDockingNotebook::MovePage(wxAuiTabCtrl *src, int tabPageIndex, wxAuiTabCt
 	return true;
 }
 
-wxString wxDockingNotebook::SavePerspective(void)
+wxString wxDockingNotebook::SerializeLayout(void)
 {
-	vector<wxAuiTabCtrlInfo> infos = getTabControls();
+	vector<wxAuiLayoutInfo> infos = getTabControls();
 	wxString perspective = "views=" + to_string(infos.size());
 	updateTabRelations(infos);
 
 	int32_t ctrlId = 0;
-	for (wxAuiTabCtrlInfo const &info : infos)
+	for (wxAuiLayoutInfo const &info : infos)
 	{
 		perspective += "|tabctrl=" + to_string(ctrlId++);
 		wxSize sz = info.m_tabCtrl->GetSize();
 		perspective += "|sz=" + to_string(sz.x) + ":" + to_string(sz.y);
 		perspective += "|pagecnt=" + to_string(info.m_pages.size());
 
-		for (wxAuiTabCtrlInfo::PageInfo const &page : info.m_pages)
+		for (wxAuiLayoutInfo::PageCtrlMapping const &page : info.m_pages)
 		{
 			perspective += "|tabindex=" + to_string(page.m_tabIndex);
 			perspective += "|pageindex=" + to_string(page.m_pageIndex);
@@ -288,7 +288,7 @@ wxString wxDockingNotebook::SavePerspective(void)
 	return perspective;
 }
 
-bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiTabCtrlInfo> &outInfos)
+bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiLayoutInfo> &outInfos)
 {
 	outInfos.clear();
 
@@ -298,10 +298,10 @@ bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiTabCtrlIn
 	if (!readToken(layout, "views", n))
 		return false;
 
-	vector<wxAuiTabCtrlInfo> infos(n);
+	vector<wxAuiLayoutInfo> infos(n);
 
 	uint32_t i = 0;
-	for (wxAuiTabCtrlInfo &info : infos)
+	for (wxAuiLayoutInfo &info : infos)
 	{
 		if (!readToken(layout, "tabctrl", n))
 			return false;
@@ -321,7 +321,7 @@ bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiTabCtrlIn
 		if (!readToken(layout, "pagecnt", n))
 			return false;
 		info.m_pages.resize(n);
-		for (wxAuiTabCtrlInfo::PageInfo &page : info.m_pages)
+		for (wxAuiLayoutInfo::PageCtrlMapping &page : info.m_pages)
 		{
 			if (!readToken(layout, "tabindex", n))
 				return false;
@@ -343,21 +343,18 @@ bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiTabCtrlIn
 	return true;
 }
 
-bool wxDockingNotebook::RestoreSplit(vector<wxAuiTabCtrlInfo> &infos, wxAuiTabCtrlInfo &info, int32_t targetIndex, int direction)
+bool wxDockingNotebook::RestoreSplit(vector<wxAuiLayoutInfo> &infos, vector<wxAuiLayoutInfo::PageCtrlMapping> &pages, wxAuiLayoutInfo &info, int32_t targetIndex, int direction)
 {
-	// The first item is considered as the root of all pages where we can select
-	// pages from, so this has to exist already and can not be a split target.
-	if (!targetIndex)
+	// The first item has to exist already and can not be a split target.
+	// If the targetindex is < 0 then it doesn't have such a target, which
+	// is just as well.
+	if (!targetIndex || targetIndex < 0)
 		return true;
 
-	if (targetIndex < 0 || targetIndex >= infos.size())
+	if (targetIndex >= infos.size())
 		return false;
 
-	wxAuiTabCtrlInfo *target = &infos[targetIndex];
-
-	// We assume that root contains all pages, so we can choose one from there
-	// if we need to split.
-	wxAuiTabCtrlInfo *root = &infos[0];
+	wxAuiLayoutInfo *target = &infos[targetIndex];
 
 	size_t pageindex = -1;
 	wxWindow *w = nullptr;
@@ -365,6 +362,9 @@ bool wxDockingNotebook::RestoreSplit(vector<wxAuiTabCtrlInfo> &infos, wxAuiTabCt
 	// The target was already split, so we are done.
 	if (target->m_tabCtrl != nullptr)
 		return true;
+
+	// Move all pages here that we want to split.
+
 
 	// If the current control doesn't have enough pages, we try to move one
 	// from root here, so we can split it.
@@ -401,11 +401,10 @@ bool wxDockingNotebook::RestoreSplit(vector<wxAuiTabCtrlInfo> &infos, wxAuiTabCt
 	Split(pageindex, direction);
 
 	// After the split we need to update the tabctrl with the newly created one
-	int idx;
-	return FindTab(w, &target->m_tabCtrl, &idx);
+	return FindTab(w, &target->m_tabCtrl, &targetIndex);
 }
 
-bool wxDockingNotebook::LoadPerspective(wxString layout, bool update)
+bool wxDockingNotebook::DeserializeLayout(wxString layout, bool update)
 {
 	// If the current notebook doesn't have enough pages, there is nothing
 	// we can do, so we don't need to proceed. The LoadPerspective() only
@@ -426,11 +425,12 @@ bool wxDockingNotebook::LoadPerspective(wxString layout, bool update)
 	if (!FindTab(page, &root, &tabIndex))
 		return false;
 
-	vector<wxAuiTabCtrlInfo> infos;
+	vector<wxAuiLayoutInfo> infos;
 	if (!parseTabControls(layout, infos))
 		return false;
 
 	infos[0].m_tabCtrl = root;
+	vector<wxAuiLayoutInfo::PageCtrlMapping> pageMappings;
 
 	// First we need to move all pages to the same ctrl.
 	for (size_t i = 1; i < pages; i++)
@@ -441,15 +441,33 @@ bool wxDockingNotebook::LoadPerspective(wxString layout, bool update)
 		if (!FindTab(page, &src, &tabIndex))
 			return false;
 
+		if (!infos[0].ownsPage(i))
+			pageMappings.emplace_back(wxAuiLayoutInfo::PageCtrlMapping(tabIndex, i));
+
+		if (src == root)
+			continue;
+
 		MovePage(src, tabIndex, root, false);
 	}
 
-	for (wxAuiTabCtrlInfo &info : infos)
+	// Now we build the layout
+	for (wxAuiLayoutInfo &info : infos)
 	{
-		RestoreSplit(infos, info, info.m_left, wxLEFT);
-		RestoreSplit(infos, info, info.m_right, wxRIGHT);
-		RestoreSplit(infos, info, info.m_top, wxTOP);
-		RestoreSplit(infos, info, info.m_bottom, wxBOTTOM);
+		RestoreSplit(infos, pageMappings, info, info.m_left, wxLEFT);
+		RestoreSplit(infos, pageMappings, info, info.m_right, wxRIGHT);
+		RestoreSplit(infos, pageMappings, info, info.m_top, wxTOP);
+		RestoreSplit(infos, pageMappings, info, info.m_bottom, wxBOTTOM);
+	}
+
+	// The layout is in the correct order, but we still have to shuffle
+	// the pages to their correct position. This has to be done seperatly
+	// afterwards, because when we create the layout, we have to ensure
+	// the for each split there is at least one page available.
+	// This can not be guaranteed if a page is surrounded by pages with
+	// only one tab each.
+	for (wxAuiLayoutInfo &info : infos)
+	{
+
 	}
 
 	return true;

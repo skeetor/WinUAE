@@ -108,7 +108,7 @@ bool DocumentPanel::serialize(wxString groupId, wxConfigBase *config)
 	if (!DocumentWindow::serialize(groupId, config))
 		return false;
 
-	config->Write(groupId + "Layout", SavePerspective());
+	config->Write(groupId + "Layout", SerializeLayout());
 
 	for (size_t i = 0; i < GetPageCount(); i++)
 	{
@@ -152,7 +152,7 @@ bool DocumentPanel::deserialize(wxString groupId, wxConfigBase *config)
 		AddPage(d, d->getTitle(), false);
 	}
 
-	LoadPerspective(config->Read(groupId + "Layout", ""));
+	DeserializeLayout(config->Read(groupId + "Layout", ""));
 
 	Thaw();
 
