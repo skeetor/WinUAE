@@ -1,7 +1,7 @@
 #pragma once
 
 #include <wx/aui/aui.h>
-#include <map>
+#include <set>
 
 class wxAuiPageCtrlMapping
 {
@@ -28,7 +28,7 @@ public:
 	{
 	}
 
-	wxAuiLayoutInfo(wxAuiTabCtrl *ctrl, wxWindow *page, int tabIndex, int pageIndex, uint32_t saveIndex, wxString const &name)
+	wxAuiLayoutInfo(wxAuiTabCtrl *ctrl, wxWindow *page, int tabIndex, int pageIndex)
 	: m_tabCtrl(ctrl)
 	, m_left(-1)
 	, m_right(-1)
@@ -113,7 +113,7 @@ protected: // wxAuiNotebook internals
 	std::vector<wxAuiLayoutInfo> getTabControls(void);
 
 	/**
-	 * Parse the layout from a string created by SavePerspective().
+	 * Parse the layout from a string created by SerializeLayout().
 	 */
 	bool parseTabControls(wxString &layout, std::vector<wxAuiLayoutInfo> &infos);
 
@@ -124,5 +124,5 @@ protected: // wxAuiNotebook internals
 	 * has enough pages, and moves the last page to the splitter, so it can be splitted.
 	 * If that also fails, false is returned.
 	 */
-	bool RestoreSplit(std::vector<wxAuiLayoutInfo> &infos, std::map<int, size_t> &pageMapping, wxAuiLayoutInfo &splitter, int32_t targetIndex, int direction);
+	bool RestoreSplit(std::vector<wxAuiLayoutInfo> &infos, std::set<int> &unassignedPages, wxAuiLayoutInfo &splitter, int32_t targetIndex, int direction);
 };

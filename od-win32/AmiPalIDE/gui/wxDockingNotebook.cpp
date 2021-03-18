@@ -58,9 +58,6 @@ wxAuiManager *wxDockingNotebook::GetManager()
 	return &m_mgr;
 }
 
-// Group all pages into their tabcontrols. This will not be
-// neccessary when we move the code to wxAuiBook, as this information
-// is already there in wxTabFrame which is not accessible outside.
 vector<wxAuiLayoutInfo> wxDockingNotebook::getTabControls(void)
 {
 	vector<wxAuiLayoutInfo> infos;
@@ -85,7 +82,7 @@ vector<wxAuiLayoutInfo> wxDockingNotebook::getTabControls(void)
 		}
 
 		if (ctrl)
-			infos.push_back(wxAuiLayoutInfo(ctrl, page, tabIndex, infos.size(), infos.size(), GetPageText(i)));
+			infos.push_back(wxAuiLayoutInfo(ctrl, page, tabIndex, i));
 	}
 
 	return infos;
@@ -345,12 +342,10 @@ bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiLayoutInf
 	return true;
 }
 
-bool wxDockingNotebook::RestoreSplit(vector<wxAuiLayoutInfo> &infos, map<int, size_t> &pageMapping, wxAuiLayoutInfo &info, int32_t targetIndex, int direction)
+bool wxDockingNotebook::RestoreSplit(vector<wxAuiLayoutInfo> &infos, set<int> &unassignedPages, wxAuiLayoutInfo &info, int32_t targetIndex, int direction)
 {
-	// The first item has to exist already and can not be a split target.
 	// If the targetindex is < 0 then it doesn't have such a target, which
 	// is just as well.
-	//if (!targetIndex || targetIndex < 0)
 	if (targetIndex < 0)
 		return true;
 
@@ -363,41 +358,55 @@ bool wxDockingNotebook::RestoreSplit(vector<wxAuiLayoutInfo> &infos, map<int, si
 	if (target->m_tabCtrl != nullptr)
 		return true;
 
-	wxWindow *w = GetPage(GetPageCount() - 1);
+	// This is where split of from
+	wxWindow *w = nullptr;
+	int pageCnt = 0;
 
-	map<int, size_t>::iterator it = pageMapping.begin();
-	while(it != pageMapping.end())
+	// Assign all required tabs for this target control
+	for (wxAuiPageCtrlMapping const &mapping : target->m_pages)
 	{
-		size_t tgt = it->second;
+		int pgi = mapping.m_pageIndex;
 
-		if (tgt != targetIndex)
-		{
-			++it;
+		set<int>::iterator it = unassignedPages.find(pgi);
+		if (it == unassignedPages.end())
 			continue;
-		}
 
-		int pgi = it->first;
 		wxAuiTabCtrl *src;
 		int idx;
 		wxWindow *page = GetPage(pgi);
 		if(!FindTab(page, &src, &idx))
 			return false;
 
+		int tidx;
 		if (direction == wxLEFT)
-			idx = 0;
+		{
+			tidx = pageCnt;
+			w = page;
+		}
 		else
-			idx = -1;
+		{
+			tidx = -1;
+			if (!w)
+				w = page;
+		}
 
-		MovePage(src, pgi, info.m_tabCtrl, idx);
+		MovePage(src, idx, info.m_tabCtrl, tidx);
 
 		// remove the page from the list of unassigned pages.
-		pageMapping.erase(it++);
+		unassignedPages.erase(it);
+		pageCnt++;
 	}
+
+	// None of the pages, required for this tab, could be found.
+	// Either the user closed them, or there is something wrong.
+	// In any case, we can not make up new pages.
+	if (!pageCnt)
+		return false;
 
 	size_t pageIndex = GetPageIndex(w);
 	Split(pageIndex, direction);
 
-	// After the split we need to update the tabctrl with the newly created one
+	// Update the tabctrl with the newly created one
 	return FindTab(w, &target->m_tabCtrl, &targetIndex);
 }
 
@@ -427,7 +436,7 @@ bool wxDockingNotebook::DeserializeLayout(wxString layout, bool update)
 		return false;
 
 	infos[0].m_tabCtrl = root;
-	map<int, size_t> pageMappings;
+	set<int> unassignedPages;
 
 	// First we need to move all pages to the same ctrl.
 	for (size_t i = 1; i < pages; i++)
@@ -438,14 +447,9 @@ bool wxDockingNotebook::DeserializeLayout(wxString layout, bool update)
 		if (!FindTab(page, &src, &tabIndex))
 			return false;
 
-		if (src == root)
-			continue;
-
 		// Create a list of all pages which are not yet assigned to their
 		// correct tabctrl.
-		size_t ti;
-		if ((ti = infos[0].tabPage(i)) != -1)
-			pageMappings.insert(make_pair(i, ti));
+		unassignedPages.insert(i);
 
 		if (src == root)
 			continue;
@@ -456,10 +460,10 @@ bool wxDockingNotebook::DeserializeLayout(wxString layout, bool update)
 	// Now we build the layout
 	for (wxAuiLayoutInfo &info : infos)
 	{
-		RestoreSplit(infos, pageMappings, info, info.m_left, wxLEFT);
-		RestoreSplit(infos, pageMappings, info, info.m_right, wxRIGHT);
-		RestoreSplit(infos, pageMappings, info, info.m_top, wxTOP);
-		RestoreSplit(infos, pageMappings, info, info.m_bottom, wxBOTTOM);
+		RestoreSplit(infos, unassignedPages, info, info.m_left, wxLEFT);
+		RestoreSplit(infos, unassignedPages, info, info.m_right, wxRIGHT);
+		RestoreSplit(infos, unassignedPages, info, info.m_top, wxTOP);
+		RestoreSplit(infos, unassignedPages, info, info.m_bottom, wxBOTTOM);
 	}
 
 	return true;

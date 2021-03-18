@@ -277,8 +277,14 @@ void MemoryPanel::adjustDimensions(void)
 	int ch;
 
 	m_memoryTxt->GetTextExtent("0", &cw, &ch);
+	if (sz.x < (int)m_vertSB)
+		sz.x = (int)m_vertSB + 1;
+
+	if (sz.y < (ah - (int)m_horizSB))
+		sz.y = (ah - (int)m_horizSB) + 1;
+
 	int chars = ((sz.GetWidth() - m_vertSB) / cw);
-	int lines = ((sz.GetHeight() - ah - m_horizSB) / ch) - 1;
+	int lines = ((sz.GetHeight() - (ah - m_horizSB)) / ch) - 1;
 	if (lines <= 0)
 		lines = 1;
 	m_curLines = lines;
