@@ -1,23 +1,23 @@
 #pragma once
 
 #include <wx/aui/aui.h>
+#include <map>
+
+class wxAuiPageCtrlMapping
+{
+public:
+	wxAuiPageCtrlMapping(int tabIndex = -1, int pageIndex = -1)
+		: m_tabIndex(tabIndex)
+		, m_pageIndex(pageIndex)
+	{
+	}
+
+	int m_tabIndex;
+	int m_pageIndex;
+};
 
 class wxAuiLayoutInfo
 {
-public:
-	class PageCtrlMapping
-	{
-	public:
-		PageCtrlMapping(int tabIndex = -1, int pageIndex = -1)
-		: m_tabIndex(tabIndex)
-		, m_pageIndex(pageIndex)
-		{
-		}
-
-		int m_tabIndex;
-		int m_pageIndex;
-	};
-
 public:
 	wxAuiLayoutInfo()
 	: m_tabCtrl(nullptr)
@@ -47,23 +47,23 @@ public:
 
 	void addPage(int tabIndex, int pageIndex)
 	{
-		PageCtrlMapping pm(tabIndex, pageIndex);
+		wxAuiPageCtrlMapping pm(tabIndex, pageIndex);
 		m_pages.push_back(pm);
 	}
 
-	bool ownsPage(int pageIndex)
+	size_t tabPage(int pageIndex)
 	{
-		for (PageCtrlMapping const &pm : m_pages)
+		for (wxAuiPageCtrlMapping const &pm : m_pages)
 		{
 			if (pm.m_pageIndex == pageIndex)
-				return true;
+				return pm.m_tabIndex;
 		}
 
-		return false;
+		return -1;
 	}
 
 	wxAuiTabCtrl *m_tabCtrl;
-	std::vector<PageCtrlMapping> m_pages;
+	std::vector<wxAuiPageCtrlMapping> m_pages;
 	wxPoint m_position;
 	wxSize m_size;
 
@@ -96,7 +96,7 @@ protected: // wxAuiNotebook internals
 	 * Move the page from the source tab ctrl to the destination. If this was the last
 	 * page, the tab ctrl will be removed. If src == dest, false is returned.
 	 */
-	bool MovePage(wxAuiTabCtrl *src, int tabPageIndex, wxAuiTabCtrl *dest, bool select = true);
+	void MovePage(wxAuiTabCtrl *src, int tabPageIndex, wxAuiTabCtrl *dest, int destTabIndex = -1, bool select = true);
 
 	/**
 	 * Update the relations left/top/... in the list.
@@ -124,5 +124,5 @@ protected: // wxAuiNotebook internals
 	 * has enough pages, and moves the last page to the splitter, so it can be splitted.
 	 * If that also fails, false is returned.
 	 */
-	bool RestoreSplit(std::vector<wxAuiLayoutInfo> &infos, std::vector<wxAuiLayoutInfo::PageCtrlMapping> &pages, wxAuiLayoutInfo &splitter, int32_t targetIndex, int direction);
+	bool RestoreSplit(std::vector<wxAuiLayoutInfo> &infos, std::map<int, size_t> &pageMapping, wxAuiLayoutInfo &splitter, int32_t targetIndex, int direction);
 };
