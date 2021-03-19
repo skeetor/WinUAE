@@ -82,7 +82,10 @@ vector<wxAuiLayoutInfo> wxDockingNotebook::getTabControls(void)
 		}
 
 		if (ctrl)
+		{
 			infos.push_back(wxAuiLayoutInfo(ctrl, page, tabIndex, i));
+			infos[infos.size()-1].m_name = GetPageText(i);
+		}
 	}
 
 	return infos;
@@ -168,7 +171,7 @@ int32_t wxDockingNotebook::nearestTab(wxAuiLayoutInfo const &ctrl, int direction
 				if (ctrlPos.x != pi.x)
 					continue;
 
-				if (ctrlPos.y < pi.y)
+				if (ctrlPos.y > pi.y)
 				{
 					if (!nearest)
 					{
@@ -177,7 +180,7 @@ int32_t wxDockingNotebook::nearestTab(wxAuiLayoutInfo const &ctrl, int direction
 						continue;
 					}
 
-					if (pi.y < nearest->m_position.y)
+					if (pi.y > nearest->m_position.y)
 					{
 						nearest = &info;
 						rc = i;
@@ -192,7 +195,7 @@ int32_t wxDockingNotebook::nearestTab(wxAuiLayoutInfo const &ctrl, int direction
 				if (ctrlPos.x != pi.x)
 					continue;
 
-				if (ctrlPos.y > pi.y)
+				if (ctrlPos.y < pi.y)
 				{
 					if (!nearest)
 					{
@@ -201,7 +204,7 @@ int32_t wxDockingNotebook::nearestTab(wxAuiLayoutInfo const &ctrl, int direction
 						continue;
 					}
 
-					if (pi.y > nearest->m_position.y)
+					if (pi.y < nearest->m_position.y)
 					{
 						nearest = &info;
 						rc = i;

@@ -36,7 +36,7 @@ public:
 	, m_bottom(-1)
 	{
 		// When restoring, this may be a nullptr
-		if(page)
+		if (page)
 			m_position = page->GetPosition();
 
 		addPage(tabIndex, pageIndex);
@@ -66,6 +66,7 @@ public:
 	std::vector<wxAuiPageCtrlMapping> m_pages;
 	wxPoint m_position;
 	wxSize m_size;
+	wxString m_name;	// For debugging
 
 	// Index of the TabCtrlInfo
 	int32_t m_left;
