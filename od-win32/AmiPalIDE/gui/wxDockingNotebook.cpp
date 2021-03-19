@@ -84,7 +84,9 @@ vector<wxAuiLayoutInfo> wxDockingNotebook::getTabControls(void)
 		if (ctrl)
 		{
 			infos.push_back(wxAuiLayoutInfo(ctrl, page, tabIndex, i));
+#ifdef _DEBUG
 			infos[infos.size()-1].m_name = GetPageText(i);
+#endif
 		}
 	}
 
@@ -265,29 +267,32 @@ void wxDockingNotebook::MovePage(wxAuiTabCtrl *src, int tabPageIndex, wxAuiTabCt
 wxString wxDockingNotebook::SerializeLayout(void)
 {
 	vector<wxAuiLayoutInfo> infos = getTabControls();
-	wxString perspective = "views=" + to_string(infos.size());
+	wxString layout = "views=" + to_string(infos.size());
 	updateTabRelations(infos);
 
 	int32_t ctrlId = 0;
 	for (wxAuiLayoutInfo const &info : infos)
 	{
-		perspective += "|tabctrl=" + to_string(ctrlId++);
+		layout += "|tabctrl=" + to_string(ctrlId++);
 		wxSize sz = info.m_tabCtrl->GetSize();
-		perspective += "|sz=" + to_string(sz.x) + ":" + to_string(sz.y);
-		perspective += "|pagecnt=" + to_string(info.m_pages.size());
+		layout += "|sz=" + to_string(sz.x) + ":" + to_string(sz.y);
+		layout += "|pagecnt=" + to_string(info.m_pages.size());
 
 		for (wxAuiPageCtrlMapping const &page : info.m_pages)
 		{
-			perspective += "|tabindex=" + to_string(page.m_tabIndex);
-			perspective += "|pageindex=" + to_string(page.m_pageIndex);
+			layout += "|tabindex=" + to_string(page.m_tabIndex);
+			layout += "|pageindex=" + to_string(page.m_pageIndex);
 		}
-		perspective += "|left=" + to_string(info.m_left);
-		perspective += "|right=" + to_string(info.m_right);
-		perspective += "|top=" + to_string(info.m_top);
-		perspective += "|bottom=" + to_string(info.m_bottom);
+#ifdef _DEBUG
+		layout += "|name=" + info.m_name;
+#endif
+		layout += "|left=" + to_string(info.m_left);
+		layout += "|right=" + to_string(info.m_right);
+		layout += "|top=" + to_string(info.m_top);
+		layout += "|bottom=" + to_string(info.m_bottom);
 	}
 
-	return perspective;
+	return layout;
 }
 
 bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiLayoutInfo> &outInfos)
@@ -333,6 +338,10 @@ bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiLayoutInf
 				return false;
 			page.m_pageIndex = n;
 		}
+#ifdef _DEBUG
+		if (!readToken(layout, "name", info.m_name))
+			return false;
+#endif
 
 		PARSE_RELATION(left);
 		PARSE_RELATION(right);

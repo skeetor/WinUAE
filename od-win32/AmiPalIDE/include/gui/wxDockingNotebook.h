@@ -66,7 +66,10 @@ public:
 	std::vector<wxAuiPageCtrlMapping> m_pages;
 	wxPoint m_position;
 	wxSize m_size;
+
+#ifdef _DEBUG
 	wxString m_name;	// For debugging
+#endif
 
 	// Index of the TabCtrlInfo
 	int32_t m_left;
