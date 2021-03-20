@@ -128,5 +128,5 @@ protected: // wxAuiNotebook internals
 	 * has enough pages, and moves the last page to the splitter, so it can be splitted.
 	 * If that also fails, false is returned.
 	 */
-	bool RestoreSplit(std::vector<wxAuiLayoutInfo> &infos, std::set<int> &unassignedPages, wxAuiLayoutInfo &splitter, int32_t targetIndex, int direction);
+	bool RestoreNeighbor(std::vector<wxAuiLayoutInfo> &infos, std::set<int> &unassignedPages, wxAuiLayoutInfo &splitter, int32_t targetIndex, int direction);
 };

@@ -13,7 +13,7 @@ wxString toHexString(T w, size_t len = sizeof(T) << 1)
 	rc[1] = 'x';
 
 	for (size_t i = 0, j = (len - 1) * 4; i < len; ++i, j -= 4)
-		rc[i+2] = digits[(w >> j) & 0x0f];
+		rc[i+2] = digits[((size_t)w >> j) & 0x0f];
 
 	return rc;
 }

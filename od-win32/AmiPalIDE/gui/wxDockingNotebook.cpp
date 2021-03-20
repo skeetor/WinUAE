@@ -354,7 +354,7 @@ bool wxDockingNotebook::parseTabControls(wxString &layout, vector<wxAuiLayoutInf
 	return true;
 }
 
-bool wxDockingNotebook::RestoreSplit(vector<wxAuiLayoutInfo> &infos, set<int> &unassignedPages, wxAuiLayoutInfo &info, int32_t targetIndex, int direction)
+bool wxDockingNotebook::RestoreNeighbor(vector<wxAuiLayoutInfo> &infos, set<int> &unassignedPages, wxAuiLayoutInfo &info, int32_t targetIndex, int direction)
 {
 	// If the targetindex is < 0 then it doesn't have such a target, which
 	// is just as well.
@@ -472,10 +472,10 @@ bool wxDockingNotebook::DeserializeLayout(wxString layout, bool update)
 	// Now we build the layout
 	for (wxAuiLayoutInfo &info : infos)
 	{
-		RestoreSplit(infos, unassignedPages, info, info.m_left, wxLEFT);
-		RestoreSplit(infos, unassignedPages, info, info.m_right, wxRIGHT);
-		RestoreSplit(infos, unassignedPages, info, info.m_top, wxTOP);
-		RestoreSplit(infos, unassignedPages, info, info.m_bottom, wxBOTTOM);
+		RestoreNeighbor(infos, unassignedPages, info, info.m_left, wxLEFT);
+		RestoreNeighbor(infos, unassignedPages, info, info.m_right, wxRIGHT);
+		RestoreNeighbor(infos, unassignedPages, info, info.m_top, wxTOP);
+		RestoreNeighbor(infos, unassignedPages, info, info.m_bottom, wxBOTTOM);
 	}
 
 	return true;

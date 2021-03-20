@@ -26,6 +26,7 @@
 #include <wx/stdpaths.h>
 #include <wx/wfstream.h>
 #include <wx/treectrl.h>
+#include "wx/clipbrd.h"
 
 using namespace std;
 
@@ -43,9 +44,13 @@ wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
 
 	EVT_MENU(IDM_VIEW_MEMORY_TOOLBAR, MainFrame::OnViewMemoryToolbar)
 
-	EVT_MENU(IDM_TOOLS_OPTIONS, MainFrame::OnOptions)
 	EVT_MENU(IDM_TOOLS_LAYOUT_SAVE, MainFrame::OnLayoutSave)
 	EVT_MENU(IDM_TOOLS_LAYOUT_LOAD, MainFrame::OnLayoutLoad)
+	EVT_MENU(IDM_TOOLS_OPTIONS, MainFrame::OnOptions)
+	EVT_MENU(IDM_TOOLS_SPLIT_LEFT, MainFrame::OnSplit)
+	EVT_MENU(IDM_TOOLS_SPLIT_RIGHT, MainFrame::OnSplit)
+	EVT_MENU(IDM_TOOLS_SPLIT_TOP, MainFrame::OnSplit)
+	EVT_MENU(IDM_TOOLS_SPLIT_BOTTOM, MainFrame::OnSplit)
 
 wxEND_EVENT_TABLE()
 
@@ -181,17 +186,17 @@ wxMenu *MainFrame::createHelpMenu(void)
 wxMenu *MainFrame::createViewMenu(void)
 {
 	wxMenuItem *item;
-	wxMenu *viewMenu = new wxMenu();
+	wxMenu *menu = new wxMenu();
 
 	// Toolbars
 	wxMenu *toolbarMenu = new wxMenu();
-	item = new wxMenuItem(viewMenu, wxID_ANY, wxT("Toolbars"), wxEmptyString, wxITEM_NORMAL, toolbarMenu);
-	viewMenu->Append(item);
+	item = new wxMenuItem(menu, wxID_ANY, wxT("Toolbars"), wxEmptyString, wxITEM_NORMAL, toolbarMenu);
+	menu->Append(item);
 
 	item = new wxMenuItem(toolbarMenu, IDM_VIEW_MEMORY_TOOLBAR, wxString(wxT("Memory")), wxEmptyString, wxITEM_NORMAL);
 	toolbarMenu->Append(item);
 
-	return viewMenu;
+	return menu;
 }
 
 wxMenu *MainFrame::createToolsMenu(void)
@@ -205,10 +210,23 @@ wxMenu *MainFrame::createToolsMenu(void)
 	item = new wxMenuItem(menu, IDM_TOOLS_LAYOUT_LOAD, wxString(wxT("Load Layout...")) , wxEmptyString, wxITEM_NORMAL);
 	menu->Append(item);
 
+	wxMenu *splitMenu = new wxMenu();
+	item = new wxMenuItem(menu, wxID_ANY, wxT("Split"), wxEmptyString, wxITEM_NORMAL, splitMenu);
+	menu->Append(item);
+	item = new wxMenuItem(splitMenu, IDM_TOOLS_SPLIT_LEFT, wxString(wxT("Left")), wxEmptyString, wxITEM_NORMAL);
+	splitMenu->Append(item);
+	item = new wxMenuItem(splitMenu, IDM_TOOLS_SPLIT_RIGHT, wxString(wxT("Right")), wxEmptyString, wxITEM_NORMAL);
+	splitMenu->Append(item);
+	item = new wxMenuItem(splitMenu, IDM_TOOLS_SPLIT_TOP, wxString(wxT("Top")), wxEmptyString, wxITEM_NORMAL);
+	splitMenu->Append(item);
+	item = new wxMenuItem(splitMenu, IDM_TOOLS_SPLIT_BOTTOM, wxString(wxT("Bottom")), wxEmptyString, wxITEM_NORMAL);
+	splitMenu->Append(item);
+
 	menu->AppendSeparator();
 
 	item = new wxMenuItem(menu, IDM_TOOLS_OPTIONS, wxString(wxT("&Options")), wxEmptyString, wxITEM_NORMAL);
 	menu->Append(item);
+
 
 	return menu;
 }
@@ -332,6 +350,69 @@ void MainFrame::OnOptions(wxCommandEvent& event)
 	// effect in this case. Only if the user did not press apply
 	// but then, the changes are discarded anyway.
 	dlg.ShowModal();
+}
+
+void MainFrame::OnSplit(wxCommandEvent &event)
+{
+	int direction = 0;
+	switch (event.GetId())
+	{
+		case IDM_TOOLS_SPLIT_LEFT:
+			direction = wxLEFT;
+		break;
+
+		case IDM_TOOLS_SPLIT_RIGHT:
+			direction = wxRIGHT;
+		break;
+
+		case IDM_TOOLS_SPLIT_TOP:
+			direction = wxTOP;
+		break;
+
+		case IDM_TOOLS_SPLIT_BOTTOM:
+			direction = wxBOTTOM;
+		break;
+
+		default:
+			return;
+	}
+
+	DocumentPanel *p = getDocumentPanel();
+
+	wxString s;
+	wxSize csz = p->GetClientSize();
+	s << "Size: " << csz.x << "/" << csz.y << "\n";
+
+	for (int i = 0; i < p->GetPageCount(); i++)
+	{
+		wxWindow *page = p->GetPage(i);
+		wxAuiTabCtrl *ctrl;
+		int tabIndex;
+		p->FindTab(page, &ctrl, &tabIndex);
+
+		wxSize sz = page->GetClientSize();
+		wxSize dsz = ToDIP(sz);
+		wxPoint pt = page->GetPosition();
+		wxPoint dpt = ToDIP(pt);
+
+		s << p->GetPageText(i) << " -";
+		s << " TabCtrl: " << toHexString(ctrl);
+		s << " Window: " << toHexString(page);
+		s << " PageIndex: " << to_string(i);
+		s << " TabIndex: " << to_string(tabIndex);
+		s << " Position: " << to_string(pt.x) << "/" << to_string(pt.y);
+		s << " Size: " << to_string(sz.x) << "/" << to_string(sz.y);
+		s << "\n";
+	}
+
+	if (wxTheClipboard->Open())
+	{
+		wxTheClipboard->SetData(new wxTextDataObject(s));
+		wxTheClipboard->Close();
+	}
+
+	int page = p->GetSelection();
+	p->Split(page, direction);
 }
 
 void MainFrame::OnLayoutSave(wxCommandEvent& event)

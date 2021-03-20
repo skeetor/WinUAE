@@ -44,6 +44,10 @@ enum AmiPalMainFrameID
 	,IDM_TOOLS_OPTIONS
 	,IDM_TOOLS_LAYOUT_SAVE
 	,IDM_TOOLS_LAYOUT_LOAD
+	,IDM_TOOLS_SPLIT_LEFT
+	,IDM_TOOLS_SPLIT_RIGHT
+	,IDM_TOOLS_SPLIT_TOP
+	,IDM_TOOLS_SPLIT_BOTTOM
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -82,6 +86,7 @@ public:
 	void OnOptions(wxCommandEvent& event);
 	void OnLayoutSave(wxCommandEvent& event);
 	void OnLayoutLoad(wxCommandEvent& event);
+	void OnSplit(wxCommandEvent& event);
 
 	/**
 	 * If a modal dialog is used, it should be registered here. This is
