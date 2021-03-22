@@ -30,6 +30,40 @@ namespace
 		}
 	};
 	Unloader uld;
+
+	static const char *gRegisterName[] =
+	{
+		"D0"
+		, "D1"
+		, "D2"
+		, "D3"
+		, "D4"
+		, "D5"
+		, "D6"
+		, "D7"
+
+		, "A0"
+		, "A1"
+		, "A2"
+		, "A3"
+		, "A4"
+		, "A5"
+		, "A6"
+		, "A7"
+
+		, "IP"
+		, "CCR"
+
+	};
+
+	static const ClDbgStatusFlag gStatusFlags[] =
+	{
+		ClDbgStatusFlag("C", (1 << 0))
+		, ClDbgStatusFlag("V", (1 << 1))
+		, ClDbgStatusFlag("Z", (1 << 2))
+		, ClDbgStatusFlag("N", (1 << 3))
+		, ClDbgStatusFlag("X", (1 << 4))
+	};
 }
 IDebugger *Debugger = &dbg;
 
@@ -103,10 +137,10 @@ static void DebuggerExited(void)
 	gDebuggerExited = true;
 }
 
-static size_t DbgMemoryRead(size_t address, DbgByte *buffer, size_t bufferSize)
+static size_t DbgMemoryRead(size_t address, ClDbgByte *buffer, size_t bufferSize)
 {
-	DbgByte *s = buffer;
-	DbgByte *e = buffer+ bufferSize;
+	ClDbgByte *s = buffer;
+	ClDbgByte *e = buffer+ bufferSize;
 
 	uint8_t c = (address & 0xff);
 	while (s < e)
@@ -119,9 +153,52 @@ static size_t DbgMemoryRead(size_t address, DbgByte *buffer, size_t bufferSize)
 	return bufferSize;
 }
 
-static size_t DbgMemoryWrite(size_t address, DbgByte *buffer, size_t bufferSize)
+static size_t DbgMemoryWrite(size_t address, ClDbgByte *buffer, size_t bufferSize)
 {
 	return bufferSize;
+}
+
+static void DbgMachineDescription(ClDbgMachine *machine)
+{
+	machine->cores = 1;
+	machine->name = "Commodore Amiga";
+	machine->model = "A1000";
+}
+
+static void DbgCoreDescription(ClDbgCPUCore *core, uint32_t idx)
+{
+	core->name = "Motorola 68k";
+	core->model = "M68000";
+	core->type = 1;	// To be defined.
+	core->registers = sizeof(gRegisterName)/sizeof(gRegisterName[0]);
+	core->statusFlags = sizeof(gStatusFlags) / sizeof(gStatusFlags[0]);
+	core->isVirtual = false;
+}
+
+static void DbgRegisterDescription(ClDbgCPURegister *cpuRegister, uint32_t idx)
+{
+	cpuRegister->name = gRegisterName[idx];
+
+	if (idx < 17)
+		cpuRegister->byteWidth = 4;
+	else
+		cpuRegister->byteWidth = 1;
+
+	if (idx <= 7)
+		cpuRegister->type = ClDbgCPURegister::DATA;
+	else if (idx <= 14)
+		cpuRegister->type = ClDbgCPURegister::DATA_ADDRESS;
+	else if (idx == 15)
+		cpuRegister->type = (ClDbgCPURegister::RegisterType)(ClDbgCPURegister::DATA_ADDRESS | ClDbgCPURegister::STACK_POINTER);
+	else if (idx == 16)
+		cpuRegister->type = ClDbgCPURegister::INSTRUCTION_POINTER;
+	else if (idx == 17)
+		cpuRegister->type = ClDbgCPURegister::STATUS_FLAGS;
+}
+
+static void DbgStatusFlagDescription(ClDbgStatusFlag *statusFlag, uint32_t idx)
+{
+	*statusFlag = gStatusFlags[idx];
 }
 
 void initAPI()
@@ -131,6 +208,10 @@ void initAPI()
 	Debugger->DebuggerExited = DebuggerExited;
 	Debugger->MemoryRead = DbgMemoryRead;
 	Debugger->MemoryWrite = DbgMemoryWrite;
+	Debugger->MachineDescription = DbgMachineDescription;
+	Debugger->CoreDescription = DbgCoreDescription;
+	Debugger->RegisterDescription = DbgRegisterDescription;
+	Debugger->StatusFlagDescription = DbgStatusFlagDescription;
 
 	// We use this dummy so that we can savely call the functions without
 	// constantly checking the pointers. Dummy always returns 0.

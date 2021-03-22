@@ -177,4 +177,8 @@ static void initAPI(IDebugger *debugger)
 	Debugger->MemoryRead = debugger->MemoryRead;
 	Debugger->MemoryWrite = debugger->MemoryWrite;
 
+	Debugger->MachineDescription = debugger->MachineDescription;
+	Debugger->CoreDescription = debugger->CoreDescription;
+	Debugger->RegisterDescription = debugger->RegisterDescription;
+	Debugger->StatusFlagDescription = debugger->StatusFlagDescription;
 }

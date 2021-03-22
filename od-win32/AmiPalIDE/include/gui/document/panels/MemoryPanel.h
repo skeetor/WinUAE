@@ -5,7 +5,6 @@
 #include <wx/textctrl.h>
 
 #include "gui/document/Document.h"
-#include "debugger/DebuggerAPI.h"
 #include "patterns/observer.h"
 #include "config/DebuggerConfig.h"
 
@@ -14,6 +13,7 @@
 
 class MemoryToolBar;
 class EditBtn;
+class ClDbgByte;
 
 ///////////////////////////////////////////////////////////////////////////
 class MemoryPanel
@@ -107,7 +107,7 @@ private:
 	size_t m_curLines;
 	size_t m_columnBytes;
 	DisplayType m_type;
-	std::vector<DbgByte> m_lockCache;
+	std::vector<ClDbgByte> m_lockCache;
 	size_t m_addressLimit;
 
 	bool m_spaces:1;

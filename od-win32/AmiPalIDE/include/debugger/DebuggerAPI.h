@@ -154,13 +154,32 @@ public:
 	/**
 	 * Read memory from the specified address. Returns the number of bytes read.
 	 */
-	size_t (*MemoryRead)(size_t address, DbgByte *buffer, size_t bufferSize);
+	size_t (*MemoryRead)(size_t address, ClDbgByte *buffer, size_t bufferSize);
 
 	/**
 	 * Write memory to the specified address. Returns the number of bytes written.
 	 */
-	size_t (*MemoryWrite)(size_t address, DbgByte *buffer, size_t bufferSize);
+	size_t (*MemoryWrite)(size_t address, ClDbgByte *buffer, size_t bufferSize);
 
+	/**
+	 * Read description for the machine
+	 */
+	void (*MachineDescription)(ClDbgMachine *machine);
+
+	/**
+	 * Read the description for the specified core.
+	 */
+	void (*CoreDescription)(ClDbgCPUCore *core, uint32_t idx);
+
+	/**
+	 * Read the description for the specified register.
+	 */
+	void (*RegisterDescription)(ClDbgCPURegister *cpuRegister, uint32_t idx);
+
+	/**
+	 * Read the description for the status flags.
+	 */
+	void (*StatusFlagDescription)(ClDbgStatusFlag *cpuRegister, uint32_t idx);
 
 // ******************************************************************************
 // ******************** Functions to be used from the client ********************

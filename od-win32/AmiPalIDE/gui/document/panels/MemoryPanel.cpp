@@ -1,6 +1,7 @@
 #include "gui/document/MemoryToolBar.h"
 #include "gui/document/panels/MemoryPanel.h"
 
+#include "debugger/DebuggerAPI.h"
 #include "utils/StringUtils.h"
 
 #include <wx/artprov.h>
@@ -339,7 +340,7 @@ size_t MemoryPanel::printDump(size_t address)
 
 	adjustDimensions();
 
-	DbgByte *memPtr;
+	ClDbgByte *memPtr;
 	size_t size;
 
 	// If the panel is locked, then we use the memorydump for the cache.

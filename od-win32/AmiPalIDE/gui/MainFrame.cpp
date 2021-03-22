@@ -68,6 +68,11 @@ MainFrame::MainFrame(void)
 	restoreConfig();
 
 	SetStatusText("Welcome to the AmiPal Debugger!");
+
+	ClDbgCPUCore c;
+	Debugger->CoreDescription(&c, 0);
+	ClDbgCPURegister r0;
+	Debugger->RegisterDescription(&r0, 0);
 }
 
 MainFrame::~MainFrame(void)
