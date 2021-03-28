@@ -72,8 +72,8 @@ MemoryToolBar::MemoryToolBar(MainFrame *frame, wxWindow *parent, wxWindowID id, 
 	m_spacesChk = new wxCheckBox(this, IDC_SPACES_CHK, wxT("Spaces"), wxDefaultPosition, wxDefaultSize, 0);
 	m_spacesChk->SetValue(true);
 	AddControl(m_spacesChk);
-	wxButton *btn;
-	btn = new wxButton(this, IDC_MEMORY_NEW, wxT("New"), wxDefaultPosition, wxDefaultSize, 0);
+
+	wxButton *btn = new wxButton(this, IDC_MEMORY_NEW, wxT("New"), wxDefaultPosition, wxDefaultSize, 0);
 	AddControl(btn);
 
 	Realize();
